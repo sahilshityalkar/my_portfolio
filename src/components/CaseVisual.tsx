@@ -4,7 +4,7 @@ import { Plate } from "@/components/Plate";
 
 /** Real project imagery when it exists, otherwise a drafting plate. */
 export function CaseVisual({ c, seed, priority = false }: { c: CaseStudy; seed: number; priority?: boolean }) {
-  if (!c.image) return <Plate seed={seed} numeral={c.index} caption={`Plate ${c.index}`} />;
+  if (!c.image) return <Plate seed={seed} numeral={c.index} caption={`Plate ${c.index}`} kind={c.plate} />;
   return (
     <figure className="group/plate relative aspect-[4/3] overflow-hidden bg-paper-2">
       <Image

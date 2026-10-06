@@ -9,6 +9,7 @@ export const work: CaseStudy[] = [
   {
     slug: "replyai",
     index: "I",
+    plate: "replies",
     title: "ReplyAI",
     kicker: "A workspace for answering customer complaints: generate, review and send on-brand replies across email and WhatsApp.",
     year: "2026",
@@ -52,6 +53,7 @@ export const work: CaseStudy[] = [
   {
     slug: "clyra-student-app",
     index: "II",
+    plate: "mastery",
     title: demo("Clyra — the student app"),
     kicker: demo("Turning an AI diagnosis of what a student doesn’t know yet into an interface that feels like progress, not a report card."),
     year: "2025",
@@ -88,6 +90,7 @@ export const work: CaseStudy[] = [
   {
     slug: "clyra-institutions",
     index: "III",
+    plate: "heatmap",
     title: demo("Clyra — the institution workspace"),
     kicker: demo("Auto-grading, cohort heatmaps and live dashboards that show a school which students need help before they fall behind."),
     year: "2025",

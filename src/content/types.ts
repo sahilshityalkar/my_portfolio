@@ -46,6 +46,8 @@ export type CaseStudy = {
   links: Link[];
   /** Optional real imagery (put the file in /public). Without it, a drafting plate is drawn. */
   image?: { src: string; alt: string };
+  /** Which technical drawing to show when there is no image. */
+  plate?: "replies" | "mastery" | "heatmap";
 };
 
 export type Education = { school: string; degree: string; years: string };
