@@ -44,9 +44,9 @@ export type CaseStudy = {
   /** Case-study body. Each section renders with the same editorial template. */
   sections: { heading: string; body: Text }[];
   links: Link[];
-  /** Optional real imagery (put the file in /public). Without it, a drafting plate is drawn. */
-  image?: { src: string; alt: string };
-  /** Which technical drawing to show when there is no image. */
+  /** A real screenshot of the shipped product (file in /public), shown on the case page. */
+  image?: { src: string; alt: string; url?: string };
+  /** The technical drawing that represents this project on the index and the case page. */
   plate?: "replies" | "mastery" | "heatmap";
 };
 

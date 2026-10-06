@@ -20,7 +20,7 @@ export const work: CaseStudy[] = [
     sections: [
       {
         heading: "Context",
-        body: "Support teams answer the same complaints all day, across email and WhatsApp. ReplyAI started as a micro-SaaS with one promise — paste a complaint, get three ready-to-send replies in under five seconds — and grew into a customer-response workspace built around that moment.",
+        body: "Support teams answer the same complaints all day, across email and WhatsApp. ReplyAI started as a micro-SaaS with one promise — paste a complaint, get three ready-to-send replies in under five seconds — and grew into a customer-response workspace built around that moment, replying in Hinglish, Hindi, English, Tamil, Marathi, Bengali and more.",
       },
       {
         heading: "My role",
@@ -45,6 +45,11 @@ export const work: CaseStudy[] = [
         ),
       },
     ],
+    image: {
+      src: "/work/replyai.png",
+      alt: "The ReplyAI landing page: “Customer replies, handled from one workspace”, with language options and an example complaint and reply.",
+      url: "complaint-reply-generator.vercel.app",
+    },
     links: [
       { label: "Live site", href: "https://complaint-reply-generator.vercel.app" },
       { label: "Source", href: "https://github.com/sahilshityalkar/complaint-reply-generator" },

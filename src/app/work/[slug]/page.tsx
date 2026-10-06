@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
+import { Fragment } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getCase, work } from "@/content/work";
 import { T, plain } from "@/components/Draftable";
-import { CaseVisual } from "@/components/CaseVisual";
+import { CaseScreenshot, CaseVisual } from "@/components/CaseVisual";
 
 export const dynamicParams = false;
 
@@ -68,22 +69,30 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
       </header>
 
       <div className="wrap mt-16 fade-in" style={{ ["--i" as string]: 3 }}>
-        <CaseVisual c={c} seed={i + 3} priority />
+        <CaseVisual c={c} seed={i + 3} />
       </div>
 
       <div className="wrap grid-12 mt-20 gap-y-16 sm:mt-28">
         <T as="p" v={c.summary} className="t-lede col-span-12 md:col-span-8 md:col-start-4" />
         {c.sections.map((s, n) => (
-          <section key={s.heading} className="col-span-12 grid grid-cols-subgrid gap-y-4 border-t border-rule pt-5" data-reveal>
-            <h2 className="t-meta col-span-12 flex gap-3 md:col-span-3">
-              <span className="text-mark">{String(n + 1).padStart(2, "0")}</span>
-              {s.heading}
-            </h2>
-            <T as="p" v={s.body} className="col-span-12 max-w-[62ch] text-[1.15rem] text-ink-2 md:col-span-8 md:col-start-4" />
-          </section>
+          <Fragment key={s.heading}>
+            <section className="col-span-12 grid grid-cols-subgrid gap-y-4 border-t border-rule pt-5" data-reveal>
+              <h2 className="t-meta col-span-12 flex gap-3 md:col-span-3">
+                <span className="text-mark">{String(n + 1).padStart(2, "0")}</span>
+                {s.heading}
+              </h2>
+              <T as="p" v={s.body} className="col-span-12 max-w-[62ch] text-[1.15rem] text-ink-2 md:col-span-8 md:col-start-4" />
+            </section>
+            {/* the product itself, right after the decisions that shaped it */}
+            {s.heading === "Decisions" && c.image ? (
+              <div className="col-span-12" data-reveal>
+                <CaseScreenshot c={c} />
+              </div>
+            ) : null}
+          </Fragment>
         ))}
         {c.links.length ? (
-          <ul className="t-meta col-span-12 flex gap-6 md:col-start-4">
+          <ul className="t-meta col-span-12 flex gap-6 md:col-span-9 md:col-start-4">
             {c.links.map((l) =>
               l.href ? (
                 <li key={l.label}>
