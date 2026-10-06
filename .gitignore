@@ -1,0 +1,17 @@
+# deps
+/node_modules
+# next
+/.next/
+/out/
+next-env.d.ts
+*.tsbuildinfo
+# env
+.env*
+!.env.example
+# misc
+.DS_Store
+*.log
+/coverage
+/.vercel
+/.playwright-mcp
+/lighthouse*
