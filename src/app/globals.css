@@ -26,6 +26,9 @@
   --max: 90rem;
   --header-h: 3.75rem;
 
+  --serif: var(--font-newsreader), "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --mono: var(--font-plex-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
+
   color-scheme: light;
 }
 
@@ -46,8 +49,8 @@
 }
 
 @theme inline {
-  --font-serif: var(--font-newsreader), "Iowan Old Style", "Palatino Linotype", Georgia, serif;
-  --font-mono: var(--font-plex-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-serif: var(--serif);
+  --font-mono: var(--mono);
   --color-paper: var(--paper);
   --color-paper-2: var(--paper-2);
   --color-ink: var(--ink);
@@ -71,7 +74,7 @@ html {
 
 body {
   background: var(--paper);
-  font-family: var(--font-serif);
+  font-family: var(--serif);
   font-size: 1.0625rem;
   line-height: 1.55;
   font-optical-sizing: auto;
@@ -107,7 +110,7 @@ body::before {
 /* ------------------------------------------------------------------ type */
 
 .t-display {
-  font-family: var(--font-serif);
+  font-family: var(--serif);
   font-weight: 380;
   font-size: clamp(3.4rem, 10.4vw, 10.25rem);
   line-height: 0.9;
@@ -115,7 +118,7 @@ body::before {
 }
 
 .t-title {
-  font-family: var(--font-serif);
+  font-family: var(--serif);
   font-weight: 400;
   font-size: clamp(2.1rem, 4.6vw, 4rem);
   line-height: 1;
@@ -129,7 +132,7 @@ body::before {
 }
 
 .t-meta {
-  font-family: var(--font-mono);
+  font-family: var(--mono);
   font-size: 0.6875rem;
   line-height: 1.4;
   letter-spacing: 0.06em;
@@ -137,7 +140,7 @@ body::before {
 }
 
 .t-mono {
-  font-family: var(--font-mono);
+  font-family: var(--mono);
   font-size: 0.8125rem;
   letter-spacing: 0;
 }
