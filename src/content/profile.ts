@@ -24,6 +24,6 @@ export const links = {
   email: null as string | null, // e.g. "you@domain.com"
   resume: null as string | null, // e.g. "/resume.pdf" (put the file in /public)
   github: "https://github.com/sahilshityalkar" as string | null,
-  linkedin: null as string | null,
-  x: null as string | null,
+  linkedin: "https://www.linkedin.com/in/sahilshityalkar/" as string | null,
+  x: "https://x.com/SK_sahil05" as string | null,
 };
