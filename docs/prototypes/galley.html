@@ -1,0 +1,13 @@
+<!doctype html><meta charset=utf-8><title>B Galley</title>
+<style>body{margin:0;background:#f5f2ec;color:#1c1b19;font:20px/1.5 Georgia,serif}
+#c{position:relative;margin:80px;width:560px}#h{position:absolute;top:0;bottom:0;width:2px;background:#a8402a;cursor:ew-resize}
+span.w{position:absolute;white-space:nowrap;will-change:transform}h1{font-weight:400;font-size:64px;margin:80px 80px 0;letter-spacing:-2px}</style>
+<h1>Galley — drag the red measure</h1><div id=c></div><div id=h></div>
+<script>
+const txt="Frontend Lead Engineer at Clyra. I own how the product is built and how it feels — component architecture, interface quality and the decisions in between. This prototype reflows every word on its own spring when the measure changes, like lead type sliding in a composing stick.".split(" ");
+const c=document.getElementById('c'),h=document.getElementById('h');const m=document.createElement('canvas').getContext('2d');m.font='20px Georgia';
+const ws=txt.map(t=>{const s=document.createElement('span');s.className='w';s.textContent=t;c.appendChild(s);return{s,w:m.measureText(t).width,x:0,y:0,vx:0,vy:0,tx:0,ty:0}});
+let W=560;function layout(){let x=0,y=0;const sp=m.measureText(' ').width;for(const w of ws){if(x+w.w>W&&x>0){x=0;y+=30}w.tx=x;w.ty=y;x+=w.w+sp}c.style.height=y+30+'px'}
+layout();ws.forEach(w=>{w.x=w.tx;w.y=w.ty});let last=0;function f(t){const dt=Math.min((t-last)/1000||0.016,0.05);last=t;for(const w of ws){for(const k of['x','y']){const a=-220*(w[k]-w['t'+k])-24*w['v'+k];w['v'+k]+=a*dt;w[k]+=w['v'+k]*dt}w.s.style.transform=`translate(${w.x}px,${w.y}px)`}const r=c.getBoundingClientRect();h.style.left=r.left+W+'px';h.style.top=r.top+scrollY+'px';h.style.height=r.height+'px';requestAnimationFrame(f)}requestAnimationFrame(f);
+let drag=false;h.onpointerdown=e=>{drag=true;h.setPointerCapture(e.pointerId)};h.onpointerup=()=>drag=false;h.onpointermove=e=>{if(!drag)return;W=Math.max(160,e.clientX-c.getBoundingClientRect().left);layout()}
+</script>
