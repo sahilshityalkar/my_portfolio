@@ -431,6 +431,16 @@ function draw(f: Frame) {
 
   ctx.restore();
 
+  // The glass sits above the page, so it would hide the focus ring of the very
+  // element it travels to. Redraw keyboard focus on top, in the accent colour.
+  const focused = document.activeElement;
+  if (focused instanceof HTMLElement && focused !== document.body && focused.matches(":focus-visible")) {
+    const fr = focused.getBoundingClientRect();
+    ctx.strokeStyle = p.mark;
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(Math.round(fr.left) - 3.5, Math.round(fr.top) - 3.5, Math.round(fr.width) + 7, Math.round(fr.height) + 7);
+  }
+
   if (f.scan) {
     // the scan head on touch devices
     if (f.reveal > 0 && f.reveal < 1) {
@@ -662,11 +672,13 @@ export function Loupe() {
 
     // keyboard users: the glass travels to whatever has focus
     const onFocus = (e: FocusEvent) => {
-      if (current !== "lens" || !(e.target instanceof Element)) return;
-      const r = e.target.getBoundingClientRect();
-      px.target = r.left + r.width / 2;
-      py.target = r.top + r.height / 2;
-      kick();
+      if (current === "off" || !(e.target instanceof Element)) return;
+      if (current === "lens") {
+        const r = e.target.getBoundingClientRect();
+        px.target = r.left + r.width / 2;
+        py.target = r.top + r.height / 2;
+      }
+      kick(); // repaint the focus ring
     };
 
     const onScroll = () => current !== "off" && kick();
