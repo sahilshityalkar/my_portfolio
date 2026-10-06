@@ -24,7 +24,7 @@ and interviewers will ask about it.
 | Email: sahilshityalkar05@gmail.com | GitHub profile README. Swap it if you prefer another for recruiters |
 | GitHub, LinkedIn, X links | You and the GitHub profile |
 | B.Sc. IT, Ramanand Arya D.A.V. College, 2021–2024 | Résumé (CGPA deliberately left off) |
-| ReplyAI case study (except "In hindsight") | The repo, its TEST_REPORT.md and the live site |
+| ReplyAI case study (except "In hindsight"), languages, screenshot | The repo, its TEST_REPORT.md and the live site |
 
 ## Demo content to replace
 
@@ -44,9 +44,10 @@ and interviewers will ask about it.
       *Context* section describes Clyra's public product and is accurate.
 - [ ] **Case III, Clyra institution workspace**: same as Case II
 - [ ] Check what you're allowed to say publicly about Clyra's internals
-- [ ] Imagery: add screenshots to `public/work/` and set
-      `image: { src: "/work/<file>.png", alt: "…" }` on each case. Until then
-      they show generated drafting plates.
+- [ ] Imagery: ReplyAI's case page already shows a screenshot of the live
+      site (`public/work/replyai.png`). For the Clyra cases, add screenshots to
+      `public/work/` and set `image: { src, alt, url }` on each case; they show
+      on the case page after "Decisions". The index keeps the technical drawings.
 
 ### `src/content/about.ts`
 - [ ] Both paragraphs

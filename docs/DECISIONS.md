@@ -145,6 +145,56 @@ How:
   canvas drops to 1× resolution and stops hatching padding. The lab shader
   does the same.
 - WebGL is lazy-loaded and confined to the lab.
+- Fonts are instanced and subset with fontTools. Newsreader went from 279 KB
+  to 142 KB: the roman keeps optical sizes 12–72 and weights 300–500, and the
+  italic, which only appears at display sizes, is pinned to optical size 60.
+
+### Measured
+
+These numbers come from the production build (`next start`), with the cache
+disabled, measured in Chromium through Playwright and CDP:
+
+| Profile | LCP | FCP | CLS | Transfer |
+| --- | --- | --- | --- | --- |
+| Desktop 1440×900, unthrottled | **196 ms** | 196 ms | **0** | 395 KB |
+| Mobile 390×844, 4× CPU slowdown, 1.6 Mbps / 150 ms RTT | **2.2 s** | 1.2 s | **0** | 394 KB |
+
+The transfer breaks down as ~170 KB fonts, ~160 KB JavaScript (React and the
+Next.js runtime), 20 KB HTML and 8 KB CSS. The glass under a 4×-throttled CPU
+averaged 14 ms per frame (p95 28 ms) while moving and flooding. Unthrottled
+it holds the display rate: the HUD reads 138–144 fps on a 144 Hz panel.
+
+The mobile LCP has since improved further: the hero's entrance delays were
+cut from 300 ms to 120 ms after this measurement. Re-run it with Lighthouse
+(see the README) on your deployed URL.
+
+## Verification log
+
+Everything was checked in a real browser, not assumed: Chromium through
+Playwright at 360, 390, 768, 1024, 1440 and 1920 px, in Day and Night, with
+reduced motion, with JavaScript disabled, with WebGL unavailable, with
+keyboard only, and on a touch-emulated phone. That pass found and fixed real
+bugs:
+
+- **Italic letterforms outlined in roman.** Canvas used the `h1`'s font
+  instead of each word's own `<span>` style. Fonts are now resolved per word.
+- **Blueprint labels clipped under the scrollbar.** The canvas used
+  `innerWidth`; it now uses `clientWidth`.
+- **Transparent mobile menu.** `backdrop-filter` on the header made it the
+  containing block for the fixed full-screen menu, so the menu collapsed to
+  60px. The blur now lives on its own layer.
+- **The glass hid the keyboard focus ring** of the very element it travels
+  to. The canvas now redraws `:focus-visible` on top.
+- **Glass experiment fell back on remount.** Cleanup called `loseContext()`,
+  so React's dev double-invoke (or any remount) found a dead context.
+  Resources are now deleted instead.
+- **Display mask clipped ascenders.** The overflow-clipped entrance mask was
+  shorter than the glyphs at `line-height: 0.9`. It's padded and offset now.
+- **15-column grid on case pages.** A row spanning 12 columns from column 4
+  created implicit tracks and narrowed the page. Every route is now verified
+  at exactly 12 columns, with no horizontal overflow and one `h1`.
+- **Fonts on canvas.** `next/font` renames families, so canvas text read the
+  real family name from the CSS variable instead of a hard-coded name.
 
 See the README for how to re-run the audit.
 
@@ -164,10 +214,20 @@ See the README for how to re-run the audit.
 
 ## Honesty
 
-All personal facts live in `src/content/`. Unknown facts are typed `Draft`
-values that render as deliberate "in preparation" notes, and every one of
-them is listed in `PLACEHOLDERS.md`. The colophon only states facts about the
-site itself, which are verifiable by inspecting it.
+All personal facts live in `src/content/`. Verified facts are cited in
+`PLACEHOLDERS.md`: the GitHub profile, the published résumé, the ReplyAI
+repository with its test report and live site, and heyclyra.com. Copy written
+to complete the design while real details are pending is wrapped in
+`demo("…")`, so `grep -rn "demo(" src/content` lists every line of it. No
+metrics were invented, even in demo copy, and Clyra's company statistics are
+not attributed to the person. The colophon only states facts about the site
+itself.
+
+The work index uses **technical drawings** rather than screenshots: a drawing
+of each product's core idea, in the same language as the glass. That keeps
+the three cases one consistent set, even though two can't show screenshots
+yet. Where a real product exists (ReplyAI), its case page also shows the
+shipped product.
 
 ## Known limitations
 
@@ -177,4 +237,8 @@ site itself, which are verifiable by inspecting it.
   so drift never accumulates.
 - `ctx.letterSpacing` is newer; where it's unsupported, outlined letters sit
   a fraction tighter than the real ones.
-- The drafting plates stand in for project imagery until real visuals exist.
+- The Clyra case studies describe Clyra's public product accurately, but the
+  person's specific contributions there are demo copy until replaced.
+- With the glass flooded, links still work, so clicks that land on a link
+  navigate instead of returning to lens mode. This is deliberate: the page
+  stays usable under the glass.
