@@ -164,9 +164,15 @@ Next.js runtime), 20 KB HTML and 8 KB CSS. The glass under a 4×-throttled CPU
 averaged 14 ms per frame (p95 28 ms) while moving and flooding. Unthrottled
 it holds the display rate: the HUD reads 138–144 fps on a 144 Hz panel.
 
-The mobile LCP has since improved further: the hero's entrance delays were
-cut from 300 ms to 120 ms after this measurement. Re-run it with Lighthouse
-(see the README) on your deployed URL.
+After cutting the hero's entrance delays from 300 ms to 120 ms, the final
+production build measures **2.1 s** mobile LCP on the same throttled profile.
+Every route was swept on production with no console errors or warnings.
+Re-run the audit with Lighthouse (see the README) on your deployed URL.
+
+`docs/demo.webm` is a 30-second recording of the signature flow on the
+production build: hero → glass → flood → scroll the live blueprint → Night →
+close. It was recorded headlessly, so it's a reference, not a polished capture;
+record your own at 60 fps for posting.
 
 ## Verification log
 

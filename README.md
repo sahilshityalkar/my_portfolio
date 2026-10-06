@@ -5,7 +5,8 @@ Personal portfolio of Sahil Shityalkar, Frontend Lead Engineer at Clyra.
 A calm, editorial site with one secret: press **L** (or tap **Inspect**) and a
 glass slides over the page, showing its live engineering drawing, measured
 from the DOM. The concept and every trade-off are in
-[docs/DECISIONS.md](docs/DECISIONS.md).
+[docs/DECISIONS.md](docs/DECISIONS.md), and a recording of the signature flow
+is in [docs/demo.webm](docs/demo.webm).
 
 ## Run
 
