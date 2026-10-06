@@ -15,7 +15,7 @@ export const profile = {
   /** One honest sentence. Shown in the hero and used as the meta description. */
   statement:
     "Frontend Lead Engineer at Clyra. I own how the product is built and how it feels — component architecture, interface quality and the decisions in between.",
-  location: draft("City, Country — or “Remote”") as Text,
+  location: "Mumbai, India" as Text,
   availability: draft("e.g. “Open to senior frontend roles” — or remove") as Text,
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com",
 };

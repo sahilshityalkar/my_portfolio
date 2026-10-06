@@ -14,7 +14,7 @@ and `grep -n "null" src/content/profile.ts` lists missing links.
       `sahilshityalkar`. Confirm the spelling and how you want it written.
 - [ ] **Statement.** One honest sentence about your role. A draft is in place;
       rewrite it in your own voice.
-- [ ] **Location.** City/country, or "Remote".
+- [x] **Location.** Mumbai, India (from your GitHub profile).
 - [ ] **Availability.** For example "Open to senior frontend roles", or remove it.
 - [ ] **Site URL.** Set `NEXT_PUBLIC_SITE_URL` in your host's environment
       (e.g. `https://yourname.dev`). Canonical URLs, the sitemap, robots and
