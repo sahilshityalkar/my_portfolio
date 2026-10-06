@@ -4,7 +4,6 @@ import { draft } from "@/content/types";
 
 export function Contact() {
   const rows = [
-    { label: "Email", value: links.email, href: links.email ? `mailto:${links.email}` : null },
     { label: "Résumé", value: links.resume ? "Download PDF" : null, href: links.resume },
     { label: "LinkedIn", value: links.linkedin?.replace(/^https?:\/\/(www\.)?/, ""), href: links.linkedin },
     { label: "GitHub", value: links.github?.replace(/^https?:\/\//, ""), href: links.github },

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { lab } from "@/content/lab";
 import { SectionHead } from "@/components/SectionHead";
+import { GlassMark } from "@/components/GlassMark";
 
 export function Lab() {
   return (
@@ -26,8 +27,11 @@ export function Lab() {
                   <span className="mt-3 block max-w-[52ch] text-ink-2">{e.summary}</span>
                   <span className="t-meta mt-4 block text-ink-3">{e.tech}</span>
                 </span>
-                <span className="t-meta col-start-2 mt-4 self-start text-ink sm:col-start-3 sm:mt-2">
-                  <span className="link-draw">Open</span> →
+                <span className="t-meta col-start-2 mt-6 flex flex-col items-start gap-4 text-ink sm:col-start-3 sm:mt-1 sm:items-end">
+                  {e.slug === "glass" ? <GlassMark /> : null}
+                  <span>
+                    <span className="link-draw">Open</span> →
+                  </span>
                 </span>
               </Link>
             </li>
