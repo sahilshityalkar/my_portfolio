@@ -1,83 +1,72 @@
 # Placeholder checklist
 
-Everything below is unknown to the build and must come from you. Nothing on the
-site was invented: unwritten values are `draft("…")` entries in `src/content/`,
-and they render as quiet, dotted-underlined italic notes ("in preparation"),
-never as fake content.
+The site is complete and every section reads as finished, but some copy is
+**demo content**: realistic text written so the design is whole while real
+details are pending. In code it's wrapped in `demo("…")`, so you can find all
+of it at once:
 
-Quick audit: `grep -rn "draft(" src/content` lists every remaining placeholder,
-and `grep -n "null" src/content/profile.ts` lists missing links.
+```bash
+grep -rn "demo(" src/content
+```
 
-## Identity — `src/content/profile.ts`
+Replace a demo string by deleting the `demo(` wrapper and its closing `)` and
+editing the text. Never leave a demo claim you can't stand behind. Recruiters
+and interviewers will ask about it.
 
-- [x] **Name.** `Sahil Shityalkar`, as written on your résumé in the
-      Personal-Portfolio-Website repo.
-- [ ] **Statement.** One honest sentence about your role. A draft is in place;
-      rewrite it in your own voice.
-- [x] **Location.** Mumbai, India (from your GitHub profile).
-- [ ] **Availability.** For example "Open to senior frontend roles", or remove it.
-- [ ] **Site URL.** Set `NEXT_PUBLIC_SITE_URL` in your host's environment
-      (e.g. `https://yourname.dev`). Canonical URLs, the sitemap, robots and
-      OG images all derive from it.
+## Verified (sourced, no action needed, but double-check)
 
-## Links — `src/content/profile.ts` → `links`
+| Fact | Source |
+| --- | --- |
+| Name: Sahil Shityalkar | Résumé in the Personal-Portfolio-Website repo |
+| Frontend Lead Engineer at Clyra, since Jan 2025 | You |
+| Clyra: "the AI school operating system" | heyclyra.com |
+| Mumbai, India | GitHub profile |
+| Email: sahilshityalkar05@gmail.com | GitHub profile README. Swap it if you prefer another for recruiters |
+| GitHub, LinkedIn, X links | You and the GitHub profile |
+| B.Sc. IT, Ramanand Arya D.A.V. College, 2021–2024 | Résumé (CGPA deliberately left off) |
+| ReplyAI case study (except "In hindsight") | The repo, its TEST_REPORT.md and the live site |
 
-- [x] `email`: `sahilshityalkar05@gmail.com` (the address on your GitHub profile
-      README). Swap it if you prefer a different one for recruiters.
-- [ ] `resume`: the résumé in your old portfolio repo predates Clyra and
-      lists no work experience, so it is **not** linked. Put an up-to-date PDF in `/public` (e.g. `/public/resume.pdf`) and set
-      `resume: "/resume.pdf"`. The header shows a Résumé button once it's set.
-- [x] `linkedin`: https://www.linkedin.com/in/sahilshityalkar/
-- [x] `x`: https://x.com/SK_sahil05
-- [x] `github`: `https://github.com/sahilshityalkar` (taken from the repo remote; verify)
+## Demo content to replace
 
-## Experience — `src/content/experience.ts`
+### `src/content/profile.ts`
+- [ ] `availability`: the line under your email in Contact
 
-Your LinkedIn and X profiles couldn't be read automatically (both block
-crawlers), and no public source mentions Clyra, so nothing about Clyra beyond
-your title is on the site.
+### `src/content/experience.ts`
+- [ ] Clyra `summary`
+- [ ] The three Clyra `notes` (architecture ownership, dashboards, team
+      standards). These are plausible for your role, not confirmed. Keep only
+      what's true, and add real numbers where you can.
 
-- [ ] Clyra start date (month and year)
-- [ ] Three notes: what you own, a hard decision and its outcome, how you raise
-      the team's bar. Use real numbers only.
-- [ ] Earlier roles, if any: add more objects to the array.
+### `src/content/work.ts`
+- [ ] **ReplyAI**: the "In hindsight" paragraph (your reflection, written for you)
+- [ ] **Case II, Clyra student app**: title, kicker, stack, summary, and the
+      My role / Problem / Decisions / Outcome / Hindsight sections. The
+      *Context* section describes Clyra's public product and is accurate.
+- [ ] **Case III, Clyra institution workspace**: same as Case II
+- [ ] Check what you're allowed to say publicly about Clyra's internals
+- [ ] Imagery: add screenshots to `public/work/` and set
+      `image: { src: "/work/<file>.png", alt: "…" }` on each case. Until then
+      they show generated drafting plates.
 
-## Selected work — `src/content/work.ts`
+### `src/content/about.ts`
+- [ ] Both paragraphs
+- [ ] The three principles (craft, systems, teams). Only keep beliefs you'd
+      defend in an interview.
 
-**Case I, ReplyAI**, is written from your repo
-(github.com/sahilshityalkar/complaint-reply-generator), its TEST_REPORT.md and
-the live site. Review the wording, and fill in:
+## Missing (hidden until provided)
 
-- [ ] "In hindsight", the last section
-- [ ] Confirm "Independent project — product, interface and engineering" as your role
-- [ ] Imagery: add a screenshot at `public/work/replyai.png` and set
-      `image: { src: "/work/replyai.png", alt: "…" }` on the entry
+- [ ] **Résumé PDF**: put it at `public/resume.pdf` and set
+      `links.resume = "/resume.pdf"` in `profile.ts`. A Résumé button then
+      appears in the header, the hero and Contact.
+- [ ] **Site URL**: set `NEXT_PUBLIC_SITE_URL` (e.g. `https://sahil.dev`) in
+      your host's environment. Canonical URLs, the sitemap, robots and the
+      share image all use it.
 
-Not used, on purpose: `petreon` and the old portfolio (their live URLs return
-404 and the code is early or template-based), `shoping-site` (its README points
-to another author), and the forks (no upstream PRs). The résumé's "40%
-improvement in user engagement" isn't used either, since nothing backs it up.
+## Deliberately not used
 
-For **Case II** (intended for your Clyra work) and **Case III**:
-
-- [ ] Title, kicker, year, role, stack, summary
-- [ ] Six body sections: Context, My role, The problem, Decisions, Outcome, In hindsight
-- [ ] Links (live site, repo) if public
-- [ ] Rename the `slug` once the project has a real name (the URL updates itself)
-- [ ] Imagery: the drafting plates (`src/components/Plate.tsx`) stand in for
-      screenshots. Swap them for `next/image` when you have real visuals.
-
-## Education
-
-- [x] B.Sc. Information Technology, Ramanand Arya D.A.V. College, Mumbai,
-      2021–2024 (from your résumé). The CGPA is left off deliberately.
-
-## About — `src/content/about.ts`
-
-- [ ] Two paragraphs in your own voice
-- [ ] Three principles (craft, systems, teams). Only write what you actually believe.
-
-## Optional
-
-- [ ] Re-check the share card (`/opengraph-image`) once your name is final
-- [ ] Add a second Lab experiment: see "Adding a lab experiment" in README.md
+- `petreon` and the old portfolio: their live URLs return 404, and the code is
+  early or template-based.
+- `shoping-site`: its README points to another author.
+- Forks (twenty, nextui, floating-ui, meshery…): no upstream contributions.
+- The old résumé's "40% improvement in user engagement": nothing backs it up.
+- Clyra's company stats (users, GPA): those are Clyra's results, not yours.

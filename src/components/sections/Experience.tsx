@@ -1,4 +1,5 @@
 import { education, experience } from "@/content/experience";
+import { profile } from "@/content/profile";
 import { T } from "@/components/Draftable";
 import { SectionHead } from "@/components/SectionHead";
 
@@ -13,6 +14,11 @@ export function Experience() {
               <div className="md:sticky md:top-[calc(var(--header-h)+2rem)]">
                 <p className="font-serif text-[clamp(3rem,8vw,6.5rem)] italic leading-[0.9] tracking-[-0.035em]">{r.company}</p>
                 <p className="t-meta mt-5 text-[var(--ink-2)]">{r.title}</p>
+                {r.company === profile.company && profile.companyUrl ? (
+                  <a href={profile.companyUrl} target="_blank" rel="noreferrer" className="t-meta link-draw mt-1.5 inline-block text-[var(--ink-3)]">
+                    {profile.companyUrl.replace(/^https?:\/\//, "")} ↗
+                  </a>
+                ) : null}
                 <p className="t-meta mt-1.5 text-[var(--ink-3)]">
                   <T v={r.start} /> — <T v={r.end} />
                 </p>

@@ -12,7 +12,7 @@ export function Hero() {
     { label: "LinkedIn", href: links.linkedin },
     { label: "GitHub", href: links.github },
     { label: "X", href: links.x },
-  ];
+  ].filter((c) => c.label !== "Résumé" || c.href);
 
   return (
     <section
@@ -47,7 +47,14 @@ export function Hero() {
           >
             {profile.role}
             <br />
-            <span className="text-[var(--ink-3)]">at</span> {profile.company}
+            <span className="text-[var(--ink-3)]">at</span>{" "}
+            {profile.companyUrl ? (
+              <a href={profile.companyUrl} target="_blank" rel="noreferrer" className="link-draw text-[var(--ink)]">
+                {profile.company}
+              </a>
+            ) : (
+              profile.company
+            )}
             <br />
             <span className="text-[var(--ink-3)]">{profile.experience} in industry</span>
           </p>

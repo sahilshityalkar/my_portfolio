@@ -1,17 +1,24 @@
-import { draft, type Education, type Role } from "./types";
+import { demo, type Education, type Role } from "./types";
 
 export const experience: Role[] = [
   {
     company: "Clyra",
     title: "Frontend Lead Engineer",
-    start: draft("Start month & year"),
+    start: "Jan 2025",
     end: "Present",
-    summary:
-      "Leading the frontend: the architecture the product is built on, the quality bar of the interface, and the trade-offs between shipping fast and shipping well.",
+    summary: demo(
+      "Leading the frontend of Clyra, the AI school operating system — the student learning experience and the tools schools run on, from architecture to the last pixel.",
+    ),
     notes: [
-      draft("A system you designed or own — e.g. the component library, data layer or design-token pipeline"),
-      draft("A hard engineering decision and its outcome — measured if you can"),
-      draft("How you raise the bar for the team — reviews, standards, mentoring"),
+      demo(
+        "Own the frontend architecture across both sides of the product: the student app — mastery map, adaptive quizzes, weekly study plans — and the institution workspace for grading and cohort insight.",
+      ),
+      demo(
+        "Built the real-time progress dashboards and cohort heatmaps: data-dense views that stay fast and legible as classes, concepts and submissions grow.",
+      ),
+      demo(
+        "Set the team’s frontend standards — a shared component library, design tokens and review practice — so new features ship consistent, accessible and fast by default.",
+      ),
     ],
   },
 ];

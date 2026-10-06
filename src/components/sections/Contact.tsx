@@ -9,7 +9,7 @@ export function Contact() {
     { label: "LinkedIn", value: links.linkedin?.replace(/^https?:\/\/(www\.)?/, ""), href: links.linkedin },
     { label: "GitHub", value: links.github?.replace(/^https?:\/\//, ""), href: links.github },
     { label: "X", value: links.x?.replace(/^https?:\/\/(www\.)?/, ""), href: links.x },
-  ];
+  ].filter((r) => r.label !== "Résumé" || r.href);
 
   return (
     <section id="contact" aria-labelledby="contact-title" data-spec="Contact" className="wrap pb-10 pt-24 sm:pt-36">

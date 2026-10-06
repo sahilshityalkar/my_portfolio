@@ -1,13 +1,17 @@
-import { draft, type Text } from "./types";
+import { demo, type Text } from "./types";
 
 export const about: { paragraphs: Text[]; principles: { title: string; body: Text }[] } = {
   paragraphs: [
-    draft("Two or three sentences in your own voice: how you got into frontend, and what you care about in the work."),
-    draft("Outside the editor — optional. One line is enough."),
+    demo(
+      "I’m a frontend engineer from Mumbai. I started out building full-stack apps with the MERN stack and Next.js, and kept drifting towards the part people actually touch — the interface, and the architecture that keeps it fast and honest as a product grows.",
+    ),
+    demo(
+      "At Clyra I lead that work for students and schools. Outside of it I build small products end to end, like ReplyAI, to keep my instincts sharp across the whole stack.",
+    ),
   ],
   principles: [
-    { title: "On craft", body: draft("A belief about interface quality you actually hold.") },
-    { title: "On systems", body: draft("How you think about architecture, components or design systems.") },
-    { title: "On teams", body: draft("How you lead, review or collaborate.") },
+    { title: "On craft", body: demo("The details users never consciously notice are the ones that make a product feel trustworthy.") },
+    { title: "On systems", body: demo("A component library is a set of decisions the team no longer has to make. Make them well, once.") },
+    { title: "On teams", body: demo("Review the work, not the person — and leave every codebase easier to change than you found it.") },
   ],
 };

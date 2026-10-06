@@ -11,6 +11,13 @@ export type Text = string | Draft;
 
 export const draft = (hint: string): Draft => ({ draft: true, hint });
 
+/**
+ * Demo copy: realistic, replaceable text that completes the design while real
+ * facts are pending. Renders like normal text; `grep -rn "demo(" src/content`
+ * lists every instance (see PLACEHOLDERS.md).
+ */
+export const demo = (text: string): string => text;
+
 export const isDraft = (v: unknown): v is Draft =>
   typeof v === "object" && v !== null && (v as Draft).draft === true;
 
