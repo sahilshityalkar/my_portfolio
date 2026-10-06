@@ -65,9 +65,9 @@ void main() {
 
   // Fresnel: the rim reflects the room and darkens; a soft highlight upper-left
   float fres = pow(1.0 - h, 3.0);
-  c = mix(c, ink, fres * 0.28);
-  float spec = smoothstep(0.32, 0.0, length(d - vec2(-0.38, -0.42)));
-  c += spec * 0.10;
+  c = mix(c, ink, fres * 0.18);
+  float spec = smoothstep(0.16, 0.0, length(d - vec2(-0.42, -0.46)));
+  c += spec * 0.08;
   float rim = smoothstep(0.965, 1.0, sqrt(r2));
   c = mix(c, ink, rim * 0.55);
 
@@ -290,7 +290,11 @@ export default function GlassCanvas() {
       canvas.removeEventListener("pointermove", onMove);
       canvas.removeEventListener("keydown", onKey);
       canvas.removeEventListener("webglcontextlost", onLost);
-      gl.getExtension("WEBGL_lose_context")?.loseContext();
+      // Release resources but keep the context alive: a remount (or React's
+      // dev double-invoke) reuses the same canvas, and a lost context can't recover.
+      gl.deleteTexture(tex);
+      gl.deleteBuffer(buf);
+      gl.deleteProgram(prog);
     };
     // the GL setup runs once; later changes flow through `api`
     // eslint-disable-next-line react-hooks/exhaustive-deps
