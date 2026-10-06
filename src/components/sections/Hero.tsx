@@ -34,7 +34,7 @@ export function Hero() {
             <span>{first}</span>
           </span>
           {last ? (
-            <span className="mask-line pl-[12%] italic sm:pl-[16.66%]" style={{ ["--i" as string]: 1 }}>
+            <span className="mask-line pl-[12%] italic sm:pl-[16.66%] lg:pl-0 lg:text-right" style={{ ["--i" as string]: 1 }}>
               <span>{last}</span>
             </span>
           ) : null}

@@ -28,7 +28,8 @@ type Box = {
   fixed: boolean;
   group: Element | null;
 };
-type Word = { text: string; x: number; y: number; w: number; h: number };
+/** Each word keeps its own font, so a roman line and an italic line both redraw truthfully. */
+type Word = { text: string; x: number; y: number; w: number; h: number; font: string; spacing: string; ascent: number };
 type TypeSpec = {
   font: string;
   spacing: string;
@@ -98,12 +99,25 @@ function measure(ctx: CanvasRenderingContext2D): Model {
     const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
     for (let n = walker.nextNode(); n; n = walker.nextNode()) {
       const text = n.textContent ?? "";
+      const ps = n.parentElement ? getComputedStyle(n.parentElement) : cs;
+      const wfont = `${ps.fontStyle} ${ps.fontWeight} ${ps.fontSize} ${ps.fontFamily}`;
+      ctx.font = wfont;
+      const wascent = ctx.measureText("Hxg").fontBoundingBoxAscent;
       for (const match of text.matchAll(/\S+/g)) {
         range.setStart(n, match.index);
         range.setEnd(n, match.index + match[0].length);
         const wr = range.getClientRects()[0];
         if (!wr || wr.width < 1) continue;
-        words.push({ text: match[0], x: wr.left + sx, y: wr.top + sy, w: wr.width, h: wr.height });
+        words.push({
+          text: match[0],
+          x: wr.left + sx,
+          y: wr.top + sy,
+          w: wr.width,
+          h: wr.height,
+          font: wfont,
+          spacing: ps.letterSpacing,
+          ascent: wascent,
+        });
       }
     }
     const r = el.getBoundingClientRect();
@@ -169,7 +183,7 @@ function hatch(ctx: CanvasRenderingContext2D, color: string, dpr: number): Canva
   const x = c.getContext("2d");
   if (!x) return null;
   x.strokeStyle = color;
-  x.globalAlpha = 0.55;
+  x.globalAlpha = 0.3;
   x.lineWidth = dpr * 0.75;
   x.beginPath();
   x.moveTo(0, s);
@@ -247,7 +261,7 @@ function draw(f: Frame) {
   ctx.clip();
 
   // vellum
-  ctx.globalAlpha = 0.955;
+  ctx.globalAlpha = 0.975;
   ctx.fillStyle = p.paper;
   ctx.fillRect(0, 0, W, H);
   ctx.globalAlpha = 1;
@@ -256,7 +270,7 @@ function draw(f: Frame) {
   ctx.strokeStyle = p.rule;
   ctx.lineWidth = 1;
   const oy = -(sy % 64);
-  ctx.globalAlpha = 0.22;
+  ctx.globalAlpha = 0.09;
   ctx.beginPath();
   for (let y = oy % 8; y < H; y += 8) {
     ctx.moveTo(0, Math.round(y) + 0.5);
@@ -267,7 +281,7 @@ function draw(f: Frame) {
     ctx.lineTo(x + 0.5, H);
   }
   ctx.stroke();
-  ctx.globalAlpha = 0.5;
+  ctx.globalAlpha = 0.3;
   ctx.beginPath();
   for (let y = oy; y < H; y += 64) {
     ctx.moveTo(0, Math.round(y) + 0.5);
@@ -283,9 +297,9 @@ function draw(f: Frame) {
   // column grid
   if (model.grid) {
     ctx.fillStyle = p.mark;
-    ctx.globalAlpha = 0.045;
+    ctx.globalAlpha = 0.035;
     for (const [x, w] of model.grid.cols) ctx.fillRect(x - sx, 0, w, H);
-    ctx.globalAlpha = 0.28;
+    ctx.globalAlpha = 0.1;
     ctx.strokeStyle = p.mark;
     ctx.beginPath();
     for (const [x, w] of model.grid.cols) {
@@ -312,45 +326,59 @@ function draw(f: Frame) {
   ctx.globalAlpha = 1;
 
   // letterforms
+  const LS = (v: string) => {
+    if ("letterSpacing" in ctx) (ctx as CanvasRenderingContext2D & { letterSpacing: string }).letterSpacing = v;
+  };
   for (const t of model.types) {
     const ty = t.y - sy;
     if (ty > H || ty + t.h < 0) continue;
-    ctx.font = t.font;
-    if ("letterSpacing" in ctx) (ctx as CanvasRenderingContext2D & { letterSpacing: string }).letterSpacing = t.spacing;
     ctx.textBaseline = "alphabetic";
     ctx.strokeStyle = p.ink;
-    ctx.lineWidth = Math.max(0.75, t.size / 140);
+    ctx.lineWidth = Math.max(0.75, t.size / 160);
     const rows = new Map<number, Word[]>();
     for (const w of t.words) {
       const key = Math.round(w.y);
       rows.set(key, [...(rows.get(key) ?? []), w]);
-      ctx.strokeText(w.text, w.x - sx, w.y - sy + t.ascent);
+      ctx.font = w.font;
+      LS(w.spacing);
+      ctx.strokeText(w.text, w.x - sx, w.y - sy + w.ascent);
     }
-    if ("letterSpacing" in ctx) (ctx as CanvasRenderingContext2D & { letterSpacing: string }).letterSpacing = "0px";
+    LS("0px");
 
     const x0 = t.x - sx;
     const x1 = t.x - sx + t.w;
     let first = true;
-    for (const [y] of rows) {
-      const base = y - sy + t.ascent;
+    for (const [y, row] of rows) {
+      const w0 = row[0]!;
+      ctx.font = w0.font;
+      const cap = ctx.measureText("H").actualBoundingBoxAscent;
+      const xh = ctx.measureText("x").actualBoundingBoxAscent;
+      const base = y - sy + w0.ascent;
       const lines: [number, string, boolean][] = [
         [base, "baseline", false],
-        [base - t.xh, `x-height ${(t.xh / t.size).toFixed(2)}em`, true],
-        [base - t.cap, `cap ${(t.cap / t.size).toFixed(2)}em`, true],
+        [base - xh, `x-height ${(xh / t.size).toFixed(2)}em`, true],
+        [base - cap, `cap height ${(cap / t.size).toFixed(2)}em`, true],
       ];
+      const rowEnd = Math.max(...row.map((w) => w.x + w.w)) - sx;
       for (const [ly, label, dashed] of lines) {
         ctx.strokeStyle = p.mark;
         ctx.lineWidth = 1;
-        ctx.setLineDash(dashed ? [4, 4] : []);
+        ctx.globalAlpha = dashed ? 0.7 : 1;
+        ctx.setLineDash(dashed ? [3, 4] : []);
         ctx.beginPath();
         ctx.moveTo(x0 - 12, Math.round(ly) + 0.5);
-        ctx.lineTo(x1 + 12, Math.round(ly) + 0.5);
+        ctx.lineTo(Math.min(x1, rowEnd + 160), Math.round(ly) + 0.5);
         ctx.stroke();
         ctx.setLineDash([]);
+        ctx.globalAlpha = 1;
         if (first || t.size > 60) {
           ctx.font = MONO;
+          const lw = ctx.measureText(label).width;
+          const lx = Math.min(rowEnd + 24, W - lw - 16);
+          ctx.fillStyle = p.paper;
+          ctx.fillRect(lx - 4, ly - 7, lw + 8, 13);
           ctx.fillStyle = p.mark;
-          ctx.fillText(label, x1 + 16, ly + 3);
+          ctx.fillText(label, lx, ly + 3);
         }
       }
       first = false;
@@ -381,7 +409,9 @@ function draw(f: Frame) {
     ctx.setLineDash([6, 3]);
     ctx.strokeRect(Math.round(x) + 0.5, Math.round(y) + 0.5, Math.round(b.w) - 1, Math.round(b.h) - 1);
     ctx.setLineDash([]);
-    tag(ctx, b.label, Math.round(x), Math.max(Math.round(y), 15), p);
+    // keep the tag readable below the fixed header while its box scrolls past
+    const headerH = b.fixed ? 15 : 78;
+    tag(ctx, b.label, Math.round(x), Math.min(Math.max(Math.round(y), headerH), Math.round(y + b.h)), p);
     ctx.font = MONO;
     const dims = `${Math.round(b.w)} × ${Math.round(b.h)}`;
     ctx.fillStyle = p.mark;
@@ -446,7 +476,11 @@ function draw(f: Frame) {
     ctx.font = MONO;
     ctx.fillStyle = p.ink3;
     const read = `x ${Math.round(cx + sx)}  y ${Math.round(cy + sy)}  ·  ${f.fps} fps`;
-    ctx.fillText(read, cx - ctx.measureText(read).width / 2, cy + r + 20);
+    const rw = ctx.measureText(read).width;
+    ctx.fillStyle = p.paper;
+    ctx.fillRect(cx - rw / 2 - 6, cy + r + 9, rw + 12, 16);
+    ctx.fillStyle = p.ink3;
+    ctx.fillText(read, cx - rw / 2, cy + r + 20);
   }
 }
 
@@ -473,7 +507,8 @@ export function Loupe() {
     const lensRadius = () => Math.round(Math.min(190, Math.max(120, Math.min(innerWidth, innerHeight) * 0.2)));
 
     let dpr = Math.min(devicePixelRatio || 1, 2);
-    let W = innerWidth;
+    // clientWidth excludes the scrollbar, so labels never tuck under it
+    let W = document.documentElement.clientWidth;
     let H = innerHeight;
     readMono();
     let palette = readPalette();
@@ -495,7 +530,7 @@ export function Loupe() {
     let dirty = true;
 
     const resize = () => {
-      W = innerWidth;
+      W = document.documentElement.clientWidth;
       H = innerHeight;
       canvas.width = Math.round(W * dpr);
       canvas.height = Math.round(H * dpr);

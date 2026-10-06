@@ -112,7 +112,7 @@ body::before {
 .t-display {
   font-family: var(--serif);
   font-weight: 380;
-  font-size: clamp(3.4rem, 10.4vw, 10.25rem);
+  font-size: clamp(3.4rem, 12.2vw, 12.5rem);
   line-height: 0.9;
   letter-spacing: -0.035em;
 }
