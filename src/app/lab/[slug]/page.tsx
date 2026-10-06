@@ -26,16 +26,16 @@ export default async function ExperimentPage({ params }: PageProps<"/lab/[slug]"
   return (
     <div className="pt-[calc(var(--header-h)+2rem)]">
       <div className="wrap grid-12 items-end gap-y-6 pb-8" data-spec-grid>
-        <p className="t-meta col-span-12 flex gap-3 text-[var(--ink-3)] fade-in">
-          <Link href="/lab" className="link-draw hover:text-[var(--ink)]">
+        <p className="t-meta col-span-12 flex gap-3 text-ink-3 fade-in">
+          <Link href="/lab" className="link-draw hover:text-ink">
             ← Lab
           </Link>
           <span aria-hidden="true">/</span>
-          <span className="text-[var(--mark)]">{e.index}</span>
+          <span className="text-mark">{e.index}</span>
         </p>
         <h1 className="t-title col-span-12 md:col-span-4">{e.title}</h1>
-        <p className="col-span-12 max-w-[56ch] text-[var(--ink-2)] md:col-span-6">{e.summary}</p>
-        <p className="t-meta col-span-12 text-[var(--ink-3)] md:col-span-2 md:text-right">{e.tech}</p>
+        <p className="col-span-12 max-w-[56ch] text-ink-2 md:col-span-6">{e.summary}</p>
+        <p className="t-meta col-span-12 text-ink-3 md:col-span-2 md:text-right">{e.tech}</p>
       </div>
       <Experiment />
     </div>

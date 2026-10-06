@@ -7,7 +7,7 @@ const GlassCanvas = dynamic(() => import("./GlassCanvas"), {
   ssr: false,
   loading: () => (
     <div className="wrap">
-      <div className="t-meta grid aspect-[4/5] place-items-center bg-[var(--paper-2)] text-[var(--ink-3)] sm:aspect-[16/9]">
+      <div className="t-meta grid aspect-[4/5] place-items-center bg-paper-2 text-ink-3 sm:aspect-[16/9]">
         Grinding the lens…
       </div>
     </div>

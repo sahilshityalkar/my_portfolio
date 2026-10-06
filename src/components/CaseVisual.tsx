@@ -6,16 +6,16 @@ import { Plate } from "@/components/Plate";
 export function CaseVisual({ c, seed, priority = false }: { c: CaseStudy; seed: number; priority?: boolean }) {
   if (!c.image) return <Plate seed={seed} numeral={c.index} caption={`Plate ${c.index}`} />;
   return (
-    <figure className="group/plate relative aspect-[4/3] overflow-hidden bg-[var(--paper-2)]">
+    <figure className="group/plate relative aspect-[4/3] overflow-hidden bg-paper-2">
       <Image
         src={c.image.src}
         alt={c.image.alt}
         fill
         priority={priority}
         sizes="(min-width: 768px) 58vw, 100vw"
-        className="object-cover object-top transition-transform duration-[1.6s] ease-[var(--ease-out)] group-hover/plate:scale-[1.025]"
+        className="object-cover object-top transition-transform duration-[1.6s] ease-(--ease-out) group-hover/plate:scale-[1.025]"
       />
-      <figcaption className="t-meta absolute left-3 top-3 bg-[var(--paper)] px-1.5 py-0.5 text-[var(--ink-3)]">
+      <figcaption className="t-meta absolute left-3 top-3 bg-paper px-1.5 py-0.5 text-ink-3">
         Plate {c.index}
       </figcaption>
     </figure>

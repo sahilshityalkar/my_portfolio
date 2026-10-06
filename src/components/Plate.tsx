@@ -20,7 +20,7 @@ export function Plate({ seed, numeral, caption }: { seed: number; numeral: strin
   const angle = (Math.round(r() * 60 - 30) * Math.PI) / 180;
 
   return (
-    <figure className="group/plate relative aspect-[4/3] overflow-hidden bg-[var(--paper-2)]">
+    <figure className="group/plate relative aspect-[4/3] overflow-hidden bg-paper-2">
       <svg viewBox="0 0 600 450" className="absolute inset-0 size-full" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
         <g stroke="var(--rule-strong)" strokeWidth="1" fill="none" opacity="0.35">
           {Array.from({ length: 11 }, (_, i) => (
@@ -34,7 +34,7 @@ export function Plate({ seed, numeral, caption }: { seed: number; numeral: strin
           fill="none"
           stroke="var(--ink)"
           strokeWidth="1"
-          className="transition-transform duration-[1.6s] ease-[var(--ease-out)] group-hover/plate:rotate-[8deg]"
+          className="transition-transform duration-[1.6s] ease-(--ease-out) group-hover/plate:rotate-[8deg]"
           style={{ transformOrigin: `${cx}px ${cy}px` }}
         >
           {arcs.map((a, i) => (
@@ -54,13 +54,13 @@ export function Plate({ seed, numeral, caption }: { seed: number; numeral: strin
           y="410"
           textAnchor="end"
           fill="var(--ink)"
-          className="font-serif italic transition-transform duration-[1.6s] ease-[var(--ease-out)] group-hover/plate:-translate-y-2"
+          className="font-serif italic transition-transform duration-[1.6s] ease-(--ease-out) group-hover/plate:-translate-y-2"
           style={{ fontSize: 210, fontWeight: 300, letterSpacing: "-0.04em" }}
         >
           {numeral}
         </text>
       </svg>
-      <figcaption className="t-meta absolute left-3 top-3 text-[var(--ink-3)]">{caption}</figcaption>
+      <figcaption className="t-meta absolute left-3 top-3 text-ink-3">{caption}</figcaption>
     </figure>
   );
 }

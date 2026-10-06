@@ -13,8 +13,8 @@ export function Contact() {
 
   return (
     <section id="contact" aria-labelledby="contact-title" data-spec="Contact" className="wrap pb-10 pt-24 sm:pt-36">
-      <div className="grid-12 gap-y-12 border-t border-[var(--rule-strong)] pt-4">
-        <p className="t-meta col-span-12 text-[var(--mark)]" data-reveal>
+      <div className="grid-12 gap-y-12 border-t border-(--rule-strong) pt-4">
+        <p className="t-meta col-span-12 text-mark" data-reveal>
           06
         </p>
         <h2 id="contact-title" className="t-display col-span-12" data-reveal data-spec-type="Newsreader">
@@ -28,14 +28,14 @@ export function Contact() {
           ) : (
             <T as="p" v={draft("your@email.com")} className="t-lede" />
           )}
-          <p className="t-meta mt-4 text-[var(--ink-3)]">
+          <p className="t-meta mt-4 text-ink-3">
             <T v={profile.availability} />
           </p>
         </div>
         <ul className="col-span-12 md:col-span-6 md:col-start-7" data-reveal>
           {rows.map((r) => (
-            <li key={r.label} className="grid grid-cols-[7rem_1fr] border-t border-[var(--rule)] py-3 last:border-b">
-              <span className="t-meta pt-1 text-[var(--ink-3)]">{r.label}</span>
+            <li key={r.label} className="grid grid-cols-[7rem_1fr] border-t border-rule py-3 last:border-b">
+              <span className="t-meta pt-1 text-ink-3">{r.label}</span>
               {r.href && r.value ? (
                 <a
                   href={r.href}
@@ -52,7 +52,7 @@ export function Contact() {
         </ul>
       </div>
 
-      <footer className="t-meta mt-28 flex flex-col justify-between gap-3 border-t border-[var(--rule)] pt-5 text-[var(--ink-3)] sm:flex-row">
+      <footer className="t-meta mt-28 flex flex-col justify-between gap-3 border-t border-rule pt-5 text-ink-3 sm:flex-row">
         <span>
           © {new Date().getFullYear()} {profile.name}
         </span>

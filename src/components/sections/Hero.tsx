@@ -22,9 +22,9 @@ export function Hero() {
       className="relative flex min-h-[100svh] flex-col justify-end pb-8 pt-[calc(var(--header-h)+2rem)] sm:pb-10"
     >
       <div className="wrap grid-12 gap-y-10" data-spec-grid>
-        <p className="t-meta col-span-12 flex justify-between text-[var(--ink-3)] fade-in" style={{ ["--i" as string]: 0 }}>
+        <p className="t-meta col-span-12 flex justify-between text-ink-3 fade-in" style={{ ["--i" as string]: 0 }}>
           <span>
-            <span className="text-[var(--mark)]">01</span>&ensp;Index
+            <span className="text-mark">01</span>&ensp;Index
           </span>
           <span>Portfolio — {new Date().getFullYear()}</span>
         </p>
@@ -40,23 +40,23 @@ export function Hero() {
           ) : null}
         </h1>
 
-        <div className="col-span-12 grid grid-cols-subgrid gap-y-8 border-t border-[var(--rule)] pt-6">
+        <div className="col-span-12 grid grid-cols-subgrid gap-y-8 border-t border-rule pt-6">
           <p
-            className="t-meta col-span-12 text-[var(--ink-2)] md:col-span-4 lg:col-span-3 fade-in"
+            className="t-meta col-span-12 text-ink-2 md:col-span-4 lg:col-span-3 fade-in"
             style={{ ["--i" as string]: 1 }}
           >
             {profile.role}
             <br />
-            <span className="text-[var(--ink-3)]">at</span>{" "}
+            <span className="text-ink-3">at</span>{" "}
             {profile.companyUrl ? (
-              <a href={profile.companyUrl} target="_blank" rel="noreferrer" className="link-draw text-[var(--ink)]">
+              <a href={profile.companyUrl} target="_blank" rel="noreferrer" className="link-draw text-ink">
                 {profile.company}
               </a>
             ) : (
               profile.company
             )}
             <br />
-            <span className="text-[var(--ink-3)]">{profile.experience} in industry</span>
+            <span className="text-ink-3">{profile.experience} in industry</span>
           </p>
 
           <p
@@ -78,11 +78,11 @@ export function Hero() {
                 <li key={c.label}>
                   <a
                     href={c.href}
-                    className="link-draw text-[var(--ink)]"
+                    className="link-draw text-ink"
                     {...(c.href.startsWith("http") ? { target: "_blank", rel: "noreferrer" } : {})}
                   >
                     {c.label}
-                    <span aria-hidden="true" className="ml-1 text-[var(--ink-3)]">
+                    <span aria-hidden="true" className="ml-1 text-ink-3">
                       ↗
                     </span>
                   </a>
@@ -98,7 +98,7 @@ export function Hero() {
 
         <div className="col-span-12 flex items-end justify-between gap-6 fade-in" style={{ ["--i" as string]: 5 }}>
           <InspectHint />
-          <a href="#work" className="t-meta hidden shrink-0 text-[var(--ink-3)] hover:text-[var(--ink)] sm:block">
+          <a href="#work" className="t-meta hidden shrink-0 text-ink-3 hover:text-ink sm:block">
             02 Selected work ↓
           </a>
         </div>

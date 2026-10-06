@@ -21,21 +21,21 @@ export function Work() {
                 <CaseVisual c={c} seed={i + 3} />
               </div>
               <div className={`col-span-12 md:col-span-4 ${i % 2 ? "md:order-1 md:col-start-1" : "md:col-start-9"}`}>
-                <p className="t-meta flex gap-3 text-[var(--ink-3)]">
-                  <span className="text-[var(--mark)]">{c.index}</span>
+                <p className="t-meta flex gap-3 text-ink-3">
+                  <span className="text-mark">{c.index}</span>
                   <T v={c.year} />
                 </p>
-                <h3 className="t-title mt-3 transition-transform duration-700 ease-[var(--ease-out)] group-hover:translate-x-2">
+                <h3 className="t-title mt-3 transition-transform duration-700 ease-(--ease-out) group-hover:translate-x-2">
                   <T v={c.title} />
                 </h3>
-                <T as="p" v={c.kicker} className="mt-4 max-w-[38ch] text-[var(--ink-2)]" />
-                <dl className="t-meta mt-6 grid grid-cols-[6rem_1fr] gap-y-1.5 border-t border-[var(--rule)] pt-4">
-                  <dt className="text-[var(--ink-3)]">Role</dt>
+                <T as="p" v={c.kicker} className="mt-4 max-w-[38ch] text-ink-2" />
+                <dl className="t-meta mt-6 grid grid-cols-[6rem_1fr] gap-y-1.5 border-t border-rule pt-4">
+                  <dt className="text-ink-3">Role</dt>
                   <T as="dd" v={c.role} />
-                  <dt className="text-[var(--ink-3)]">Stack</dt>
+                  <dt className="text-ink-3">Stack</dt>
                   <T as="dd" v={c.stack} />
                 </dl>
-                <p className="t-meta mt-6 text-[var(--ink)]">
+                <p className="t-meta mt-6 text-ink">
                   <span className="link-draw">Read the case study</span> →
                 </p>
               </div>

@@ -37,21 +37,21 @@ export function Header() {
   return (
     <header
       data-spec="Header"
-      className="fixed inset-x-0 top-0 z-50 h-[var(--header-h)] bg-[color-mix(in_srgb,var(--paper)_86%,transparent)] backdrop-blur-md"
+      className="fixed inset-x-0 top-0 z-50 h-(--header-h) bg-[color-mix(in_srgb,var(--paper)_86%,transparent)] backdrop-blur-md"
     >
       <div className="wrap flex h-full items-center justify-between gap-6">
         <Link href="/" className="t-meta flex items-baseline gap-3" aria-label={`${profile.name} — home`}>
-          <span className="text-[var(--ink)]">{profile.name}</span>
-          <span className="hidden text-[var(--ink-3)] lg:inline">
+          <span className="text-ink">{profile.name}</span>
+          <span className="hidden text-ink-3 lg:inline">
             {profile.role}, {profile.company}
           </span>
         </Link>
 
         <nav aria-label="Primary" className="hidden md:block">
-          <ul className="t-meta flex gap-6 text-[var(--ink-2)]">
+          <ul className="t-meta flex gap-6 text-ink-2">
             {nav.map((n) => (
               <li key={n.href}>
-                <a href={n.href} className="link-draw hover:text-[var(--ink)]">
+                <a href={n.href} className="link-draw hover:text-ink">
                   {n.label}
                 </a>
               </li>
@@ -64,7 +64,7 @@ export function Header() {
             type="button"
             aria-pressed={inspecting}
             onClick={() => inspect.set(inspecting ? "off" : matchMedia("(pointer: coarse)").matches ? "full" : "lens")}
-            className="group flex h-9 items-center gap-2 rounded-full px-3 text-[var(--ink-2)] transition-colors hover:text-[var(--ink)] aria-pressed:text-[var(--mark)]"
+            className="group flex h-9 items-center gap-2 rounded-full px-3 text-ink-2 transition-colors hover:text-ink aria-pressed:text-mark"
           >
             <svg width="13" height="13" viewBox="0 0 13 13" aria-hidden="true" className="overflow-visible">
               <circle cx="5.5" cy="5.5" r="4.75" fill="none" stroke="currentColor" />
@@ -78,7 +78,7 @@ export function Header() {
               />
             </svg>
             <span>{inspecting ? "Close" : "Inspect"}</span>
-            <kbd className="hidden rounded border border-[var(--rule-strong)] px-1 font-[inherit] text-[0.625rem] text-[var(--ink-3)] lg:inline">
+            <kbd className="hidden rounded border border-(--rule-strong) px-1 font-[inherit] text-[0.625rem] text-ink-3 lg:inline">
               L
             </kbd>
           </button>
@@ -87,11 +87,11 @@ export function Header() {
             type="button"
             onClick={() => setTheme(t === "day" ? "night" : "day")}
             aria-label={t === "day" ? "Switch to night" : "Switch to day"}
-            className="flex h-9 items-center gap-2 rounded-full px-3 text-[var(--ink-2)] transition-colors hover:text-[var(--ink)]"
+            className="flex h-9 items-center gap-2 rounded-full px-3 text-ink-2 transition-colors hover:text-ink"
           >
             <span aria-hidden="true" className="relative block size-3 overflow-hidden rounded-full border border-current">
               <span
-                className="absolute inset-0 rounded-full bg-current transition-transform duration-700 ease-[var(--ease-out)]"
+                className="absolute inset-0 rounded-full bg-current transition-transform duration-700 ease-(--ease-out)"
                 style={{ transform: t === "night" ? "translateX(0)" : "translateX(60%)" }}
               />
             </span>
@@ -101,7 +101,7 @@ export function Header() {
           {links.resume ? (
             <a
               href={links.resume}
-              className="hidden h-9 items-center rounded-full border border-[var(--rule-strong)] px-4 text-[var(--ink)] transition-colors hover:bg-[var(--ink)] hover:text-[var(--paper)] sm:flex"
+              className="hidden h-9 items-center rounded-full border border-(--rule-strong) px-4 text-ink transition-colors hover:bg-ink hover:text-paper sm:flex"
             >
               Résumé
             </a>
@@ -109,7 +109,7 @@ export function Header() {
 
           <button
             type="button"
-            className="flex h-9 items-center px-2 text-[var(--ink)] md:hidden"
+            className="flex h-9 items-center px-2 text-ink md:hidden"
             aria-expanded={open}
             aria-controls="menu"
             onClick={() => setOpen((o) => !o)}
@@ -120,19 +120,19 @@ export function Header() {
       </div>
 
       {open ? (
-        <div id="menu" className="fixed inset-x-0 top-[var(--header-h)] bottom-0 z-50 bg-[var(--paper)] md:hidden">
+        <div id="menu" className="fixed inset-x-0 top-(--header-h) bottom-0 z-50 bg-paper md:hidden">
           <nav aria-label="Index" className="wrap flex h-full flex-col justify-between pb-10 pt-6">
             <ul>
               {nav.map((n, i) => (
                 <li key={n.href} className="rule fade-in" style={{ ["--i" as string]: i - 3 }}>
                   <a href={n.href} onClick={() => setOpen(false)} className="flex items-baseline justify-between py-4">
                     <span className="t-title">{n.label}</span>
-                    <span className="t-meta text-[var(--ink-3)]">{n.n}</span>
+                    <span className="t-meta text-ink-3">{n.n}</span>
                   </a>
                 </li>
               ))}
             </ul>
-            <p className="t-meta text-[var(--ink-3)]">Tip — tap Inspect to see how this page is built.</p>
+            <p className="t-meta text-ink-3">Tip — tap Inspect to see how this page is built.</p>
           </nav>
         </div>
       ) : null}

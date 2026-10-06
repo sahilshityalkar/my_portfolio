@@ -33,12 +33,12 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
   return (
     <article data-spec="CaseStudy" className="pt-[calc(var(--header-h)+3rem)]">
       <header className="wrap grid-12 gap-y-8" data-spec-grid>
-        <nav aria-label="Breadcrumb" className="t-meta col-span-12 flex gap-3 text-[var(--ink-3)] fade-in">
-          <Link href="/#work" className="link-draw hover:text-[var(--ink)]">
+        <nav aria-label="Breadcrumb" className="t-meta col-span-12 flex gap-3 text-ink-3 fade-in">
+          <Link href="/#work" className="link-draw hover:text-ink">
             ← Selected work
           </Link>
           <span aria-hidden="true">/</span>
-          <span className="text-[var(--mark)]">Case {c.index}</span>
+          <span className="text-mark">Case {c.index}</span>
         </nav>
         <h1 className="t-display col-span-12 lg:col-span-10" data-spec-type="Newsreader">
           <span className="mask-line">
@@ -50,7 +50,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
         <T as="p" v={c.kicker} className="t-lede col-span-12 max-w-[40ch] md:col-span-7 fade-in" />
         <dl
           data-spec="Facts"
-          className="t-meta col-span-12 grid grid-cols-3 gap-4 border-t border-[var(--rule)] pt-4 md:col-span-5 md:col-start-8 fade-in"
+          className="t-meta col-span-12 grid grid-cols-3 gap-4 border-t border-rule pt-4 md:col-span-5 md:col-start-8 fade-in"
         >
           {(
             [
@@ -60,7 +60,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
             ] as const
           ).map(([k, v]) => (
             <div key={k}>
-              <dt className="text-[var(--ink-3)]">{k}</dt>
+              <dt className="text-ink-3">{k}</dt>
               <T as="dd" v={v} className="mt-1" />
             </div>
           ))}
@@ -74,12 +74,12 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
       <div className="wrap grid-12 mt-20 gap-y-16 sm:mt-28">
         <T as="p" v={c.summary} className="t-lede col-span-12 md:col-span-8 md:col-start-4" />
         {c.sections.map((s, n) => (
-          <section key={s.heading} className="col-span-12 grid grid-cols-subgrid gap-y-4 border-t border-[var(--rule)] pt-5" data-reveal>
+          <section key={s.heading} className="col-span-12 grid grid-cols-subgrid gap-y-4 border-t border-rule pt-5" data-reveal>
             <h2 className="t-meta col-span-12 flex gap-3 md:col-span-3">
-              <span className="text-[var(--mark)]">{String(n + 1).padStart(2, "0")}</span>
+              <span className="text-mark">{String(n + 1).padStart(2, "0")}</span>
               {s.heading}
             </h2>
-            <T as="p" v={s.body} className="col-span-12 max-w-[62ch] text-[1.15rem] text-[var(--ink-2)] md:col-span-8 md:col-start-4" />
+            <T as="p" v={s.body} className="col-span-12 max-w-[62ch] text-[1.15rem] text-ink-2 md:col-span-8 md:col-start-4" />
           </section>
         ))}
         {c.links.length ? (
@@ -98,9 +98,9 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
       </div>
 
       <footer className="wrap mt-32 pb-16">
-        <Link href={`/work/${next.slug}`} className="group block border-t border-[var(--rule-strong)] pt-5">
-          <span className="t-meta text-[var(--ink-3)]">Next — Case {next.index}</span>
-          <span className="t-title mt-3 block transition-transform duration-700 ease-[var(--ease-out)] group-hover:translate-x-2">
+        <Link href={`/work/${next.slug}`} className="group block border-t border-(--rule-strong) pt-5">
+          <span className="t-meta text-ink-3">Next — Case {next.index}</span>
+          <span className="t-title mt-3 block transition-transform duration-700 ease-(--ease-out) group-hover:translate-x-2">
             <T v={next.title} /> →
           </span>
         </Link>

@@ -65,7 +65,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body>
         <a
           href="#main"
-          className="t-meta fixed left-4 top-3 z-[60] -translate-y-20 bg-[var(--ink)] px-3 py-2 text-[var(--paper)] focus:translate-y-0"
+          className="t-meta fixed left-4 top-3 z-[60] -translate-y-20 bg-ink px-3 py-2 text-paper focus:translate-y-0"
         >
           Skip to content
         </a>

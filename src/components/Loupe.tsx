@@ -696,10 +696,10 @@ export function Loupe() {
         <div
           data-loupe-skip
           aria-hidden="true"
-          className="t-meta pointer-events-none fixed bottom-4 left-[var(--gutter)] z-50 flex gap-4 text-[var(--ink-3)] fade-in"
+          className="t-meta pointer-events-none fixed bottom-4 left-(--gutter) z-50 flex gap-4 text-ink-3 fade-in"
           style={{ ["--i" as string]: 0 }}
         >
-          <span className="text-[var(--mark)]">{mode === "full" ? "Blueprint" : "Glass"}</span>
+          <span className="text-mark">{mode === "full" ? "Blueprint" : "Glass"}</span>
           <span className="hidden sm:inline">{hud.nodes} measured nodes</span>
           <span>{hud.fps} fps</span>
           <span className="hidden sm:inline">{mode === "lens" ? "Click to flood · Esc to close" : "Click to return · Esc to close"}</span>

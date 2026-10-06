@@ -302,10 +302,10 @@ export default function GlassCanvas() {
   if (failed) {
     return (
       <div className="wrap">
-        <div className="grid aspect-[16/9] place-items-center border border-dashed border-[var(--rule-strong)] bg-[var(--paper-2)] p-8 text-center">
+        <div className="grid aspect-[16/9] place-items-center border border-dashed border-(--rule-strong) bg-paper-2 p-8 text-center">
           <div>
             <p className="t-title italic">{text}</p>
-            <p className="t-meta mt-4 text-[var(--ink-3)]">WebGL2 is unavailable here, so the glass is resting. The type is still yours.</p>
+            <p className="t-meta mt-4 text-ink-3">WebGL2 is unavailable here, so the glass is resting. The type is still yours.</p>
           </div>
         </div>
       </div>
@@ -319,28 +319,28 @@ export default function GlassCanvas() {
         tabIndex={0}
         role="img"
         aria-label={`The words “${text}” seen through a glass lens. Drag, or use the arrow keys, to move the lens.`}
-        className="block aspect-[4/5] w-full cursor-grab touch-none bg-[var(--paper-2)] active:cursor-grabbing sm:aspect-[16/9]"
+        className="block aspect-[4/5] w-full cursor-grab touch-none bg-paper-2 active:cursor-grabbing sm:aspect-[16/9]"
       />
-      <div className="t-meta mt-4 grid gap-6 border-t border-[var(--rule)] pt-4 sm:grid-cols-[1fr_auto_auto] sm:items-end">
+      <div className="t-meta mt-4 grid gap-6 border-t border-rule pt-4 sm:grid-cols-[1fr_auto_auto] sm:items-end">
         <label className="flex flex-col gap-2">
-          <span className="text-[var(--ink-3)]">Type under the glass</span>
+          <span className="text-ink-3">Type under the glass</span>
           <input
             value={text}
             maxLength={28}
             onChange={(e) => setText(e.target.value)}
-            className="border-b border-[var(--rule-strong)] bg-transparent py-1 font-serif text-xl normal-case tracking-normal text-[var(--ink)] outline-none focus:border-[var(--mark)]"
+            className="border-b border-(--rule-strong) bg-transparent py-1 font-serif text-xl normal-case tracking-normal text-ink outline-none focus:border-mark"
           />
         </label>
         <label className="flex flex-col gap-2">
-          <span className="text-[var(--ink-3)]">Curvature {power.toFixed(2)}</span>
-          <input type="range" min={0.1} max={0.9} step={0.01} value={power} onChange={(e) => setPower(+e.target.value)} className="accent-[var(--mark)]" />
+          <span className="text-ink-3">Curvature {power.toFixed(2)}</span>
+          <input type="range" min={0.1} max={0.9} step={0.01} value={power} onChange={(e) => setPower(+e.target.value)} className="accent-mark" />
         </label>
         <label className="flex flex-col gap-2">
-          <span className="text-[var(--ink-3)]">Dispersion {spread.toFixed(2)}</span>
-          <input type="range" min={0} max={0.2} step={0.005} value={spread} onChange={(e) => setSpread(+e.target.value)} className="accent-[var(--mark)]" />
+          <span className="text-ink-3">Dispersion {spread.toFixed(2)}</span>
+          <input type="range" min={0} max={0.2} step={0.005} value={spread} onChange={(e) => setSpread(+e.target.value)} className="accent-mark" />
         </label>
       </div>
-      <p className="t-meta mt-6 pb-24 text-[var(--ink-3)]">Drag the glass. Arrow keys move it; hold Shift to move further.</p>
+      <p className="t-meta mt-6 pb-24 text-ink-3">Drag the glass. Arrow keys move it; hold Shift to move further.</p>
     </div>
   );
 }
