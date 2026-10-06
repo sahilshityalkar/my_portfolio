@@ -184,7 +184,7 @@ export default function GlassCanvas() {
       rctx.textAlign = "center";
       rctx.textBaseline = "middle";
       rctx.fillText(label, w / 2, h / 2);
-      rctx.font = `500 ${11 * dpr}px "IBM Plex Mono", monospace`;
+      rctx.font = `500 ${11 * dpr}px ${getComputedStyle(document.documentElement).getPropertyValue("--font-plex-mono").trim() || "monospace"}, monospace`;
       rctx.fillStyle = colors.mark;
       rctx.textAlign = "left";
       rctx.fillText("LAB 001 — GLASS", step, h - step);

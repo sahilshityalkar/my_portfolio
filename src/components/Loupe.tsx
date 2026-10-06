@@ -180,7 +180,12 @@ function hatch(ctx: CanvasRenderingContext2D, color: string, dpr: number): Canva
   return p;
 }
 
-const MONO = '500 10px "IBM Plex Mono", ui-monospace, monospace';
+/** next/font renames families, so read the real one from the CSS variable. */
+let MONO = "500 10px ui-monospace, monospace";
+const readMono = () => {
+  const fam = getComputedStyle(document.documentElement).getPropertyValue("--font-plex-mono").trim();
+  if (fam) MONO = `500 10px ${fam}, ui-monospace, monospace`;
+};
 
 function tag(ctx: CanvasRenderingContext2D, text: string, x: number, y: number, p: Palette, fill = p.mark) {
   ctx.font = MONO;
@@ -470,6 +475,7 @@ export function Loupe() {
     let dpr = Math.min(devicePixelRatio || 1, 2);
     let W = innerWidth;
     let H = innerHeight;
+    readMono();
     let palette = readPalette();
     let pattern: CanvasPattern | null = null;
     let model: Model = EMPTY;
