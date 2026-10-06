@@ -59,14 +59,21 @@ a component.
 | `lab.ts` | Lab experiment index |
 | `about.ts` | About paragraphs and principles |
 
-**Placeholders.** Unknown facts are written as `draft("hint")`. They render as
-quiet, dotted-underlined italic notes so the site never looks broken, and
-they're tracked in [PLACEHOLDERS.md](PLACEHOLDERS.md). Replace a draft by
-swapping `draft("…")` for a plain string. To find what's left:
+**Demo content.** Copy written to complete the design while real details are
+pending is wrapped in `demo("…")`; it renders like normal text. Every instance
+is listed in [PLACEHOLDERS.md](PLACEHOLDERS.md), along with the source of
+every verified fact. To find what's left:
 
 ```bash
-grep -rn "draft(" src/content
+grep -rn "demo(" src/content
 ```
+
+Values that are simply unknown can use `draft("hint")`. These render as
+quiet, dotted-underlined italic notes, so the site never looks broken.
+
+**Images.** Each case study is drawn as a technical plate (`plate:
+"replies" | "mastery" | "heatmap"`). Add `image: { src, alt, url }` to also
+show a real screenshot of the shipped product on its case page.
 
 **Résumé.** Drop the PDF into `public/` (e.g. `public/resume.pdf`) and set
 `links.resume = "/resume.pdf"`. A Résumé button appears in the header.
