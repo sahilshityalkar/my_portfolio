@@ -1,4 +1,4 @@
-import { draft, type Role } from "./types";
+import { draft, type Education, type Role } from "./types";
 
 export const experience: Role[] = [
   {
@@ -13,5 +13,14 @@ export const experience: Role[] = [
       draft("A hard engineering decision and its outcome — measured if you can"),
       draft("How you raise the bar for the team — reviews, standards, mentoring"),
     ],
+  },
+];
+
+/** From the résumé published in github.com/sahilshityalkar/Personal-Portfolio-Website. */
+export const education: Education[] = [
+  {
+    school: "Ramanand Arya D.A.V. College, Mumbai",
+    degree: "B.Sc. Information Technology",
+    years: "2021 — 2024",
   },
 ];

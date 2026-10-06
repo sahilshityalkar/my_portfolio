@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { work } from "@/content/work";
 import { T, plain } from "@/components/Draftable";
-import { Plate } from "@/components/Plate";
+import { CaseVisual } from "@/components/CaseVisual";
 import { SectionHead } from "@/components/SectionHead";
 
 export function Work() {
@@ -18,7 +18,7 @@ export function Work() {
               aria-label={`Case study ${c.index}: ${plain(c.title, "in preparation")}`}
             >
               <div className={`col-span-12 md:col-span-7 ${i % 2 ? "md:order-2 md:col-start-6" : ""}`}>
-                <Plate seed={i + 3} numeral={c.index} caption={`Plate ${c.index}`} />
+                <CaseVisual c={c} seed={i + 3} />
               </div>
               <div className={`col-span-12 md:col-span-4 ${i % 2 ? "md:order-1 md:col-start-1" : "md:col-start-9"}`}>
                 <p className="t-meta flex gap-3 text-[var(--ink-3)]">

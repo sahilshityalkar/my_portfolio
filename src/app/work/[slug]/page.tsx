@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getCase, work } from "@/content/work";
 import { T, plain } from "@/components/Draftable";
-import { Plate } from "@/components/Plate";
+import { CaseVisual } from "@/components/CaseVisual";
 
 export const dynamicParams = false;
 
@@ -68,7 +68,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
       </header>
 
       <div className="wrap mt-16 fade-in" style={{ ["--i" as string]: 3 }}>
-        <Plate seed={i + 3} numeral={c.index} caption={`Plate ${c.index} — replace with project imagery`} />
+        <CaseVisual c={c} seed={i + 3} priority />
       </div>
 
       <div className="wrap grid-12 mt-20 gap-y-16 sm:mt-28">

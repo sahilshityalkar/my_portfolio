@@ -1,4 +1,4 @@
-import { experience } from "@/content/experience";
+import { education, experience } from "@/content/experience";
 import { T } from "@/components/Draftable";
 import { SectionHead } from "@/components/SectionHead";
 
@@ -37,6 +37,20 @@ export function Experience() {
           </li>
         ))}
       </ol>
+      <div className="grid-12 mt-24 gap-y-4 border-t border-[var(--rule)] pt-5" data-reveal>
+        <h3 className="t-meta col-span-12 text-[var(--ink-3)] md:col-span-4">Education</h3>
+        <ul className="col-span-12 md:col-span-8 lg:col-start-7 lg:col-span-6">
+          {education.map((e) => (
+            <li key={e.school} className="grid gap-x-6 gap-y-1 sm:grid-cols-[1fr_auto]">
+              <span>
+                {e.degree}
+                <span className="block text-[var(--ink-2)]">{e.school}</span>
+              </span>
+              <span className="t-meta pt-1 text-[var(--ink-3)]">{e.years}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
     </section>
   );
 }

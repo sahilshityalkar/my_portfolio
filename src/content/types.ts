@@ -37,7 +37,11 @@ export type CaseStudy = {
   /** Case-study body. Each section renders with the same editorial template. */
   sections: { heading: string; body: Text }[];
   links: Link[];
+  /** Optional real imagery (put the file in /public). Without it, a drafting plate is drawn. */
+  image?: { src: string; alt: string };
 };
+
+export type Education = { school: string; degree: string; years: string };
 
 export type Experiment = {
   slug: string;

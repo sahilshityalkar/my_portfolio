@@ -5,7 +5,7 @@ import { draft, type Text } from "./types";
  * Replace every `draft(...)` with real text; see PLACEHOLDERS.md.
  */
 export const profile = {
-  /** Inferred from the GitHub handle `sahilshityalkar`. Confirm spelling. */
+  /** As written on the résumé published in the GitHub repo Personal-Portfolio-Website. */
   name: "Sahil Shityalkar",
   shortName: "Sahil",
   role: "Frontend Lead Engineer",
@@ -21,7 +21,7 @@ export const profile = {
 };
 
 export const links = {
-  email: null as string | null, // e.g. "you@domain.com"
+  email: "sahilshityalkar05@gmail.com" as string | null, // published on the GitHub profile README
   resume: null as string | null, // e.g. "/resume.pdf" (put the file in /public)
   github: "https://github.com/sahilshityalkar" as string | null,
   linkedin: "https://www.linkedin.com/in/sahilshityalkar/" as string | null,
