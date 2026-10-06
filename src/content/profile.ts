@@ -17,7 +17,10 @@ export const profile = {
     "Frontend Lead Engineer at Clyra, the AI school operating system. I own how the product is built and how it feels — component architecture, interface quality and the decisions in between.",
   location: "Mumbai, India" as Text,
   availability: demo("Currently leading frontend at Clyra — always happy to talk about interfaces.") as Text,
-  siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com",
+  /** NEXT_PUBLIC_SITE_URL wins; on Vercel the production domain is picked up automatically. */
+  siteUrl:
+    process.env.NEXT_PUBLIC_SITE_URL ??
+    (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "http://localhost:3000"),
 };
 
 export const links = {
