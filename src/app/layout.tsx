@@ -9,8 +9,8 @@ import "./globals.css";
 
 const newsreader = localFont({
   src: [
-    { path: "./fonts/newsreader-roman.woff2", style: "normal", weight: "200 800" },
-    { path: "./fonts/newsreader-italic.woff2", style: "italic", weight: "200 800" },
+    { path: "./fonts/newsreader-roman.woff2", style: "normal", weight: "300 500" },
+    { path: "./fonts/newsreader-italic.woff2", style: "italic", weight: "300 400" },
   ],
   variable: "--font-newsreader",
   display: "swap",
