@@ -25,7 +25,7 @@ export function Work() {
                   <span className="text-mark">{c.index}</span>
                   <T v={c.year} />
                 </p>
-                <h3 className="t-title mt-3 transition-transform duration-700 ease-(--ease-out) group-hover:translate-x-2">
+                <h3 className="t-title mt-3 transition-transform duration-700 ease-(--ease-out) group-hover:translate-x-2" data-spec-type="Newsreader">
                   <T v={c.title} />
                 </h3>
                 <T as="p" v={c.kicker} className="mt-4 max-w-[38ch] text-ink-2" />

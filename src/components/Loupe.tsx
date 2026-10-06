@@ -43,11 +43,12 @@ type TypeSpec = {
 };
 type Line = { x: number; y: number; w: number; h: number; fixed: boolean };
 type Grid = { cols: [number, number][] } | null;
-type Model = { boxes: Box[]; types: TypeSpec[]; lines: Line[]; grid: Grid };
+type Media = { x: number; y: number; w: number; h: number; label: string };
+type Model = { boxes: Box[]; types: TypeSpec[]; lines: Line[]; grid: Grid; media: Media[] };
 
 type Palette = { paper: string; ink: string; ink3: string; mark: string; rule: string };
 
-const EMPTY: Model = { boxes: [], types: [], lines: [], grid: null };
+const EMPTY: Model = { boxes: [], types: [], lines: [], grid: null, media: [] };
 
 function readPalette(): Palette {
   const s = getComputedStyle(document.documentElement);
@@ -171,7 +172,17 @@ function measure(ctx: CanvasRenderingContext2D): Model {
     grid = { cols };
   }
 
-  return { boxes, types, lines, grid };
+  // figures and images: drawn the way architects mark a picture on a plan
+  const media: Media[] = [];
+  document.querySelectorAll<HTMLElement>("main figure, main img, main canvas").forEach((el) => {
+    if (el.closest("[data-loupe-skip]") || (el.tagName !== "FIGURE" && el.closest("figure"))) return;
+    const r = el.getBoundingClientRect();
+    if (r.width < 80 || r.height < 60) return;
+    const kind = el.tagName === "FIGURE" ? (el.querySelector("img") ? "img" : el.querySelector("svg") ? "svg" : "figure") : el.tagName.toLowerCase();
+    media.push({ x: r.left + sx, y: r.top + sy, w: r.width, h: r.height, label: `${kind} ${Math.round(r.width)} × ${Math.round(r.height)}` });
+  });
+
+  return { boxes, types, lines, grid, media };
 }
 
 /* ------------------------------------------------------------------ drawing */
@@ -297,7 +308,7 @@ function draw(f: Frame) {
   // column grid
   if (model.grid) {
     ctx.fillStyle = p.mark;
-    ctx.globalAlpha = 0.035;
+    ctx.globalAlpha = 0.022;
     for (const [x, w] of model.grid.cols) ctx.fillRect(x - sx, 0, w, H);
     ctx.globalAlpha = 0.1;
     ctx.strokeStyle = p.mark;
@@ -324,6 +335,31 @@ function draw(f: Frame) {
     ctx.fillRect(x, y + l.h * 0.78, l.w, 1);
   }
   ctx.globalAlpha = 1;
+
+  // media: frame, diagonals, size
+  for (const m of model.media) {
+    const x = m.x - sx;
+    const y = m.y - sy;
+    if (y > H || y + m.h < 0) continue;
+    ctx.strokeStyle = p.ink;
+    ctx.lineWidth = 1;
+    ctx.globalAlpha = 0.45;
+    ctx.strokeRect(Math.round(x) + 0.5, Math.round(y) + 0.5, Math.round(m.w) - 1, Math.round(m.h) - 1);
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x + m.w, y + m.h);
+    ctx.moveTo(x + m.w, y);
+    ctx.lineTo(x, y + m.h);
+    ctx.globalAlpha = 0.18;
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+    ctx.font = MONO;
+    const lw = ctx.measureText(m.label).width;
+    ctx.fillStyle = p.paper;
+    ctx.fillRect(x + m.w / 2 - lw / 2 - 6, y + m.h / 2 - 9, lw + 12, 17);
+    ctx.fillStyle = p.ink;
+    ctx.fillText(m.label, x + m.w / 2 - lw / 2, y + m.h / 2 + 3);
+  }
 
   // letterforms
   const LS = (v: string) => {
@@ -749,7 +785,7 @@ export function Loupe() {
           <span className="text-mark">{mode === "full" ? "Blueprint" : "Glass"}</span>
           <span className="hidden sm:inline">{hud.nodes} measured nodes</span>
           <span>{hud.fps} fps</span>
-          <span className="hidden sm:inline">{mode === "lens" ? "Click to flood · Esc to close" : "Click to return · Esc to close"}</span>
+          <span className="hidden sm:inline">{mode === "lens" ? "Click empty space to flood · Esc to close" : "Click to return · Esc to close"}</span>
         </div>
       ) : null}
     </>
