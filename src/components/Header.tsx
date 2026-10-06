@@ -37,10 +37,13 @@ export function Header() {
   return (
     <header
       data-spec="Header"
-      className="fixed inset-x-0 top-0 z-50 h-(--header-h) bg-[color-mix(in_srgb,var(--paper)_86%,transparent)] backdrop-blur-md"
+      className="fixed inset-x-0 top-0 z-50 h-(--header-h)"
     >
-      <div className="wrap flex h-full items-center justify-between gap-6">
-        <Link href="/" className="t-meta flex items-baseline gap-3" aria-label={`${profile.name} — home`}>
+      {/* The blur lives on its own layer: backdrop-filter on the header itself would
+          become the containing block for the fixed full-screen menu below. */}
+      <div aria-hidden="true" className="absolute inset-0 bg-[color-mix(in_srgb,var(--paper)_86%,transparent)] backdrop-blur-md" />
+      <div className="wrap relative flex h-full items-center justify-between gap-4 sm:gap-6">
+        <Link href="/" className="t-meta flex items-baseline gap-3 whitespace-nowrap" aria-label={`${profile.name} — home`}>
           <span className="text-ink">{profile.name}</span>
           <span className="hidden text-ink-3 lg:inline">
             {profile.role}, {profile.company}
@@ -63,8 +66,9 @@ export function Header() {
           <button
             type="button"
             aria-pressed={inspecting}
+            aria-label={inspecting ? "Close the glass" : "Inspect this page"}
             onClick={() => inspect.set(inspecting ? "off" : matchMedia("(pointer: coarse)").matches ? "full" : "lens")}
-            className="group flex h-9 items-center gap-2 rounded-full px-3 text-ink-2 transition-colors hover:text-ink aria-pressed:text-mark"
+            className="group flex h-9 items-center gap-2 rounded-full px-2.5 text-ink-2 sm:px-3 transition-colors hover:text-ink aria-pressed:text-mark"
           >
             <svg width="13" height="13" viewBox="0 0 13 13" aria-hidden="true" className="overflow-visible">
               <circle cx="5.5" cy="5.5" r="4.75" fill="none" stroke="currentColor" />
@@ -77,7 +81,7 @@ export function Header() {
                 className="origin-center scale-0 transition-transform duration-500 [transform-box:fill-box] group-aria-pressed:scale-100"
               />
             </svg>
-            <span>{inspecting ? "Close" : "Inspect"}</span>
+            <span className="hidden sm:inline">{inspecting ? "Close" : "Inspect"}</span>
             <kbd className="hidden rounded border border-(--rule-strong) px-1 font-[inherit] text-[0.625rem] text-ink-3 lg:inline">
               L
             </kbd>
