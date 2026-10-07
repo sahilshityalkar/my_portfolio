@@ -73,6 +73,33 @@ it, and the lab can grow at its own pace. The portfolio features three
 experiments as cards with still preview drawings and links out. A future
 `experiments.json` feed from the lab can replace the hand-written list.
 
+## Second pass: making the wow visible
+
+A review found the site's best idea was hidden behind a keypress most
+visitors, and most recruiters, will never press. Five additions put it on
+the page without blocking anything:
+
+- **The name is drafted, then inked.** It rises as outlined letterforms (the
+  construction the glass reveals) and the ink soaks in. Pure CSS, readable
+  from the first frame.
+- **The glass demonstrates itself, once.** On a first visit, after a moment
+  of stillness at the top of the page, the glass crosses the surname by
+  itself. A deliberate mouse move hands it to the visitor; scrolling or a key
+  closes it. Desktop pointer only, never with reduced motion, once per
+  session.
+- **Plates draft themselves** as they scroll into view, in drafting order:
+  frames, then connections, then labels.
+- **A drafting ruler** on the right edge maps the page: a tick per section, a
+  bracket for the slice in view, click to glide. The header highlights the
+  section in view.
+- **Copy email**, because `mailto:` often does nothing on office machines.
+
+The same review also found and fixed a serious bug: fast scrolls, nav jumps
+and deep links could leave sections invisible (13 of 24 reveal targets).
+Reveals now never leave content hidden. Each addition was re-measured: zero
+layout shift including the automatic glass demo, desktop LCP about 0.3 s,
+and throttled-mobile LCP 1.4 to 1.6 s.
+
 ## Day and Night
 
 Day is the default: warm paper `#f5f2ec`, graphite ink, a single vermilion
