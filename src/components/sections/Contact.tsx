@@ -1,6 +1,7 @@
 import { links, profile } from "@/content/profile";
 import { T } from "@/components/Draftable";
 import { draft } from "@/content/types";
+import { CopyEmail } from "@/components/CopyEmail";
 
 export function Contact() {
   const rows = [
@@ -21,9 +22,20 @@ export function Contact() {
         </h2>
         <div className="col-span-12 md:col-span-5" data-reveal>
           {links.email ? (
-            <a href={`mailto:${links.email}`} className="t-lede link-draw break-all">
-              {links.email}
-            </a>
+            <>
+              <a href={`mailto:${links.email}`} className="t-lede link-draw break-all">
+                {links.email}
+              </a>
+              <div className="mt-5 flex flex-wrap gap-2">
+                <CopyEmail email={links.email} />
+                <a
+                  href={`mailto:${links.email}`}
+                  className="t-meta inline-flex h-9 items-center rounded-full px-4 text-ink-2 transition-colors hover:text-ink"
+                >
+                  Open mail app ↗
+                </a>
+              </div>
+            </>
           ) : (
             <T as="p" v={draft("your@email.com")} className="t-lede" />
           )}
