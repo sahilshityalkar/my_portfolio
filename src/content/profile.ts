@@ -14,7 +14,7 @@ export const profile = {
   experience: "2 years",
   /** One honest sentence. Shown in the hero and used as the meta description. */
   statement:
-    "I own how Clyra’s AI school platform is built and how it feels: component architecture, interface quality, and every decision in between.",
+    "I build interfaces end to end: the architecture underneath, the motion on top, and the small decisions that make software feel trustworthy.",
   location: "Mumbai, India" as Text,
   availability: demo("Currently leading frontend at Clyra. Always happy to talk about interfaces.") as Text,
   /** The canonical domain. NEXT_PUBLIC_SITE_URL overrides it (e.g. for a staging copy). */
