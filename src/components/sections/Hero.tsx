@@ -28,11 +28,11 @@ export function Hero() {
 
         <h1 id="intro-title" className="t-display col-span-12" data-spec-type="Newsreader">
           <span className="mask-line" style={{ ["--i" as string]: 0 }}>
-            <span>{first}</span>
+            <span className="ink">{first}</span>
           </span>
           {last ? (
             <span className="mask-line pl-[12%] italic sm:pl-[16.66%] lg:pl-0 lg:pr-[0.093em] lg:text-right" style={{ ["--i" as string]: 1 }}>
-              <span>{last}</span>
+              <span className="ink">{last}</span>
             </span>
           ) : null}
         </h1>

@@ -232,6 +232,31 @@ body::before {
   animation: rise 1.25s var(--ease-out) both;
   animation-delay: calc(var(--i, 0) * 90ms + 60ms);
 }
+/* The name is drafted before it is inked: it rises as outlined letterforms
+   (the same construction lines the glass reveals), then the ink soaks in.
+   Readable from the first frame; reduced motion lands straight on the ink. */
+.mask-line > span.ink {
+  -webkit-text-stroke-color: var(--ink);
+  animation:
+    rise 1.25s var(--ease-out) both,
+    ink 1.3s var(--ease-in-out) both;
+  animation-delay:
+    calc(var(--i, 0) * 90ms + 60ms),
+    calc(var(--i, 0) * 140ms + 780ms);
+}
+@keyframes ink {
+  from {
+    color: transparent;
+    -webkit-text-stroke-width: 0.009em;
+  }
+  70% {
+    -webkit-text-stroke-width: 0.009em;
+  }
+  to {
+    color: var(--ink);
+    -webkit-text-stroke-width: 0;
+  }
+}
 .fade-in {
   animation: fade 1.2s var(--ease-out) both;
   animation-delay: calc(var(--i, 0) * 70ms + 120ms);
