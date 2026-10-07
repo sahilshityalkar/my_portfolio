@@ -29,12 +29,14 @@ const plexMono = localFont({
   fallback: ["ui-monospace", "Menlo", "monospace"],
 });
 
-const title = `${profile.name} — ${profile.role}`;
+const title = `${profile.name} · ${profile.role}`;
+// The hero states the role once, visually; search results still need it in words.
+const description = `${profile.role} at ${profile.company}, Mumbai. ${profile.statement}`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(profile.siteUrl),
-  title: { default: title, template: `%s — ${profile.name}` },
-  description: profile.statement,
+  title: { default: title, template: `%s · ${profile.name}` },
+  description,
   applicationName: profile.name,
   authors: [{ name: profile.name }],
   alternates: { canonical: "/" },
@@ -43,10 +45,10 @@ export const metadata: Metadata = {
     url: "/",
     siteName: profile.name,
     title,
-    description: profile.statement,
+    description,
     locale: "en",
   },
-  twitter: { card: "summary_large_image", title, description: profile.statement },
+  twitter: { card: "summary_large_image", title, description },
   robots: { index: true, follow: true },
 };
 

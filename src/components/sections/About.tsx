@@ -2,13 +2,13 @@ import { about } from "@/content/about";
 import { T } from "@/components/Draftable";
 import { SectionHead } from "@/components/SectionHead";
 
-/** Facts about this site itself — the only claims here that need no placeholder. */
+/** Facts about this site itself: the only claims here that need no placeholder. */
 const colophon = [
   ["Type", "Newsreader (variable, optical sizes) and IBM Plex Mono, self-hosted"],
   ["Framework", "Next.js App Router, React Server Components, TypeScript"],
   ["Motion", "One hand-written spring integrator, time-based for any refresh rate"],
   ["Glass", "A 2D canvas that measures this page’s DOM and draws its blueprint"],
-  ["Lab", "Raw WebGL2 and GLSL, loaded only when you open it"],
+  ["Lab", "A separate site, lab.sahilshityalkar.com, so experiments never weigh on this one"],
   ["Libraries", "None for animation, 3D or state"],
 ] as const;
 
@@ -38,7 +38,7 @@ export function About() {
           data-reveal
         >
           <h3 id="colophon-title" className="t-meta text-ink-3">
-            Colophon — how this site is made
+            Colophon: how this site is made
           </h3>
           <dl className="mt-4 border-t border-rule">
             {colophon.map(([k, v]) => (

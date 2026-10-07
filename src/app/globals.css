@@ -120,6 +120,9 @@ body::before {
   font-size: clamp(3.4rem, 12.2vw, 12.5rem);
   line-height: 0.9;
   letter-spacing: -0.035em;
+  /* a single long word must never push the page sideways on small phones */
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 .t-title {
@@ -229,6 +232,21 @@ body::before {
 .fade-in {
   animation: fade 1.2s var(--ease-out) both;
   animation-delay: calc(var(--i, 0) * 70ms + 120ms);
+}
+
+/* Lab card: the spring's curve redraws itself when the card is hovered. */
+.lab-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+.group:hover .lab-draw,
+.group:focus-visible .lab-draw {
+  animation: draw 1.4s var(--ease-out) both;
+}
+@keyframes draw {
+  from {
+    stroke-dashoffset: 1;
+  }
 }
 
 @keyframes rise {

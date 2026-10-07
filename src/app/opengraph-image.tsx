@@ -3,7 +3,7 @@ import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import { profile } from "@/content/profile";
 
-export const alt = `${profile.name} — ${profile.role} at ${profile.company}`;
+export const alt = `${profile.name}, ${profile.role} at ${profile.company}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -87,7 +87,7 @@ export default async function OG() {
 
         <div style={{ position: "absolute", left: 64, right: 64, bottom: 52, display: "flex", justifyContent: "space-between", paddingTop: 22, borderTop: "1px solid rgba(28,27,25,0.18)", fontFamily: "Plex", fontSize: 20, letterSpacing: 1.2, textTransform: "uppercase" }}>
           <span>
-            {profile.role} — {profile.company}
+            {profile.role} · {profile.company}
           </span>
           <span style={{ color: MARK }}>Press L to look under the glass</span>
         </div>

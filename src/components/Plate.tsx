@@ -1,7 +1,7 @@
 /**
  * Drafting plates: technical drawings of each project, in the same vocabulary
  * as the Loupe (hairlines, dimension marks, mono labels, one accent). They are
- * schematic on purpose — a drawing of the idea, not a fake screenshot — and are
+ * schematic on purpose (a drawing of the idea, not a fake screenshot) and are
  * deterministic, so server and client render the same SVG.
  */
 export type PlateKind = "replies" | "mastery" | "heatmap" | "arcs";

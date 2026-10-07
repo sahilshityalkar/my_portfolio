@@ -13,18 +13,18 @@ export const work: CaseStudy[] = [
     title: "ReplyAI",
     kicker: "A workspace for answering customer complaints: generate, review and send on-brand replies across email and WhatsApp.",
     year: "2026",
-    role: "Independent project — product, interface and engineering",
+    role: "Independent project: product, interface and engineering",
     stack: "Next.js 16, React 19, TypeScript, Tailwind 4, Clerk, Supabase, Groq, Resend, Vitest",
     summary:
-      "Paste a customer complaint, get three professional, ready-to-send replies in under five seconds — then keep them in the brand’s voice, check them, approve them and send them from one inbox.",
+      "Paste a customer complaint, get three professional, ready-to-send replies in under five seconds. Then keep them in the brand’s voice, check them, approve them and send them from one inbox.",
     sections: [
       {
         heading: "Context",
-        body: "Support teams answer the same complaints all day, across email and WhatsApp. ReplyAI started as a micro-SaaS with one promise — paste a complaint, get three ready-to-send replies in under five seconds — and grew into a customer-response workspace built around that moment, replying in Hinglish, Hindi, English, Tamil, Marathi, Bengali and more.",
+        body: "Support teams answer the same complaints all day, across email and WhatsApp. ReplyAI started as a micro-SaaS with one promise (paste a complaint, get three ready-to-send replies in under five seconds) and grew into a customer-response workspace built around that moment, replying in Hinglish, Hindi, English, Tamil, Marathi, Bengali and more.",
       },
       {
         heading: "My role",
-        body: "An independent project: product, interface and engineering — from the Next.js App Router frontend and API routes to the Postgres schema and its migrations.",
+        body: "An independent project: product, interface and engineering, from the Next.js App Router frontend and API routes to the Postgres schema and its migrations.",
       },
       {
         heading: "The problem",
@@ -36,7 +36,7 @@ export const work: CaseStudy[] = [
       },
       {
         heading: "Outcome",
-        body: "The core flow — generate, apply brand voice, persist, history, safety — works end to end against a real auth session, a real Supabase database and live model calls, with 22 of 22 unit tests passing (test report, June 2026). Testing the running app also caught a high-severity bug a green build had missed: a missing migration made reply-history inserts fail silently. The fix was the migration, plus making the API log insert errors instead of swallowing them.",
+        body: "The core flow (generate, apply brand voice, persist, history, safety) works end to end against a real auth session, a real Supabase database and live model calls, with 22 of 22 unit tests passing (test report, June 2026). Testing the running app also caught a high-severity bug a green build had missed: a missing migration made reply-history inserts fail silently. The fix was the migration, plus making the API log insert errors instead of swallowing them.",
       },
       {
         heading: "In hindsight",
@@ -59,7 +59,7 @@ export const work: CaseStudy[] = [
     slug: "clyra-student-app",
     index: "II",
     plate: "mastery",
-    title: demo("Clyra — the student app"),
+    title: demo("Clyra student app"),
     kicker: demo("Turning an AI diagnosis of what a student doesn’t know yet into an interface that feels like progress, not a report card."),
     year: "2025",
     role: "Frontend Lead",
@@ -86,7 +86,7 @@ export const work: CaseStudy[] = [
       },
       {
         heading: "Outcome",
-        body: demo("Describe the result here with real numbers once you can share them — quiz completion, time to a first study plan, or performance on mid-range phones."),
+        body: demo("Describe the result here with real numbers once you can share them: quiz completion, time to a first study plan, or performance on mid-range phones."),
       },
       { heading: "In hindsight", body: demo("What you would do differently next time.") },
     ],
@@ -96,7 +96,7 @@ export const work: CaseStudy[] = [
     slug: "clyra-institutions",
     index: "III",
     plate: "heatmap",
-    title: demo("Clyra — the institution workspace"),
+    title: demo("Clyra for schools"),
     kicker: demo("Auto-grading, cohort heatmaps and live dashboards that show a school which students need help before they fall behind."),
     year: "2025",
     role: "Frontend Lead",
@@ -123,7 +123,7 @@ export const work: CaseStudy[] = [
       },
       {
         heading: "Outcome",
-        body: demo("Describe the result here with real numbers once you can share them — grading time saved, dashboard adoption, or performance with large cohorts."),
+        body: demo("Describe the result here with real numbers once you can share them: grading time saved, dashboard adoption, or performance with large cohorts."),
       },
       { heading: "In hindsight", body: demo("What you would do differently next time.") },
     ],

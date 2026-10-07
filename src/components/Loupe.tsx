@@ -5,7 +5,7 @@ import { Spring, springs } from "@/lib/spring";
 import { inspect, useStore, type InspectMode } from "@/lib/store";
 
 /**
- * The Loupe — the site's signature.
+ * The Loupe: the site's signature.
  *
  * A glass that shows the page's own engineering drawing. Everything under it is
  * measured from the live DOM at runtime, nothing is pre-drawn:
@@ -654,7 +654,7 @@ export function Loupe() {
       const full = Math.hypot(W, H) + 40;
       if (m !== "off") {
         setVisible(true);
-        // everything waiting to be revealed is revealed — the drawing must match
+        // everything waiting to be revealed is revealed, so the drawing matches the page
         document.querySelectorAll("[data-reveal]").forEach((el) => el.setAttribute("data-in", ""));
         stale = true;
       }

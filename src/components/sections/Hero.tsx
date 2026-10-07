@@ -22,11 +22,8 @@ export function Hero() {
       className="relative flex min-h-[100svh] flex-col justify-end pb-8 pt-[calc(var(--header-h)+2rem)] sm:pb-10"
     >
       <div className="wrap grid-12 gap-y-10" data-spec-grid>
-        <p className="t-meta col-span-12 flex justify-between text-ink-3 fade-in" style={{ ["--i" as string]: 0 }}>
-          <span>
-            <span className="text-mark">01</span>&ensp;Index
-          </span>
-          <span>Portfolio — {new Date().getFullYear()}</span>
+        <p className="t-meta col-span-12 text-ink-3 fade-in" style={{ ["--i" as string]: 0 }}>
+          <span className="text-mark">01</span>&ensp;Index
         </p>
 
         <h1 id="intro-title" className="t-display col-span-12" data-spec-type="Newsreader">
@@ -56,7 +53,7 @@ export function Hero() {
               profile.company
             )}
             <br />
-            <span className="text-ink-3">{profile.experience} in industry</span>
+            <T v={profile.location} className="text-ink-3" />
           </p>
 
           <p

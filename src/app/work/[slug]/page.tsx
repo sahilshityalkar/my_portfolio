@@ -51,7 +51,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
         <T as="p" v={c.kicker} className="t-lede col-span-12 max-w-[40ch] md:col-span-7 fade-in" />
         <dl
           data-spec="Facts"
-          className="t-meta col-span-12 grid grid-cols-3 gap-4 border-t border-rule pt-4 md:col-span-5 md:col-start-8 fade-in"
+          className="t-meta col-span-12 grid grid-cols-1 gap-4 border-t border-rule pt-4 min-[400px]:grid-cols-3 md:col-span-5 md:col-start-8 fade-in"
         >
           {(
             [
@@ -62,7 +62,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
           ).map(([k, v]) => (
             <div key={k}>
               <dt className="text-ink-3">{k}</dt>
-              <T as="dd" v={v} className="mt-1" />
+              <T as="dd" v={v} className="mt-1 [overflow-wrap:anywhere]" />
             </div>
           ))}
         </dl>
@@ -108,7 +108,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
 
       <footer className="wrap mt-32 pb-16">
         <Link href={`/work/${next.slug}`} className="group block border-t border-(--rule-strong) pt-5">
-          <span className="t-meta text-ink-3">Next — Case {next.index}</span>
+          <span className="t-meta text-ink-3">Next · Case {next.index}</span>
           <span className="t-title mt-3 block transition-transform duration-700 ease-(--ease-out) group-hover:translate-x-2">
             <T v={next.title} /> →
           </span>

@@ -14,13 +14,11 @@ export const profile = {
   experience: "2 years",
   /** One honest sentence. Shown in the hero and used as the meta description. */
   statement:
-    "Frontend Lead Engineer at Clyra, the AI school operating system. I own how the product is built and how it feels — component architecture, interface quality and the decisions in between.",
+    "I own how Clyra’s AI school platform is built and how it feels: component architecture, interface quality, and every decision in between.",
   location: "Mumbai, India" as Text,
-  availability: demo("Currently leading frontend at Clyra — always happy to talk about interfaces.") as Text,
-  /** NEXT_PUBLIC_SITE_URL wins; on Vercel the production domain is picked up automatically. */
-  siteUrl:
-    process.env.NEXT_PUBLIC_SITE_URL ??
-    (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "http://localhost:3000"),
+  availability: demo("Currently leading frontend at Clyra. Always happy to talk about interfaces.") as Text,
+  /** The canonical domain. NEXT_PUBLIC_SITE_URL overrides it (e.g. for a staging copy). */
+  siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "https://sahilshityalkar.com",
 };
 
 export const links = {

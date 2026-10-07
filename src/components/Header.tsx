@@ -43,11 +43,8 @@ export function Header() {
           become the containing block for the fixed full-screen menu below. */}
       <div aria-hidden="true" className="absolute inset-0 bg-[color-mix(in_srgb,var(--paper)_86%,transparent)] backdrop-blur-md" />
       <div className="wrap relative flex h-full items-center justify-between gap-4 sm:gap-6">
-        <Link href="/" className="t-meta flex items-baseline gap-3 whitespace-nowrap" aria-label={`${profile.name} — home`}>
+        <Link href="/" className="t-meta flex items-baseline gap-3 whitespace-nowrap" aria-label={`${profile.name}, home`}>
           <span className="text-ink">{profile.name}</span>
-          <span className="hidden text-ink-3 lg:inline">
-            {profile.role}, {profile.company}
-          </span>
         </Link>
 
         <nav aria-label="Primary" className="hidden md:block">
@@ -136,7 +133,7 @@ export function Header() {
                 </li>
               ))}
             </ul>
-            <p className="t-meta text-ink-3">Tip — tap Inspect to see how this page is built.</p>
+            <p className="t-meta text-ink-3">Tip: tap Inspect to see how this page is built.</p>
           </nav>
         </div>
       ) : null}

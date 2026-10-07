@@ -20,7 +20,7 @@ export function Experience() {
                   </a>
                 ) : null}
                 <p className="t-meta mt-1.5 text-ink-3">
-                  <T v={r.start} /> — <T v={r.end} />
+                  <T v={r.start} /> to <T v={r.end} />
                 </p>
               </div>
             </div>

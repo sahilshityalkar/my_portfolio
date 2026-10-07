@@ -4,7 +4,7 @@ import { isDraft, type Text } from "@/content/types";
 export function T({ v, as: Tag = "span", className = "" }: { v: Text; as?: "span" | "p" | "h3" | "dd"; className?: string }) {
   if (isDraft(v)) {
     return (
-      <Tag className={`${className} draft`} title="Placeholder — see PLACEHOLDERS.md">
+      <Tag className={`${className} draft`} title="Placeholder. See PLACEHOLDERS.md">
         {v.hint}
       </Tag>
     );

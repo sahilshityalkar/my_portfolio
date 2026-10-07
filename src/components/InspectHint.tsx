@@ -21,9 +21,9 @@ export function InspectHint() {
         {mode === "off" ? (
           <>
             <span className="hidden [@media(pointer:fine)]:inline">
-              Press <kbd className="font-[inherit] text-ink">L</kbd> to look under the glass —
+              Press <kbd className="font-[inherit] text-ink">L</kbd> to look under the glass:
             </span>
-            <span className="[@media(pointer:fine)]:hidden">Tap to look under the glass —</span>{" "}
+            <span className="[@media(pointer:fine)]:hidden">Tap to look under the glass:</span>{" "}
             this page, measured live from its own DOM.
           </>
         ) : (
