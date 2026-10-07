@@ -81,6 +81,17 @@ body {
   overflow-x: clip;
 }
 
+/* The drafting ruler is the scrollbar on wide screens (see Ruler.tsx). Wheel,
+   trackpad, keyboard and touch scrolling are untouched; only the bar is hidden. */
+@media (min-width: 1024px) {
+  html.ruler {
+    scrollbar-width: none;
+  }
+  html.ruler::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 ::selection {
   background: var(--selection);
   color: var(--ink);

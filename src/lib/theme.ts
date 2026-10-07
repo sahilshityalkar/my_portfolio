@@ -5,7 +5,7 @@ import { theme, type Theme } from "./store";
 const KEY = "theme";
 
 /** Inline, render-blocking script: applies the saved theme before first paint. */
-export const themeBootScript = `(function(){try{var d=document.documentElement;d.classList.add('js');var t=localStorage.getItem('${KEY}');if(t==='night'||t==='day'){d.dataset.theme=t}}catch(e){}})();`;
+export const themeBootScript = `(function(){try{var d=document.documentElement;d.classList.add('js');var t=localStorage.getItem('${KEY}');if(t==='night'||t==='day'){d.dataset.theme=t}}catch(e){}if(location.pathname==='/'&&matchMedia('(min-width: 1024px)').matches){d.classList.add('ruler')}})();`;
 
 export function readTheme(): Theme {
   return document.documentElement.dataset.theme === "night" ? "night" : "day";

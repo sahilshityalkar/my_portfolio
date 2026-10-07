@@ -535,7 +535,7 @@ function draw(f: Frame) {
 const isTyping = (t: EventTarget | null) =>
   t instanceof HTMLElement && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName));
 const isInteractive = (t: EventTarget | null) =>
-  t instanceof Element && !!t.closest("a,button,input,textarea,select,label,summary,[role=button]");
+  t instanceof Element && !!t.closest("a,button,input,textarea,select,label,summary,[role=button],[data-loupe-skip]");
 
 export function Loupe() {
   const canvasRef = useRef<HTMLCanvasElement>(null);

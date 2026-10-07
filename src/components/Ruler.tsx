@@ -17,6 +17,11 @@ const SECTIONS = [
  * a tick for every section, and a bracket showing the slice you're looking at.
  * It also tracks the active section for the header. Desktop only; the bracket
  * follows scroll directly (no easing) so it always tells the truth.
+ *
+ * It is also the page's scrollbar: drag the bracket, or press anywhere on the
+ * scale to jump there and keep dragging. While it is mounted on a wide screen
+ * the native scrollbar is hidden (`html.ruler`, set before first paint by the
+ * boot script so the page never changes width after load).
  */
 export function Ruler() {
   const active = useStore(section, null);
@@ -48,6 +53,48 @@ export function Ruler() {
       if (!raf) raf = requestAnimationFrame(paint);
     };
 
+    // ---- scrollbar behaviour ----
+    const wide = matchMedia("(min-width: 1024px)");
+    const syncClass = () => document.documentElement.classList.toggle("ruler", wide.matches);
+    syncClass();
+    wide.addEventListener("change", syncClass);
+
+    let grab: number | null = null; // where on the bracket it was grabbed, as a fraction
+    const fraction = (y: number) => {
+      const r = el.getBoundingClientRect();
+      return Math.min(1, Math.max(0, (y - r.top) / r.height));
+    };
+    const scrollToFraction = (f: number) => {
+      const doc = document.documentElement.scrollHeight;
+      window.scrollTo({ top: f * doc, behavior: "instant" });
+    };
+    const onDown = (e: PointerEvent) => {
+      if (e.button !== 0 || (e.target instanceof Element && e.target.closest("a"))) return;
+      e.preventDefault();
+      const doc = document.documentElement.scrollHeight;
+      const top = scrollY / doc;
+      const h = innerHeight / doc;
+      const f = fraction(e.clientY);
+      // inside the bracket: drag from where it was grabbed; outside: centre it there
+      grab = f >= top && f <= top + h ? f - top : h / 2;
+      if (grab === h / 2) scrollToFraction(f - grab);
+      el.setPointerCapture(e.pointerId);
+      el.dataset.dragging = "";
+    };
+    const onDrag = (e: PointerEvent) => {
+      if (grab === null) return;
+      scrollToFraction(fraction(e.clientY) - grab);
+    };
+    const onUp = (e: PointerEvent) => {
+      grab = null;
+      delete el.dataset.dragging;
+      if (el.hasPointerCapture(e.pointerId)) el.releasePointerCapture(e.pointerId);
+    };
+    el.addEventListener("pointerdown", onDown);
+    el.addEventListener("pointermove", onDrag);
+    el.addEventListener("pointerup", onUp);
+    el.addEventListener("pointercancel", onUp);
+
     // the section whose body crosses the middle of the screen is "here"
     const io = new IntersectionObserver(
       (entries) => {
@@ -69,6 +116,12 @@ export function Ruler() {
       io.disconnect();
       ro.disconnect();
       removeEventListener("scroll", onScroll);
+      wide.removeEventListener("change", syncClass);
+      el.removeEventListener("pointerdown", onDown);
+      el.removeEventListener("pointermove", onDrag);
+      el.removeEventListener("pointerup", onUp);
+      el.removeEventListener("pointercancel", onUp);
+      document.documentElement.classList.remove("ruler");
       section.set(null);
     };
   }, []);
@@ -77,9 +130,12 @@ export function Ruler() {
     <nav
       aria-label="Page ruler"
       data-loupe-skip
-      className="pointer-events-none fixed bottom-6 right-3 top-[calc(var(--header-h)+1.5rem)] z-30 hidden w-6 lg:block print:hidden"
+      className="pointer-events-none fixed bottom-6 right-2 top-[calc(var(--header-h)+1.5rem)] z-30 hidden w-7 lg:block print:hidden"
     >
-      <div ref={root} className="group pointer-events-auto relative h-full w-full">
+      <div
+        ref={root}
+        className="group pointer-events-auto relative h-full w-full cursor-pointer touch-none select-none data-[dragging]:cursor-grabbing"
+      >
         {/* the scale: minor ticks every 8px, major every 64px */}
         <div
           aria-hidden="true"
@@ -97,7 +153,7 @@ export function Ruler() {
         {/* the slice of the page in view */}
         <div
           aria-hidden="true"
-          className="absolute right-0 w-3 border-y border-l border-mark bg-(--mark-soft)"
+          className="absolute right-0 w-3 cursor-grab border-y border-l border-mark bg-(--mark-soft) transition-[width] duration-300 group-hover:w-4 group-data-[dragging]:w-4 group-data-[dragging]:cursor-grabbing"
           style={{ top: "calc(var(--top, 0) * 100%)", height: "max(calc(var(--h, 0.1) * 100%), 10px)" }}
         />
 
