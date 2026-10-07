@@ -97,6 +97,11 @@ a {
   border-radius: 2px;
 }
 
+/* sections receive focus programmatically after an in-page jump; no ring */
+[tabindex="-1"]:focus {
+  outline: none;
+}
+
 /* The gallery light. Invisible by day; a faint warm pool by night. */
 body::before {
   content: "";

@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import { Header } from "@/components/Header";
 import { Loupe } from "@/components/Loupe";
 import { RevealObserver } from "@/components/Reveal";
+import { SmoothAnchors } from "@/components/SmoothAnchors";
 import { profile } from "@/content/profile";
 import { themeBootScript } from "@/lib/theme";
 import "./globals.css";
@@ -75,6 +76,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         </main>
         <Loupe />
         <RevealObserver />
+        <SmoothAnchors />
       </body>
     </html>
   );
