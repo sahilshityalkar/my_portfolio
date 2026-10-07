@@ -29,6 +29,12 @@ export function SmoothAnchors() {
       const tick = (now: number) => {
         const dt = last ? (now - last) / 1000 : 1 / 60;
         last = now;
+        // frames stalling (background tab, struggling device): arrive now, don't crawl
+        if (dt > 0.25 || document.hidden) {
+          window.scrollTo({ top: to, behavior: "instant" });
+          raf = 0;
+          return;
+        }
         const moving = y.step(dt);
         window.scrollTo({ top: y.value, behavior: "instant" });
         raf = moving ? requestAnimationFrame(tick) : 0;
