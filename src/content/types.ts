@@ -52,11 +52,13 @@ export type CaseStudy = {
 
 export type Education = { school: string; degree: string; years: string };
 
+/** A featured experiment. It lives on the lab site at `${labUrl}/${slug}`. */
 export type Experiment = {
   slug: string;
   index: string;
   title: string;
   summary: string;
-  status: "live" | "draft";
   tech: string;
+  /** Which drawing to show on the card (a still sketch of the experiment). */
+  preview: "glass" | "spring" | "blueprint";
 };
