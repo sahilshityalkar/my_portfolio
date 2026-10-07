@@ -234,8 +234,9 @@ repository with its test report and live site, and heyclyra.com. Copy written
 to complete the design while real details are pending is wrapped in
 `demo("…")`, so `grep -rn "demo(" src/content` lists every line of it. No
 metrics were invented, even in demo copy, and Clyra's company statistics are
-not attributed to the person. The colophon only states facts about the site
-itself.
+not attributed to the person. The About section pairs every capability with proof a reviewer can check,
+and lists the toolkit as plain text so people and applicant-tracking
+systems can scan it.
 
 The work index uses **technical drawings** rather than screenshots: a drawing
 of each product's core idea, in the same language as the glass. That keeps
