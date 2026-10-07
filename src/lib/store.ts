@@ -37,3 +37,6 @@ export const inspect = createStore<InspectMode>("off");
 
 export type Theme = "day" | "night";
 export const theme = createStore<Theme>("day");
+
+/** The home-page section currently in view (for the header and the ruler). */
+export const section = createStore<string | null>(null);

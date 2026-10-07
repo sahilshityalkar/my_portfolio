@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { profile, links } from "@/content/profile";
-import { inspect, theme, useStore } from "@/lib/store";
+import { inspect, section, theme, useStore } from "@/lib/store";
 import { readTheme, setTheme } from "@/lib/theme";
 
 export const nav = [
@@ -17,6 +17,7 @@ export const nav = [
 export function Header() {
   const mode = useStore(inspect, "off");
   const t = useStore(theme, "day");
+  const here = useStore(section, null);
   const [open, setOpen] = useState(false);
 
   useEffect(() => theme.set(readTheme()), []);
@@ -51,7 +52,11 @@ export function Header() {
           <ul className="t-meta flex gap-6 text-ink-2">
             {nav.map((n) => (
               <li key={n.href}>
-                <a href={n.href} className="link-draw hover:text-ink">
+                <a
+                  href={n.href}
+                  aria-current={n.href === `/#${here}` ? "location" : undefined}
+                  className="link-draw transition-colors hover:text-ink aria-[current=location]:text-ink aria-[current=location]:[background-size:100%_1px]"
+                >
                   {n.label}
                 </a>
               </li>

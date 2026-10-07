@@ -4,6 +4,7 @@ import { Experience } from "@/components/sections/Experience";
 import { Lab } from "@/components/sections/Lab";
 import { About } from "@/components/sections/About";
 import { Contact } from "@/components/sections/Contact";
+import { Ruler } from "@/components/Ruler";
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
       <Lab />
       <About />
       <Contact />
+      <Ruler />
     </>
   );
 }
