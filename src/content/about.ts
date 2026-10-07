@@ -1,17 +1,60 @@
 import { demo, type Text } from "./types";
 
-export const about: { paragraphs: Text[]; principles: { title: string; body: Text }[] } = {
+export type Capability = {
+  title: string;
+  body: Text;
+  /** The evidence a reviewer can check: a project, a measured result, this site. */
+  proof: string;
+  href?: string;
+};
+
+/**
+ * The About section is written for the people deciding whether to talk to you:
+ * what level you work at, what you are good at, and the proof for each claim.
+ */
+export const about: {
+  paragraphs: Text[];
+  capabilities: Capability[];
+  toolkit: { group: string; items: string[] }[];
+} = {
   paragraphs: [
     demo(
-      "I’m a frontend engineer from Mumbai. I started out building full-stack apps with the MERN stack and Next.js, and kept drifting towards the part people actually touch: the interface, and the architecture that keeps it fast and honest as a product grows.",
+      "I’m a frontend engineer in Mumbai, leading the frontend at Clyra since January 2025. I own how the product is built: the architecture, the component system, and the quality bar for every screen that ships.",
     ),
     demo(
-      "At Clyra I lead that work for students and schools. Outside of it I build small products end to end, like ReplyAI, to keep my instincts sharp across the whole stack.",
+      "I started in full-stack JavaScript, first MERN and then Next.js, so I’m at home below the interface too: APIs, databases, auth. I still build products end to end, like ReplyAI, to keep that range sharp.",
     ),
   ],
-  principles: [
-    { title: "On craft", body: demo("The details users never consciously notice are the ones that make a product feel trustworthy.") },
-    { title: "On systems", body: demo("A component library is a set of decisions the team no longer has to make. Make them well, once.") },
-    { title: "On teams", body: demo("Review the work, not the person. Leave every codebase easier to change than you found it.") },
+
+  capabilities: [
+    {
+      title: "Frontend architecture",
+      body: demo("Component systems, design tokens and the data layer underneath them. App Router, Server Components and TypeScript, end to end."),
+      proof: "Clyra · this site",
+    },
+    {
+      title: "Interface quality",
+      body: "Accessible, responsive and fast by default: semantic HTML, full keyboard support, reduced-motion care and performance budgets.",
+      proof: "This site: zero layout shift, full keyboard and reduced-motion support",
+    },
+    {
+      title: "Full-stack product work",
+      body: "Auth, Postgres, webhooks and automated tests when the product needs them, not just the screens.",
+      proof: "ReplyAI: Next.js, Supabase, Clerk, 22 of 22 tests passing",
+      href: "/work/replyai",
+    },
+    {
+      title: "Leading frontend",
+      body: demo("Owning the frontend of a live product: setting standards, reviewing the team’s work, and making the trade-offs between speed and quality."),
+      proof: "Frontend Lead, Clyra, since Jan 2025",
+    },
+  ],
+
+  /** Plain text on purpose: scannable by people and by applicant-tracking systems. */
+  toolkit: [
+    { group: "Languages", items: ["TypeScript", "JavaScript", "HTML", "CSS", "SQL"] },
+    { group: "Frontend", items: ["React", "Next.js", "Redux", "Tailwind CSS", "shadcn/ui", "Material UI", "Canvas & WebGL"] },
+    { group: "Backend & data", items: ["Node.js", "Express", "PostgreSQL", "Supabase", "MongoDB", "REST", "WebSockets"] },
+    { group: "Quality & delivery", items: ["Vitest", "Git", "Vercel", "Sentry", "Accessibility", "Core Web Vitals"] },
   ],
 };

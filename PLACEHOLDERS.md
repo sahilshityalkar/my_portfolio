@@ -56,9 +56,12 @@ and interviewers will ask about it.
       Update titles, summaries and slugs to match what you actually publish.
 
 ### `src/content/about.ts`
-- [ ] Both paragraphs
-- [ ] The three principles (craft, systems, teams). Only keep beliefs you'd
-      defend in an interview.
+- [ ] Both bio paragraphs (written for you; make them sound like you)
+- [ ] Capabilities 01 "Frontend architecture" and 04 "Leading frontend" are
+      demo. Keep only what's true about your work at Clyra. Capabilities 02
+      and 03 cite proof that is real: this site and the ReplyAI repo.
+- [x] Toolkit: every item comes from your résumé, the ReplyAI repo or this
+      site. Remove anything you wouldn't want to be interviewed on.
 
 ## Missing (hidden until provided)
 
