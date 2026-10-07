@@ -19,6 +19,15 @@ const MARK = "var(--mark)";
 const RULE = "var(--rule-strong)";
 const MONO = { fontFamily: "var(--mono)", fontSize: 10, letterSpacing: "0.06em" } as const;
 
+/**
+ * Drafting order. When the plate scrolls into view, `.draw` strokes are traced
+ * (pathLength 1 + dashoffset), `.svg-fade` and `.pop` arrive after, and `--d`
+ * staggers them, so each drawing is drafted the way a draftsman would: frames,
+ * then connections, then labels. Static with reduced motion or without JS.
+ */
+const d = (n: number) => ({ ["--d" as string]: n });
+const draw = { className: "draw", pathLength: 1 } as const;
+
 function Field() {
   return (
     <g stroke={RULE} strokeWidth="1" opacity="0.3">
@@ -49,13 +58,17 @@ function Replies() {
   return (
     <g>
       <g className="transition-transform duration-[1.4s] ease-(--ease-out) group-hover/plate:-translate-x-1.5">
-        <rect x="56" y="150" width="170" height="118" rx="10" fill="var(--paper)" stroke={INK} />
-        <text x="72" y="174" fill={INK} style={MONO}>COMPLAINT</text>
-        <Bars x={72} y={188} w={136} rows={6} seed={2} />
+        <rect x="56" y="150" width="170" height="118" rx="10" fill="var(--paper)" stroke={INK} {...draw} style={d(0)} />
+        <g className="svg-fade" style={d(3)}>
+          <text x="72" y="174" fill={INK} style={MONO}>COMPLAINT</text>
+          <Bars x={72} y={188} w={136} rows={6} seed={2} />
+        </g>
       </g>
       <g fill="none" stroke={MARK} strokeWidth="1">
         {cards.map((i) => (
-          <path key={i} d={`M226 209 C 280 209, 290 ${110 + i * 112}, 344 ${110 + i * 112}`} strokeDasharray="3 4" />
+          <g key={i} className="svg-fade" style={d(5 + i)}>
+            <path d={`M226 209 C 280 209, 290 ${110 + i * 112}, 344 ${110 + i * 112}`} strokeDasharray="3 4" />
+          </g>
         ))}
       </g>
       {cards.map((i) => (
@@ -64,20 +77,24 @@ function Replies() {
           className="transition-transform duration-[1.4s] ease-(--ease-out) group-hover/plate:translate-x-2"
           style={{ transitionDelay: `${i * 80}ms` }}
         >
-          <rect x="344" y={62 + i * 112} width="200" height="96" rx="10" fill="var(--paper)" stroke={INK} />
-          <text x="360" y={84 + i * 112} fill={i === 0 ? MARK : INK} style={MONO}>
-            {`REPLY ${i + 1}`}
-          </text>
-          <Bars x={360} y={98 + i * 112} w={164} rows={4} seed={5 + i} />
+          <rect x="344" y={62 + i * 112} width="200" height="96" rx="10" fill="var(--paper)" stroke={INK} {...draw} style={d(6 + i * 2)} />
+          <g className="svg-fade" style={d(9 + i * 2)}>
+            <text x="360" y={84 + i * 112} fill={i === 0 ? MARK : INK} style={MONO}>
+              {`REPLY ${i + 1}`}
+            </text>
+            <Bars x={360} y={98 + i * 112} w={164} rows={4} seed={5 + i} />
+          </g>
         </g>
       ))}
       {/* dimension: the product's promise, from its README */}
       <g stroke={MARK} strokeWidth="1">
-        <line x1="226" y1="416" x2="344" y2="416" />
-        <line x1="226" y1="410" x2="226" y2="422" />
-        <line x1="344" y1="410" x2="344" y2="422" />
+        <line x1="226" y1="416" x2="344" y2="416" {...draw} style={d(14)} />
+        <line x1="226" y1="410" x2="226" y2="422" {...draw} style={d(13)} />
+        <line x1="344" y1="410" x2="344" y2="422" {...draw} style={d(15)} />
       </g>
-      <text x="285" y="406" textAnchor="middle" fill={MARK} style={MONO}>{"< 5 s"}</text>
+      <g className="svg-fade" style={d(16)}>
+        <text x="285" y="406" textAnchor="middle" fill={MARK} style={MONO}>{"< 5 s"}</text>
+      </g>
     </g>
   );
 }
@@ -92,17 +109,19 @@ function Mastery() {
   return (
     <g>
       <g stroke={INK} strokeWidth="1" opacity="0.55">
-        {edges.map(([a, b]) => {
+        {edges.map(([a, b], i) => {
           const [x1, y1] = nodes[a!]!;
           const [x2, y2] = nodes[b!]!;
-          return <line key={`${a}-${b}`} x1={x1} y1={y1} x2={x2} y2={y2} />;
+          return <line key={`${a}-${b}`} x1={x1} y1={y1} x2={x2} y2={y2} {...draw} style={d(i * 0.6)} />;
         })}
       </g>
       {nodes.map(([x, y, k], i) =>
         k === "n" ? (
           <g key={i}>
-            <circle cx={x} cy={y} r="26" fill="none" stroke={MARK} className="origin-center transition-transform duration-[1.4s] ease-(--ease-out) [transform-box:fill-box] group-hover/plate:scale-125" />
-            <circle cx={x} cy={y} r="12" fill={MARK} />
+            <g className="origin-center transition-transform duration-[1.4s] ease-(--ease-out) [transform-box:fill-box] group-hover/plate:scale-125">
+              <circle cx={x} cy={y} r="26" fill="none" stroke={MARK} {...draw} style={d(16)} />
+            </g>
+            <circle cx={x} cy={y} r="12" fill={MARK} className="pop" style={d(14)} />
           </g>
         ) : (
           <circle
@@ -113,10 +132,12 @@ function Mastery() {
             fill={k === "m" ? INK : "var(--paper)"}
             stroke={INK}
             strokeDasharray={k === "g" ? "3 3" : undefined}
+            className="pop"
+            style={d(4 + i * 0.7)}
           />
         ),
       )}
-      <g style={MONO}>
+      <g style={{ ...MONO, ...d(18) }} className="svg-fade">
         <text x="436" y="216" fill={MARK}>NEXT</text>
         <text x="48" y="408" fill={INK} opacity="0.7">● MASTERED</text>
         <text x="160" y="408" fill={INK} opacity="0.7">◌ GAP</text>
@@ -137,7 +158,20 @@ function Heatmap() {
         {Array.from({ length: rows }, (_, y) =>
           Array.from({ length: cols }, (_, x) => {
             const v = y === slipping ? 0.12 + r() * 0.18 : 0.25 + r() * 0.75;
-            return <rect key={`${x}-${y}`} x={64 + x * 30} y={70 + y * 30} width="26" height="26" rx="3" fill={INK} opacity={v * 0.85} />;
+            return (
+              <rect
+                key={`${x}-${y}`}
+                x={64 + x * 30}
+                y={70 + y * 30}
+                width="26"
+                height="26"
+                rx="3"
+                fill={INK}
+                fillOpacity={v * 0.85}
+                className="cell"
+                style={d(x + y)}
+              />
+            );
           }),
         )}
       </g>
@@ -150,19 +184,25 @@ function Heatmap() {
         fill="none"
         stroke={MARK}
         strokeWidth="1.5"
-        className="transition-[stroke-width] duration-700 group-hover/plate:[stroke-width:2.5]"
+        className="draw group-hover/plate:[stroke-width:2.5]"
+        pathLength={1}
+        style={d(22)}
       />
-      <g stroke={MARK} fill="none">
+      <g stroke={MARK} fill="none" className="svg-fade" style={d(26)}>
         <path d={`M${64 + cols * 30 + 2} ${83 + slipping * 30} H 470 V 330`} strokeDasharray="3 4" />
       </g>
       <g className="transition-transform duration-[1.4s] ease-(--ease-out) group-hover/plate:-translate-y-1.5">
-        <rect x="438" y="330" width="120" height="74" rx="8" fill="var(--paper)" stroke={INK} />
-        <text x="452" y="352" fill={MARK} style={MONO}>NEEDS HELP</text>
-        <Bars x={452} y={364} w={92} rows={3} seed={9} />
+        <rect x="438" y="330" width="120" height="74" rx="8" fill="var(--paper)" stroke={INK} {...draw} style={d(27)} />
+        <g className="svg-fade" style={d(29)}>
+          <text x="452" y="352" fill={MARK} style={MONO}>NEEDS HELP</text>
+          <Bars x={452} y={364} w={92} rows={3} seed={9} />
+        </g>
       </g>
-      <g style={MONO} fill={INK} opacity="0.7">
-        <text x="64" y="56">CONCEPTS →</text>
-        <text x="40" y="320" transform="rotate(-90 40 320)">STUDENTS →</text>
+      <g className="svg-fade" style={d(2)}>
+        <g style={MONO} fill={INK} opacity="0.7">
+          <text x="64" y="56">CONCEPTS →</text>
+          <text x="40" y="320" transform="rotate(-90 40 320)">STUDENTS →</text>
+        </g>
       </g>
     </g>
   );
@@ -200,9 +240,8 @@ export function Plate({ seed, numeral, caption, kind = "arcs" }: { seed: number;
           y="70"
           textAnchor="end"
           fill={INK}
-          opacity="0.9"
-          className="font-serif italic"
-          style={{ fontSize: 56, fontWeight: 300, letterSpacing: "-0.03em" }}
+          className="svg-fade font-serif italic"
+          style={{ fontSize: 56, fontWeight: 300, letterSpacing: "-0.03em", ...d(1) }}
         >
           {numeral}
         </text>

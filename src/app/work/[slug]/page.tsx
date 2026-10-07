@@ -68,7 +68,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
         </dl>
       </header>
 
-      <div className="wrap mt-16 fade-in" style={{ ["--i" as string]: 3 }}>
+      <div className="wrap mt-16" data-reveal>
         <CaseVisual c={c} seed={i + 3} />
       </div>
 

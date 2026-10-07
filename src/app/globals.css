@@ -262,6 +262,38 @@ body::before {
   animation-delay: calc(var(--i, 0) * 70ms + 120ms);
 }
 
+/* Drafting plates draw themselves when revealed: strokes are traced, then
+   connections, cells and labels arrive (see Plate.tsx for the order). */
+.js [data-reveal] .draw {
+  stroke-dasharray: 1 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 1.5s var(--ease-in-out);
+  transition-delay: calc(var(--d, 0) * 75ms + 250ms);
+}
+.js [data-reveal][data-in] .draw {
+  stroke-dashoffset: 0;
+}
+.js [data-reveal] :is(.svg-fade, .pop, .cell) {
+  opacity: 0;
+  transition:
+    opacity 0.8s var(--ease-out),
+    transform 0.9s var(--ease-out);
+  transition-delay: calc(var(--d, 0) * 75ms + 300ms);
+}
+.js [data-reveal] .pop {
+  transform: scale(0.3);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.js [data-reveal] .cell {
+  transition-duration: 0.5s;
+  transition-delay: calc(var(--d, 0) * 40ms + 250ms);
+}
+.js [data-reveal][data-in] :is(.svg-fade, .pop, .cell) {
+  opacity: 1;
+  transform: none;
+}
+
 /* Lab card: the spring's curve redraws itself when the card is hovered. */
 .lab-draw {
   stroke-dasharray: 1;
