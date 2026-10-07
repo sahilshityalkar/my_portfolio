@@ -218,7 +218,10 @@ body::before {
    so it starts before hydration and never delays the content. */
 .mask-line {
   display: block;
-  overflow: clip;
+  /* clip only vertically: the rise needs a mask top and bottom, but italic
+     letters (the flag of the final r) lean past their box and must not be cut */
+  overflow-x: visible;
+  overflow-y: clip;
   /* line-height 0.9 is shorter than the ascenders and descenders: pad the
      mask outwards (and cancel it with margins) so no glyph is clipped */
   padding-block: 0.14em 0.2em;
