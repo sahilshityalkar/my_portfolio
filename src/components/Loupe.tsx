@@ -678,7 +678,57 @@ export function Loupe() {
       kick();
     };
 
+    /* ---- the one-time demonstration ----
+       On a first visit, once the name has inked and the visitor is still, the
+       glass crosses the surname by itself. Moving the mouse hands it over;
+       scrolling or a key closes it. Never on touch or with reduced motion. */
+    let demo: { from: { x: number; y: number }; timers: number[] } | null = null;
+    const endDemo = (close: boolean) => {
+      if (!demo) return;
+      demo.timers.forEach(clearTimeout);
+      demo = null;
+      if (close && current === "lens") inspect.set("off");
+    };
+    const demoTimer = window.setTimeout(() => {
+      if (!matchMedia("(pointer: fine)").matches || reduced.matches || current !== "off" || window.scrollY > 40) return;
+      try {
+        if (sessionStorage.getItem("glass-demo")) return;
+        sessionStorage.setItem("glass-demo", "1");
+      } catch {
+        return;
+      }
+      const word = document.querySelector<HTMLElement>("#intro-title .mask-line:nth-child(2) > span")?.firstChild;
+      if (!word) return;
+      const r = document.createRange();
+      r.selectNodeContents(word);
+      const b = r.getBoundingClientRect();
+      if (b.width < 50 || b.bottom < 0 || b.top > H) return;
+      const y = b.top + b.height * 0.55;
+      const at = (f: number) => b.left + b.width * f;
+      demo = { from: { ...pointer }, timers: [] };
+      pointer = { x: at(0.12), y, seen: true };
+      inspect.set("lens");
+      const step = (ms: number, f: number) =>
+        demo?.timers.push(
+          window.setTimeout(() => {
+            if (!demo) return;
+            px.target = at(f);
+            py.target = y;
+            kick();
+          }, ms),
+        );
+      step(500, 0.42);
+      step(1300, 0.72);
+      step(2100, 0.9);
+      demo.timers.push(window.setTimeout(() => endDemo(true), 3300));
+    }, 3600);
+
     const onMove = (e: PointerEvent) => {
+      if (demo) {
+        // a deliberate move takes the glass over; a nudge doesn't
+        if (Math.hypot(e.clientX - demo.from.x, e.clientY - demo.from.y) < 24) return;
+        endDemo(false);
+      }
       pointer = { x: e.clientX, y: e.clientY, seen: true };
       if (current === "lens") {
         px.target = e.clientX;
@@ -688,6 +738,7 @@ export function Loupe() {
     };
 
     const onKey = (e: KeyboardEvent) => {
+      if (demo) endDemo(e.key.toLowerCase() !== "l" && e.key !== "Escape");
       if (isTyping(e.target) || e.metaKey || e.ctrlKey || e.altKey) return;
       if (e.key === "Escape" && current !== "off") inspect.set("off");
       else if (e.key.toLowerCase() === "l") inspect.set(current === "off" ? "lens" : "off");
@@ -717,7 +768,10 @@ export function Loupe() {
       kick(); // repaint the focus ring
     };
 
-    const onScroll = () => current !== "off" && kick();
+    const onScroll = () => {
+      if (demo) endDemo(true);
+      if (current !== "off") kick();
+    };
     const onSettle = () => {
       if (current === "off") return;
       stale = true;
@@ -750,6 +804,8 @@ export function Loupe() {
     const hudTimer = setInterval(() => setHud((h) => ({ ...h, fps: Math.round(1000 / frameAvg) })), 500);
 
     return () => {
+      clearTimeout(demoTimer);
+      endDemo(false);
       unsub();
       cancelAnimationFrame(raf);
       clearInterval(hudTimer);
