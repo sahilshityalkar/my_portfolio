@@ -57,7 +57,7 @@ a component.
 | `profile.ts` | Name, role, statement, location, links (email, résumé, LinkedIn, GitHub, X) |
 | `experience.ts` | Roles: company, title, dates, summary, notes |
 | `work.ts` | Case studies: the home-page cards and each `/work/[slug]` page |
-| `lab.ts` | Lab experiment index |
+| `lab.ts` | The three featured lab experiments and the lab URL |
 | `about.ts` | About paragraphs and principles |
 
 **Demo content.** Copy written to complete the design while real details are
@@ -92,14 +92,16 @@ Add attributes to any element and the loupe picks it up automatically:
 
 All other visible text gets its line boxes drawn automatically.
 
-## Adding a lab experiment
+## The lab
 
-1. Add an entry to `src/content/lab.ts`.
-2. Create `src/lab/<slug>/index.tsx` (client component; lazy-load anything heavy
-   with `next/dynamic`, like `src/lab/glass` does).
-3. Register it in `src/lab/registry.ts`.
+Experiments live in a separate application at **lab.sahilshityalkar.com**,
+with its own repo and deploy. This site only features three of them. To
+change which ones, edit `src/content/lab.ts`: each entry has a title, a
+one-line summary, tech tags, a `slug` (opens `lab.sahilshityalkar.com/<slug>`)
+and a `preview` drawing (`glass`, `spring` or `blueprint`).
 
-The `/lab/<slug>` route, its metadata and its sitemap entry are generated.
+Later, the lab can publish an `experiments.json` feed and this list can be
+read from it at build time.
 
 ## Structure
 
@@ -108,7 +110,6 @@ src/
   app/            routes, layout, global CSS, metadata routes (OG, sitemap, robots)
   components/     Header, Loupe, sections, Plate (drafting plates)
   content/        all copy and facts, typed
-  lab/            experiments and their registry
   lib/            spring integrator, global store, theme
 docs/             DECISIONS.md and the rejected concept prototypes
 ```

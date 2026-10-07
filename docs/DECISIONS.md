@@ -61,8 +61,17 @@ single-file HTML pages and checked in a real browser:
 | D. Exhibition rooms | Horizontal scroll through "rooms" | Scroll-jacking is hostile to recruiters and to mobile. Rejected without a prototype. |
 | E. Terminal / OS desktop | The site as a fake operating system | Extremely common in developer portfolios, and it hides the content. Rejected. |
 
-The best part of C survives as Lab experiment 001, **Glass**: real refraction
+The best part of C survives as lab experiment 001, **Glass**: real refraction
 optics, where WebGL actually earns its place.
+
+## The lab is a separate site
+
+Experiments live at **lab.sahilshityalkar.com**, a separate application with
+its own repo and deploy. Heavy or unfinished work can never slow down or
+break the site recruiters open, each experiment can use whatever stack suits
+it, and the lab can grow at its own pace. The portfolio features three
+experiments as cards with still preview drawings and links out. A future
+`experiments.json` feed from the lab can replace the hand-written list.
 
 ## Day and Night
 
@@ -125,7 +134,6 @@ Inspect, Day/Night and a full-screen typographic **Index** menu.
 | **React 19 + TypeScript 5.9** | TypeScript 7 (the native port) was released, but 5.9 is what the Next.js and typescript-eslint toolchain is proven against today. Upgrade when the ecosystem catches up. |
 | **Tailwind CSS v4** | Fast layout utilities over a hand-written token layer (`globals.css`). Design tokens are CSS variables, so the themes are pure CSS. |
 | **No animation, 3D or state libraries** | Motion, GSAP, three.js and Zustand were all considered. The site needs one spring, one shader and two global flags. Hand-writing them costs ~400 lines, saves well over 100 KB, and *is* the portfolio. |
-| **Raw WebGL2** for the lab | One fragment shader doesn't justify three.js. It's code-split behind `next/dynamic`, so it's only downloaded on `/lab/glass`. |
 | **External store** (`useSyncExternalStore`) | The inspect mode and theme are read by distant components (header, loupe, hint). A 30-line store avoids re-rendering the tree through context. |
 
 ## Performance
@@ -144,7 +152,7 @@ How:
 - **Adaptive quality:** if frame time stays above 24 ms for ~40 frames, the
   canvas drops to 1× resolution and stops hatching padding. The lab shader
   does the same.
-- WebGL is lazy-loaded and confined to the lab.
+- No WebGL on this site at all: experiments live on the lab site.
 - Fonts are instanced and subset with fontTools. Newsreader went from 279 KB
   to 142 KB: the roman keeps optical sizes 12–72 and weights 300–500, and the
   italic, which only appears at display sizes, is pinned to optical size 60.

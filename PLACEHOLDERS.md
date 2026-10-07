@@ -49,6 +49,12 @@ and interviewers will ask about it.
       `public/work/` and set `image: { src, alt, url }` on each case; they show
       on the case page after "Decisions". The index keeps the technical drawings.
 
+### `src/content/lab.ts`
+- [ ] The three featured experiments (Glass, Springs, Blueprint) are demo
+      entries. Their links go to lab.sahilshityalkar.com/glass, /springs and
+      /blueprint, which don't exist until the lab site is built and deployed.
+      Update titles, summaries and slugs to match what you actually publish.
+
 ### `src/content/about.ts`
 - [ ] Both paragraphs
 - [ ] The three principles (craft, systems, teams). Only keep beliefs you'd
@@ -59,9 +65,9 @@ and interviewers will ask about it.
 - [ ] **Résumé PDF**: put it at `public/resume.pdf` and set
       `links.resume = "/resume.pdf"` in `profile.ts`. A Résumé button then
       appears in the header, the hero and Contact.
-- [ ] **Site URL**: set `NEXT_PUBLIC_SITE_URL` (e.g. `https://sahil.dev`) in
-      your host's environment. Canonical URLs, the sitemap, robots and the
-      share image all use it.
+- [x] **Site URL**: defaults to `https://sahilshityalkar.com`. Override with
+      `NEXT_PUBLIC_SITE_URL` only for a staging copy.
+- [ ] **Lab site**: build and deploy lab.sahilshityalkar.com (separate app).
 
 ## Deliberately not used
 
