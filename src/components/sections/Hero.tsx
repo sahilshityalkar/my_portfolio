@@ -58,8 +58,7 @@ export function Hero() {
 
           <p
             data-spec="Statement"
-            className="t-lede col-span-12 max-w-[34ch] text-balance md:col-span-8 lg:col-span-5 fade-in"
-            style={{ ["--i" as string]: 2 }}
+            className="t-lede col-span-12 max-w-[34ch] text-balance md:col-span-8 lg:col-span-5"
           >
             {profile.statement}
           </p>

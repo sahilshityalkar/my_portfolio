@@ -83,7 +83,14 @@ export function Header() {
                 className="origin-center scale-0 transition-transform duration-500 [transform-box:fill-box] group-aria-pressed:scale-100"
               />
             </svg>
-            <span className="hidden sm:inline">{inspecting ? "Close" : "Inspect"}</span>
+            {/* both labels share one cell, so switching never resizes the button
+                (an automatic switch would otherwise count as a layout shift) */}
+            <span className="hidden sm:inline-grid">
+              <span className={`col-start-1 row-start-1 ${inspecting ? "invisible" : ""}`}>Inspect</span>
+              <span aria-hidden="true" className={`col-start-1 row-start-1 ${inspecting ? "" : "invisible"}`}>
+                Close
+              </span>
+            </span>
             <kbd className="hidden rounded border border-(--rule-strong) px-1 font-[inherit] text-[0.625rem] text-ink-3 lg:inline">
               L
             </kbd>
