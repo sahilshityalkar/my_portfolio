@@ -19,16 +19,19 @@ export function About() {
 
         <div className="col-span-12 md:col-span-6 md:col-start-7 lg:col-span-6 lg:col-start-7" data-reveal>
           <h3 className="t-meta text-ink-3">What I bring</h3>
-          <ol className="mt-4 border-t border-rule">
-            {about.capabilities.map((c, i) => (
-              <li key={c.title} data-spec="Capability" className="grid grid-cols-[2.5rem_minmax(0,1fr)] gap-x-3 border-b border-rule py-5">
-                <span className="t-meta pt-1.5 text-mark">{String(i + 1).padStart(2, "0")}</span>
+          <ul className="mt-4 border-t border-rule">
+            {about.capabilities.map((c) => (
+              <li key={c.title} data-spec="Capability" className="border-b border-rule py-5">
                 <div>
                   <h4 className="text-[1.2rem] leading-snug text-ink">{c.title}</h4>
                   <T as="p" v={c.body} className="mt-1.5 text-ink-2" />
                   <p className="t-meta mt-3 text-ink-3">
                     <span className="text-mark">Proof</span>&ensp;
-                    {c.href ? (
+                    {c.href?.startsWith("#") ? (
+                      <a href={c.href} className="link-draw text-ink">
+                        {c.proof}
+                      </a>
+                    ) : c.href ? (
                       <Link href={c.href} className="link-draw text-ink">
                         {c.proof}
                       </Link>
@@ -39,7 +42,7 @@ export function About() {
                 </div>
               </li>
             ))}
-          </ol>
+          </ul>
         </div>
 
         <div className="col-span-12 border-t border-(--rule-strong) pt-5" data-reveal>
