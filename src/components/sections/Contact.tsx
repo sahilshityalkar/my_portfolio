@@ -27,7 +27,9 @@ export function Contact() {
                 className="t-title link-draw [overflow-wrap:anywhere]"
                 data-spec-type="Newsreader"
               >
-                {links.email}
+                {/* break after the @ on narrow screens, never mid-word unless it must */}
+                {links.email.split("@")[0]}@<wbr />
+                {links.email.split("@").slice(1).join("@")}
               </a>
               <div className="mt-6 flex flex-wrap gap-2">
                 <CopyEmail email={links.email} />

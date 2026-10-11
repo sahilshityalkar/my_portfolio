@@ -80,7 +80,8 @@ export function Hero() {
             {links.email ? (
               <li className="flex flex-wrap items-center gap-x-1 normal-case tracking-normal lg:justify-end">
                 <a href={`mailto:${links.email}`} className="link-draw text-ink [overflow-wrap:anywhere]">
-                  {links.email}
+                  {links.email.split("@")[0]}@<wbr />
+                  {links.email.split("@").slice(1).join("@")}
                 </a>
                 <CopyEmail email={links.email} compact />
               </li>
