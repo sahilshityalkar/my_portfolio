@@ -154,7 +154,8 @@ body::before {
   font-family: var(--mono);
   font-size: 0.6875rem;
   line-height: 1.4;
-  letter-spacing: 0.06em;
+  /* lightly tracked: a label, not a shouted eyebrow */
+  letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 
@@ -318,18 +319,18 @@ body::before {
   will-change: transform, opacity;
   border: 1px solid color-mix(in srgb, var(--ink) 70%, transparent);
   /* a paper hairline outside the ink, so the ring reads on a light screenshot */
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--paper) 80%, transparent);
+  box-shadow: 0 0 0 1px var(--paper);
 }
-/* degree ticks every 15 degrees, a longer one every 90 */
+/* degree ticks every 24 degrees, like a protractor's coarse scale */
 .asbuilt-ring::before {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
   background:
-    repeating-conic-gradient(from -0.4deg, var(--ink) 0 0.8deg, transparent 0.8deg 15deg);
+    repeating-conic-gradient(from -0.5deg, var(--ink) 0 1deg, transparent 1deg 24deg);
   mask: radial-gradient(closest-side, transparent calc(100% - 5px), #000 calc(100% - 5px));
-  opacity: 0.5;
+  opacity: 0.6;
 }
 .asbuilt-read {
   opacity: 0;
@@ -363,7 +364,7 @@ html:not(.js) .asbuilt-toggle {
   font-style: normal;
   font-weight: 400;
   line-height: 1;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
