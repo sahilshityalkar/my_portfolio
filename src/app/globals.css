@@ -334,6 +334,13 @@ body::before {
 .asbuilt-read {
   opacity: 0;
   will-change: transform, opacity;
+  max-width: calc(100% - 24px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* without JS the lens cannot open, so the toggle is not offered */
+html:not(.js) .asbuilt-toggle {
+  display: none;
 }
 @media print {
   .asbuilt,
