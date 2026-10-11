@@ -9,8 +9,8 @@ import { readTheme, setTheme } from "@/lib/theme";
 export const nav = [
   { href: "/#work", label: "Work", n: "02" },
   { href: "/#experience", label: "Experience", n: "03" },
-  { href: "/#lab", label: "Lab", n: "04" },
-  { href: "/#about", label: "About", n: "05" },
+  { href: "/#about", label: "About", n: "04" },
+  { href: "/#lab", label: "Lab", n: "05" },
   { href: "/#contact", label: "Contact", n: "06" },
 ];
 
@@ -127,14 +127,14 @@ export function Header() {
             aria-controls="menu"
             onClick={() => setOpen((o) => !o)}
           >
-            {open ? "Close" : "Index"}
+            {open ? "Close" : "Menu"}
           </button>
         </div>
       </div>
 
       {open ? (
         <div id="menu" className="fixed inset-x-0 top-(--header-h) bottom-0 z-50 bg-paper md:hidden">
-          <nav aria-label="Index" className="wrap flex h-full flex-col justify-between pb-10 pt-6">
+          <nav aria-label="Site" className="wrap flex h-full flex-col justify-between pb-10 pt-6">
             <ul>
               {nav.map((n, i) => (
                 <li key={n.href} className="rule fade-in" style={{ ["--i" as string]: i - 3 }}>

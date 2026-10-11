@@ -4,11 +4,11 @@ import { useEffect, useRef, useState } from "react";
 import { section, useStore } from "@/lib/store";
 
 const SECTIONS = [
-  { id: "intro", n: "01", label: "Index" },
+  { id: "intro", n: "01", label: "Intro" },
   { id: "work", n: "02", label: "Work" },
   { id: "experience", n: "03", label: "Experience" },
-  { id: "lab", n: "04", label: "Lab" },
-  { id: "about", n: "05", label: "About" },
+  { id: "about", n: "04", label: "About" },
+  { id: "lab", n: "05", label: "Lab" },
   { id: "contact", n: "06", label: "Contact" },
 ];
 

@@ -10,7 +10,7 @@ export function Lab() {
   return (
     <section id="lab" aria-labelledby="lab-title" data-spec="Lab" className="wrap py-24 sm:py-36">
       <SectionHead
-        n="04"
+        n="05"
         id="lab-title"
         title="Lab"
         aside={

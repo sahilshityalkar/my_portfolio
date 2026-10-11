@@ -6,7 +6,7 @@ import { SectionHead } from "@/components/SectionHead";
 export function About() {
   return (
     <section id="about" aria-labelledby="about-title" data-spec="About" className="wrap py-24 sm:py-36">
-      <SectionHead n="05" id="about-title" title="About" />
+      <SectionHead n="04" id="about-title" title="About" />
 
       <div className="grid-12 mt-12 gap-y-16 sm:mt-20">
         <div className="col-span-12 md:col-span-6 lg:col-span-5" data-reveal>
