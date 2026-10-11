@@ -108,7 +108,14 @@ export function Header() {
                 style={{ transform: t === "night" ? "translateX(0)" : "translateX(60%)" }}
               />
             </span>
-            <span className="hidden sm:inline">{t === "day" ? "Day" : "Night"}</span>
+            {/* one cell for both labels: a stored Night theme is applied after
+                hydration, and a width change here would shift the whole bar */}
+            <span className="hidden sm:inline-grid">
+              <span className={`col-start-1 row-start-1 ${t === "day" ? "" : "invisible"}`}>Day</span>
+              <span aria-hidden="true" className={`col-start-1 row-start-1 ${t === "day" ? "invisible" : ""}`}>
+                Night
+              </span>
+            </span>
           </button>
 
           {links.resume ? (
