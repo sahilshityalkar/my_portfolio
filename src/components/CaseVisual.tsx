@@ -2,9 +2,13 @@ import Image from "next/image";
 import type { CaseStudy } from "@/content/types";
 import { Plate } from "@/components/Plate";
 
-/** The project's technical drawing, the same on the index and the case page. */
-export function CaseVisual({ c, seed }: { c: CaseStudy; seed: number }) {
-  return <Plate seed={seed} numeral={c.index} caption={`Plate ${c.index}`} kind={c.plate} />;
+/**
+ * The project's technical drawing, the same on the index and the case page.
+ * On the index, `asBuilt` (the case's real screenshot) puts the AS BUILT lens
+ * over the drawing; case pages call it without, so their plates stay drawings.
+ */
+export function CaseVisual({ c, seed, asBuilt }: { c: CaseStudy; seed: number; asBuilt?: CaseStudy["image"] }) {
+  return <Plate seed={seed} numeral={c.index} caption={`Plate ${c.index}`} kind={c.plate} asBuilt={asBuilt} />;
 }
 
 /** The shipped product, framed like a specimen: hairline border and its address. */

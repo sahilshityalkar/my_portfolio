@@ -4,6 +4,8 @@
  * schematic on purpose (a drawing of the idea, not a fake screenshot) and are
  * deterministic, so server and client render the same SVG.
  */
+import { AsBuilt, type AsBuiltImage } from "@/components/AsBuilt";
+
 export type PlateKind = "replies" | "mastery" | "heatmap" | "arcs";
 
 function rand(seed: number) {
@@ -57,7 +59,7 @@ function Replies() {
   const cards = [0, 1, 2];
   return (
     <g>
-      <g className="transition-transform duration-[1.4s] ease-(--ease-out) group-hover/plate:-translate-x-1.5">
+      <g>
         <rect x="56" y="150" width="170" height="118" rx="10" fill="var(--paper)" stroke={INK} {...draw} style={d(0)} />
         <g className="svg-fade" style={d(3)}>
           <text x="72" y="174" fill={INK} style={MONO}>COMPLAINT</text>
@@ -72,11 +74,7 @@ function Replies() {
         ))}
       </g>
       {cards.map((i) => (
-        <g
-          key={i}
-          className="transition-transform duration-[1.4s] ease-(--ease-out) group-hover/plate:translate-x-2"
-          style={{ transitionDelay: `${i * 80}ms` }}
-        >
+        <g key={i}>
           <rect x="344" y={62 + i * 112} width="200" height="96" rx="10" fill="var(--paper)" stroke={INK} {...draw} style={d(6 + i * 2)} />
           <g className="svg-fade" style={d(9 + i * 2)}>
             <text x="360" y={84 + i * 112} fill={i === 0 ? MARK : INK} style={MONO}>
@@ -118,9 +116,7 @@ function Mastery() {
       {nodes.map(([x, y, k], i) =>
         k === "n" ? (
           <g key={i}>
-            <g className="origin-center transition-transform duration-[1.4s] ease-(--ease-out) [transform-box:fill-box] group-hover/plate:scale-125">
-              <circle cx={x} cy={y} r="26" fill="none" stroke={MARK} {...draw} style={d(16)} />
-            </g>
+            <circle cx={x} cy={y} r="26" fill="none" stroke={MARK} {...draw} style={d(16)} />
             <circle cx={x} cy={y} r="12" fill={MARK} className="pop" style={d(14)} />
           </g>
         ) : (
@@ -184,14 +180,14 @@ function Heatmap() {
         fill="none"
         stroke={MARK}
         strokeWidth="1.5"
-        className="draw group-hover/plate:[stroke-width:2.5]"
+        className="draw"
         pathLength={1}
         style={d(22)}
       />
       <g stroke={MARK} fill="none" className="svg-fade" style={d(26)}>
         <path d={`M${64 + cols * 30 + 2} ${83 + slipping * 30} H 470 V 330`} strokeDasharray="3 4" />
       </g>
-      <g className="transition-transform duration-[1.4s] ease-(--ease-out) group-hover/plate:-translate-y-1.5">
+      <g>
         <rect x="438" y="330" width="120" height="74" rx="8" fill="var(--paper)" stroke={INK} {...draw} style={d(27)} />
         <g className="svg-fade" style={d(29)}>
           <text x="452" y="352" fill={MARK} style={MONO}>NEEDS HELP</text>
@@ -224,9 +220,22 @@ function Arcs({ seed }: { seed: number }) {
   );
 }
 
-export function Plate({ seed, numeral, caption, kind = "arcs" }: { seed: number; numeral: string; caption: string; kind?: PlateKind }) {
+export function Plate({
+  seed,
+  numeral,
+  caption,
+  kind = "arcs",
+  asBuilt,
+}: {
+  seed: number;
+  numeral: string;
+  caption: string;
+  kind?: PlateKind;
+  /** The shipped product under this drawing: opens the AS BUILT lens (landing page only). */
+  asBuilt?: AsBuiltImage;
+}) {
   return (
-    <figure className="group/plate relative aspect-[4/3] overflow-hidden bg-paper-2">
+    <figure className="relative aspect-[4/3] overflow-hidden bg-paper-2">
       <svg viewBox="0 0 600 450" className="absolute inset-0 size-full" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
         <Field />
         {kind === "replies" ? <Replies /> : kind === "mastery" ? <Mastery /> : kind === "heatmap" ? <Heatmap /> : <Arcs seed={seed} />}
@@ -237,7 +246,7 @@ export function Plate({ seed, numeral, caption, kind = "arcs" }: { seed: number;
         </g>
         <text
           x="572"
-          y="70"
+          y={asBuilt ? 118 : 70 /* below the AS BUILT toggle when it is there */}
           textAnchor="end"
           fill={INK}
           className="svg-fade font-serif italic"
@@ -246,6 +255,7 @@ export function Plate({ seed, numeral, caption, kind = "arcs" }: { seed: number;
           {numeral}
         </text>
       </svg>
+      {asBuilt ? <AsBuilt {...asBuilt} /> : null}
       <figcaption className="t-meta absolute left-3 top-3 text-ink-3">{caption}</figcaption>
     </figure>
   );

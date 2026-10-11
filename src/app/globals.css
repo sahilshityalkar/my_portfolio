@@ -274,12 +274,13 @@ body::before {
 }
 
 /* Drafting plates draw themselves when revealed: strokes are traced, then
-   connections, cells and labels arrive (see Plate.tsx for the order). */
+   connections, cells and labels arrive (see Plate.tsx for the order). Quick
+   enough that every plate is fully drawn within 1.2s of entering the view. */
 .js [data-reveal] .draw {
   stroke-dasharray: 1 1;
   stroke-dashoffset: 1;
-  transition: stroke-dashoffset 1.5s var(--ease-in-out);
-  transition-delay: calc(var(--d, 0) * 75ms + 250ms);
+  transition: stroke-dashoffset 0.55s var(--ease-in-out);
+  transition-delay: calc(var(--d, 0) * 22ms + 60ms);
 }
 .js [data-reveal][data-in] .draw {
   stroke-dashoffset: 0;
@@ -287,9 +288,9 @@ body::before {
 .js [data-reveal] :is(.svg-fade, .pop, .cell) {
   opacity: 0;
   transition:
-    opacity 0.8s var(--ease-out),
-    transform 0.9s var(--ease-out);
-  transition-delay: calc(var(--d, 0) * 75ms + 300ms);
+    opacity 0.45s var(--ease-out),
+    transform 0.45s var(--ease-out);
+  transition-delay: calc(var(--d, 0) * 22ms + 80ms);
 }
 .js [data-reveal] .pop {
   transform: scale(0.3);
@@ -297,12 +298,50 @@ body::before {
   transform-origin: center;
 }
 .js [data-reveal] .cell {
-  transition-duration: 0.5s;
-  transition-delay: calc(var(--d, 0) * 40ms + 250ms);
+  transition-duration: 0.35s;
+  transition-delay: calc(var(--d, 0) * 16ms + 40ms);
 }
 .js [data-reveal][data-in] :is(.svg-fade, .pop, .cell) {
   opacity: 1;
   transform: none;
+}
+
+/* AS BUILT: a circle of the shipped product cut out of the drawing. The
+   centre and radius are springs written as custom properties (AsBuilt.tsx). */
+.asbuilt {
+  clip-path: circle(var(--r, 0px) at var(--x, 50%) var(--y, 50%));
+  background: var(--paper-2);
+}
+.asbuilt-ring {
+  opacity: 0;
+  transform-origin: 50% 50%;
+  will-change: transform, opacity;
+  border: 1px solid color-mix(in srgb, var(--ink) 70%, transparent);
+  /* a paper hairline outside the ink, so the ring reads on a light screenshot */
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--paper) 80%, transparent);
+}
+/* degree ticks every 15 degrees, a longer one every 90 */
+.asbuilt-ring::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    repeating-conic-gradient(from -0.4deg, var(--ink) 0 0.8deg, transparent 0.8deg 15deg);
+  mask: radial-gradient(closest-side, transparent calc(100% - 5px), #000 calc(100% - 5px));
+  opacity: 0.5;
+}
+.asbuilt-read {
+  opacity: 0;
+  will-change: transform, opacity;
+}
+@media print {
+  .asbuilt,
+  .asbuilt-ring,
+  .asbuilt-read,
+  .asbuilt-toggle {
+    display: none;
+  }
 }
 
 /* Lab card: the spring's curve redraws itself when the card is hovered. */
