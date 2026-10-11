@@ -43,7 +43,9 @@ type TypeSpec = {
 };
 type Line = { x: number; y: number; w: number; h: number; fixed: boolean };
 type Grid = { cols: [number, number][] } | null;
-type Media = { x: number; y: number; w: number; h: number; label: string };
+/** A measured svg primitive: rect, circle, line or text, in document coordinates. */
+type Prim = { tag: "rect" | "circle" | "line" | "text"; x: number; y: number; w: number; h: number; dir: 1 | -1 };
+type Media = { x: number; y: number; w: number; h: number; label: string; prims: Prim[] | null };
 type Model = { boxes: Box[]; types: TypeSpec[]; lines: Line[]; grid: Grid; media: Media[] };
 
 type Palette = { paper: string; ink: string; ink3: string; mark: string; rule: string };
@@ -97,7 +99,10 @@ function measure(ctx: CanvasRenderingContext2D): Model {
     const cap = ctx.measureText("H").actualBoundingBoxAscent;
     const xh = ctx.measureText("x").actualBoundingBoxAscent;
     const words: Word[] = [];
-    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    // callouts inside a heading (the hero's CAP) are annotations, not letterforms
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, {
+      acceptNode: (n) => (n.parentElement?.closest("[data-loupe-skip]") ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT),
+    });
     for (let n = walker.nextNode(); n; n = walker.nextNode()) {
       const text = n.textContent ?? "";
       const ps = n.parentElement ? getComputedStyle(n.parentElement) : cs;
@@ -178,11 +183,47 @@ function measure(ctx: CanvasRenderingContext2D): Model {
     if (el.closest("[data-loupe-skip]") || (el.tagName !== "FIGURE" && el.closest("figure"))) return;
     const r = el.getBoundingClientRect();
     if (r.width < 80 || r.height < 60) return;
-    const kind = el.tagName === "FIGURE" ? (el.querySelector("img") ? "img" : el.querySelector("svg") ? "svg" : "figure") : el.tagName.toLowerCase();
-    media.push({ x: r.left + sx, y: r.top + sy, w: r.width, h: r.height, label: `${kind} ${Math.round(r.width)} × ${Math.round(r.height)}` });
+    const own = (q: string) => [...el.querySelectorAll(q)].find((n) => !n.closest("[data-loupe-skip]"));
+    const svg = el.tagName === "FIGURE" ? own("svg") : undefined;
+    const kind = el.tagName === "FIGURE" ? (svg ? "svg" : own("img") ? "img" : "figure") : el.tagName.toLowerCase();
+    media.push({
+      x: r.left + sx,
+      y: r.top + sy,
+      w: r.width,
+      h: r.height,
+      label: `${kind} ${Math.round(r.width)} × ${Math.round(r.height)}`,
+      prims: svg ? primitives(svg, sx, sy) : null,
+    });
   });
 
   return { boxes, types, lines, grid, media };
+}
+
+/**
+ * A drawing's own construction: its rects, circles and text first (they carry
+ * the meaning), then its lines, up to 160 in all. Measured like everything
+ * else, so the glass over a plate shows what the plate is made of.
+ */
+function primitives(svg: Element, sx: number, sy: number): Prim[] {
+  const out: Prim[] = [];
+  const take = (q: string) => {
+    for (const el of svg.querySelectorAll<SVGGraphicsElement>(q)) {
+      if (out.length >= 160) return;
+      if (el.closest("[data-loupe-skip]")) continue;
+      const r = el.getBoundingClientRect();
+      if (r.width < 0.5 && r.height < 0.5) continue;
+      let dir: 1 | -1 = 1;
+      if (el instanceof SVGLineElement) {
+        const dx = el.x2.baseVal.value - el.x1.baseVal.value;
+        const dy = el.y2.baseVal.value - el.y1.baseVal.value;
+        dir = dx * dy < 0 ? -1 : 1;
+      }
+      out.push({ tag: el.tagName.toLowerCase() as Prim["tag"], x: r.left + sx, y: r.top + sy, w: r.width, h: r.height, dir });
+    }
+  };
+  take("rect, circle, text");
+  take("line");
+  return out;
 }
 
 /* ------------------------------------------------------------------ drawing */
@@ -241,6 +282,82 @@ function dimension(ctx: CanvasRenderingContext2D, x: number, y1: number, y2: num
   ctx.fillRect(x + 6, (y1 + y2) / 2 - 7, w + 6, 13);
   ctx.fillStyle = p.mark;
   ctx.fillText(label, x + 9, (y1 + y2) / 2 + 3);
+}
+
+function drawPrims(ctx: CanvasRenderingContext2D, m: Media, sx: number, sy: number, p: Palette) {
+  const prims = m.prims ?? [];
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(m.x - sx, m.y - sy, m.w, m.h);
+  ctx.clip();
+
+  // lines: the drawing's field, ticks and edges, quieter than its shapes
+  ctx.strokeStyle = p.ink3;
+  ctx.lineWidth = 1;
+  ctx.globalAlpha = 0.6;
+  ctx.beginPath();
+  for (const l of prims) {
+    if (l.tag !== "line") continue;
+    const x0 = l.x - sx;
+    const y0 = l.y - sy;
+    if (l.dir > 0) {
+      ctx.moveTo(x0, y0);
+      ctx.lineTo(x0 + l.w, y0 + l.h);
+    } else {
+      ctx.moveTo(x0, y0 + l.h);
+      ctx.lineTo(x0 + l.w, y0);
+    }
+  }
+  ctx.stroke();
+
+  // svg text as line boxes, like every other run of text under the glass
+  ctx.fillStyle = p.ink;
+  for (const t of prims) {
+    if (t.tag !== "text") continue;
+    ctx.globalAlpha = 0.1;
+    ctx.fillRect(t.x - sx, t.y - sy, t.w, t.h);
+    ctx.globalAlpha = 0.55;
+    ctx.fillRect(t.x - sx, t.y - sy + t.h * 0.78, t.w, 1);
+  }
+
+  // shapes: dashed redline outlines
+  ctx.globalAlpha = 0.9;
+  ctx.strokeStyle = p.mark;
+  ctx.setLineDash([4, 3]);
+  ctx.beginPath();
+  for (const s of prims) {
+    const x0 = s.x - sx;
+    const y0 = s.y - sy;
+    if (s.tag === "rect") {
+      ctx.rect(Math.round(x0) + 0.5, Math.round(y0) + 0.5, Math.max(1, Math.round(s.w) - 1), Math.max(1, Math.round(s.h) - 1));
+    } else if (s.tag === "circle") {
+      const rr = Math.max(0.5, s.w / 2 - 0.5);
+      ctx.moveTo(x0 + s.w / 2 + rr, y0 + s.h / 2);
+      ctx.arc(x0 + s.w / 2, y0 + s.h / 2, rr, 0, Math.PI * 2);
+    }
+  }
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.globalAlpha = 1;
+
+  // the five largest rects carry their measured size; a pattern (a size that
+  // repeats more than three times, like heatmap cells) is labelled once
+  const size = (s: Prim) => `${Math.round(s.w)} × ${Math.round(s.h)}`;
+  const rects = prims.filter((s) => s.tag === "rect" && s.w >= 24 && s.h >= 24);
+  const count = new Map<string, number>();
+  for (const s of rects) count.set(size(s), (count.get(size(s)) ?? 0) + 1);
+  const labelled = new Set<string>();
+  const big = rects
+    .sort((a, b) => b.w * b.h - a.w * a.h)
+    .filter((s) => {
+      const k = size(s);
+      if ((count.get(k) ?? 0) > 3 && labelled.has(k)) return false;
+      labelled.add(k);
+      return true;
+    })
+    .slice(0, 5);
+  for (const s of big) tag(ctx, `rect ${size(s)}`, Math.round(s.x - sx), Math.round(s.y - sy), p);
+  ctx.restore();
 }
 
 type Frame = {
@@ -336,7 +453,8 @@ function draw(f: Frame) {
   }
   ctx.globalAlpha = 1;
 
-  // media: frame, diagonals, size
+  // media: frame and size; a picture gets the architect's cross, a drawing is
+  // redrawn from its measured primitives
   for (const m of model.media) {
     const x = m.x - sx;
     const y = m.y - sy;
@@ -345,13 +463,18 @@ function draw(f: Frame) {
     ctx.lineWidth = 1;
     ctx.globalAlpha = 0.45;
     ctx.strokeRect(Math.round(x) + 0.5, Math.round(y) + 0.5, Math.round(m.w) - 1, Math.round(m.h) - 1);
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-    ctx.lineTo(x + m.w, y + m.h);
-    ctx.moveTo(x + m.w, y);
-    ctx.lineTo(x, y + m.h);
-    ctx.globalAlpha = 0.18;
-    ctx.stroke();
+    if (m.prims) {
+      ctx.globalAlpha = 1;
+      drawPrims(ctx, m, sx, sy, p);
+    } else {
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(x + m.w, y + m.h);
+      ctx.moveTo(x + m.w, y);
+      ctx.lineTo(x, y + m.h);
+      ctx.globalAlpha = 0.18;
+      ctx.stroke();
+    }
     ctx.globalAlpha = 1;
     ctx.font = MONO;
     const lw = ctx.measureText(m.label).width;
