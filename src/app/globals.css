@@ -344,6 +344,95 @@ body::before {
   }
 }
 
+/* Callouts: the hero measured at rest (HeroCallouts.tsx). Redline in the
+   drafting pencil, labels in mono. Numbers sit in fixed-width tabular slots,
+   so a changing digit never moves anything; only the first fade is animated. */
+.callout {
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s var(--ease-out);
+  font-family: var(--mono);
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  color: var(--ink-3);
+  -webkit-text-stroke: 0;
+  hyphens: none;
+}
+.callout[data-ready] {
+  opacity: 1;
+}
+.callout-num {
+  display: inline-block;
+  color: var(--ink-2);
+}
+.callout-label {
+  position: absolute;
+  background: var(--paper);
+}
+/* CAP: a vertical dimension with 5px end ticks, label to its right */
+.callout-cap {
+  position: absolute;
+  left: calc(100% + 0.18em);
+  top: var(--cap-top, 0px);
+  height: var(--cap-h, 0px);
+  width: 5px;
+  border-block: 1px solid var(--mark);
+}
+.callout-cap::before {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  left: 2px;
+  width: 1px;
+  background: var(--mark);
+}
+.callout-cap .callout-label {
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding-block: 2px;
+}
+/* MEASURE: a horizontal dimension 10px under the paragraph's widest line */
+.callout-measure {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: var(--m-left, 0px);
+  width: var(--m-w, 0px);
+  height: 5px;
+  border-inline: 1px solid var(--mark);
+}
+.callout-measure::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 2px;
+  height: 1px;
+  background: var(--mark);
+}
+.callout-measure .callout-label {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 2px 6px;
+}
+@media (max-width: 639.98px) {
+  .callout-cap,
+  .callout-measure {
+    display: none;
+  }
+}
+@media print {
+  .callout {
+    display: none;
+  }
+}
+
 /* Lab card: the spring's curve redraws itself when the card is hovered. */
 .lab-draw {
   stroke-dasharray: 1;

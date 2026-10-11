@@ -2,6 +2,7 @@ import { profile, links } from "@/content/profile";
 import { T } from "@/components/Draftable";
 import { draft } from "@/content/types";
 import { InspectHint } from "@/components/InspectHint";
+import { CapCallout, MeasureCallout, SheetCallout } from "@/components/HeroCallouts";
 
 export function Hero() {
   const [first, ...rest] = profile.name.split(" ");
@@ -28,7 +29,12 @@ export function Hero() {
 
         <h1 id="intro-title" className="t-display col-span-12" data-spec-type="Newsreader">
           <span className="mask-line" style={{ ["--i" as string]: 0 }}>
-            <span className="ink">{first}</span>
+            <span className="ink">
+              <span className="relative inline-block">
+                {first}
+                <CapCallout />
+              </span>
+            </span>
           </span>
           {last ? (
             <span className="mask-line pl-[12%] italic sm:pl-[16.66%] lg:pl-0 lg:pr-[0.093em] lg:text-right" style={{ ["--i" as string]: 1 }}>
@@ -58,9 +64,10 @@ export function Hero() {
 
           <p
             data-spec="Statement"
-            className="t-lede col-span-12 max-w-[34ch] text-balance md:col-span-8 lg:col-span-5"
+            className="t-lede relative col-span-12 max-w-[34ch] text-balance md:col-span-8 lg:col-span-5"
           >
             {profile.statement}
+            <MeasureCallout />
           </p>
 
           <ul
@@ -92,8 +99,9 @@ export function Hero() {
           </ul>
         </div>
 
-        <div className="col-span-12 flex items-end justify-between gap-6 fade-in" style={{ ["--i" as string]: 5 }}>
+        <div className="col-span-12 flex flex-wrap items-end justify-between gap-x-6 gap-y-4 fade-in" style={{ ["--i" as string]: 5 }}>
           <InspectHint />
+          <SheetCallout className="order-last basis-full pb-[0.6875rem] sm:order-none sm:mr-auto sm:basis-auto" />
           <a href="#work" className="t-meta hidden shrink-0 text-ink-3 hover:text-ink sm:block">
             02 Selected work ↓
           </a>
