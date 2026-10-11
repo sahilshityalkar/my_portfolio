@@ -10,13 +10,26 @@ becomes a drawing; on Plate I (ReplyAI) a lens turns the drawing into the real
 product screenshot. Plus live hero callouts and a footer title block.
 
 Done and committed: research (3 agents), creative brief, interaction builder,
-content builder. The layout and polish builder was interrupted; its partial
-edits are committed as "WIP: layout and polish pass (interrupted)".
+content builder, and the layout and polish builder (finished after the
+interrupted WIP commit). Measured at the end of the layout track: page height
+5881px at 1440x900 and 7242px at 390x844; the Work rule peeks above the fold
+at 1440x900 and 1366x768; no horizontal overflow from 320 to 1920; CLS 0.000
+over load, scroll, resize, hover and flood; the whole recruiter line fits at
+375x667.
 
-**Resume from here:** finish the layout and polish track (type, spacing, rhythm,
-Night mode, mobile-specific design across the landing page), then run the QA
-and performance tester, the hiring panel review, and a lead-engineer fix pass,
-as described below.
+Layout decisions worth knowing:
+- Section rules and numbers are printed (never revealed), so they show from
+  the first frame; only titles and content rise in.
+- Below 640px the As built toggle is a tab flush in the plate corner (it would
+  otherwise sit on the REPLY 1 card), with its focus ring drawn inside.
+- Below 1600px the Ruler shows the active section's name running down the
+  ruler, since the margin is too narrow to set it beside the number.
+- The anchor reset lives in `@layer base`: unlayered, it beat every colour
+  utility on links. Keep new global element rules in a layer for the same
+  reason.
+
+**Resume from here:** run the QA and performance tester, the hiring panel
+review, and a lead-engineer fix pass, as described below.
 
 ## The agency workflow plan
 
