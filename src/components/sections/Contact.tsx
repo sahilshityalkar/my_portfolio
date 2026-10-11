@@ -15,19 +15,21 @@ export function Contact() {
   return (
     <section id="contact" aria-labelledby="contact-title" data-spec="Contact" className="wrap pb-10 pt-24 sm:pt-36">
       <div className="grid-12 gap-y-12 border-t border-(--rule-strong) pt-4">
-        <p className="t-meta col-span-12 text-mark" data-reveal>
-          06
-        </p>
-        <h2 id="contact-title" className="t-display col-span-12" data-reveal data-spec-type="Newsreader">
-          Let’s <span className="italic">talk.</span>
-        </h2>
-        <div className="col-span-12 md:col-span-5" data-reveal>
+        <div className="col-span-12" data-reveal>
+          <h2 id="contact-title" className="t-meta mb-6 text-ink-3">
+            Contact
+          </h2>
           {links.email ? (
             <>
-              <a href={`mailto:${links.email}`} className="t-lede link-draw break-all">
+              {/* the address is the headline: nothing to decode, nothing to click through */}
+              <a
+                href={`mailto:${links.email}`}
+                className="t-title link-draw [overflow-wrap:anywhere]"
+                data-spec-type="Newsreader"
+              >
                 {links.email}
               </a>
-              <div className="mt-5 flex flex-wrap gap-2">
+              <div className="mt-6 flex flex-wrap gap-2">
                 <CopyEmail email={links.email} />
                 <a
                   href={`mailto:${links.email}`}
@@ -38,12 +40,12 @@ export function Contact() {
               </div>
             </>
           ) : (
-            <T as="p" v={draft("your@email.com")} className="t-lede" />
+            <T as="p" v={draft("your@email.com")} className="t-title" />
           )}
-          <p className="t-meta mt-4 text-ink-3">
-            <T v={profile.availability} />
-          </p>
         </div>
+        <p className="t-meta col-span-12 max-w-[46ch] text-ink-3 md:col-span-5" data-reveal>
+          <T v={profile.availability} />
+        </p>
         <ul className="col-span-12 md:col-span-6 md:col-start-7" data-reveal>
           {rows.map((r) => (
             <li key={r.label} className="grid grid-cols-[5.5rem_minmax(0,1fr)] border-t border-rule py-3 last:border-b sm:grid-cols-[7rem_minmax(0,1fr)]">
@@ -65,13 +67,8 @@ export function Contact() {
       </div>
 
       <footer className="t-meta mt-28 grid gap-5 border-t border-rule pt-5 text-ink-3">
-        <p className="flex flex-col justify-between gap-3 sm:flex-row">
-          <span>
-            © {new Date().getFullYear()} {profile.name}
-          </span>
-          <span>
-            <T v={profile.location} />
-          </span>
+        <p>
+          © {new Date().getFullYear()} {profile.name} · <T v={profile.location} />
         </p>
         <TitleBlock />
       </footer>
