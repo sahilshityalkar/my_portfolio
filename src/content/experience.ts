@@ -6,19 +6,14 @@ export const experience: Role[] = [
     title: "Frontend Lead Engineer",
     start: "Jan 2025",
     end: "Present",
+    location: "Mumbai",
     summary: demo(
-      "Leading the frontend of Clyra, the AI school operating system: the student learning experience and the tools schools run on, from architecture to the last pixel.",
+      "Leading the frontend of Clyra, the AI school operating system, since January 2025, when the product was still early.",
     ),
     notes: [
-      demo(
-        "Own the frontend architecture across both sides of the product: the student app (mastery map, adaptive quizzes, weekly study plans) and the institution workspace for grading and cohort insight.",
-      ),
-      demo(
-        "Built the real-time progress dashboards and cohort heatmaps: data-dense views that stay fast and legible as classes, concepts and submissions grow.",
-      ),
-      demo(
-        "Set the team’s frontend standards (a shared component library, design tokens and review practice) so new features ship consistent, accessible and fast by default.",
-      ),
+      demo("Own the frontend architecture for both products: the student app and the institution workspace."),
+      demo("Built the progress dashboards and cohort heatmaps that schools use to spot students who need help."),
+      demo("Set the shared component library, design tokens and code review practice the frontend team works from."),
     ],
   },
 ];

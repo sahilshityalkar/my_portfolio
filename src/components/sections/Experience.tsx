@@ -22,23 +22,18 @@ export function Experience() {
                 <p className="t-meta mt-1.5 text-ink-3">
                   <T v={r.start} /> to <T v={r.end} />
                 </p>
+                {r.location ? <T as="p" v={r.location} className="t-meta mt-1.5 text-ink-3" /> : null}
               </div>
             </div>
             <div className="col-span-12 md:col-span-7 lg:col-span-6 lg:col-start-7">
               <T as="p" v={r.summary} className="t-lede text-balance" />
-              <ol className="mt-10 border-t border-rule">
+              <ul className="mt-10 border-t border-rule">
                 {r.notes.map((n, i) => (
-                  <li
-                    key={i}
-                    className="grid grid-cols-[3rem_1fr] border-b border-rule py-5"
-                    data-reveal
-                    style={{ ["--i" as string]: i }}
-                  >
-                    <span className="t-meta pt-1.5 text-mark">{String(i + 1).padStart(2, "0")}</span>
+                  <li key={i} className="border-b border-rule py-5" data-reveal style={{ ["--i" as string]: i }}>
                     <T v={n} className="text-ink-2" />
                   </li>
                 ))}
-              </ol>
+              </ul>
             </div>
           </li>
         ))}
