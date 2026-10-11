@@ -317,10 +317,20 @@ body::before {
   transform: none;
 }
 
-/* AS BUILT: a circle of the shipped product cut out of the drawing. The
-   centre and radius are springs written as custom properties (AsBuilt.tsx). */
+/* AS BUILT: a round window onto the shipped product, cut out of the drawing.
+   The window is moved and scaled by transform and the screenshot inside it
+   gets the inverse, so only compositor properties change per frame
+   (AsBuilt.tsx). */
 .asbuilt {
-  clip-path: circle(var(--r, 0px) at var(--x, 50%) var(--y, 50%));
+  opacity: 0;
+  overflow: hidden;
+  border-radius: 50%;
+  transform-origin: 50% 50%;
+  will-change: transform, opacity;
+}
+.asbuilt-shot {
+  transform-origin: 0 0;
+  will-change: transform;
   background: var(--paper-2);
 }
 .asbuilt-ring {

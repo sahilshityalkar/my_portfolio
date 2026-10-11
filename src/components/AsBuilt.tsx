@@ -11,31 +11,42 @@ export type AsBuiltImage = { src: string; alt: string; url?: string };
  * AS BUILT: the Loupe in reverse. The global glass turns the page into its
  * drawing; this small glass turns a plate's drawing into the shipped product.
  *
- * A circular clip over the real screenshot, whose centre and radius are
+ * A round window onto the real screenshot, whose centre and radius are
  * springs. Pointer (fine) hover opens a lens that snaps to the pointer on the
  * first frame and then follows it; the corner button (keyboard, touch) floods
- * it across the whole plate. Per frame, only three custom properties (feeding
- * clip-path) and two transforms are written: no layout reads, no React state.
+ * it across the whole plate.
  *
- * The screenshot is only mounted once the plate is in view after load, so it
- * costs nothing on first load. Without JS the drawing simply shows.
+ * Compositor only: the window is a fixed-size circle (overflow hidden, radius
+ * 50%) moved and scaled by transform, and the screenshot inside it gets the
+ * inverse transform, so it stays put at 1:1 while the hole travels. Per frame
+ * only transforms and opacity are written: no clip-path repaint, no layout
+ * reads, no React state. Sizes are written once per open.
+ *
+ * The screenshot is only mounted once the plate is in view after load (then
+ * fetched eagerly: a lazy image inside a closed window is never "visible" to
+ * the browser, so it would wait for the first hover). Without JS the drawing
+ * simply shows.
  */
 export function AsBuilt({ src, alt, url }: AsBuiltImage) {
   const layerRef = useRef<HTMLDivElement>(null);
+  const shotRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
   const readRef = useRef<HTMLDivElement>(null);
   const floodRef = useRef<((on: boolean) => void) | null>(null);
   const [flooded, setFlooded] = useState(false);
   const [near, setNear] = useState(false);
+  // only announce "back to the drawing" after the visitor has used the toggle
+  const [announced, setAnnounced] = useState(false);
 
   useEffect(() => {
     const layer = layerRef.current;
+    const shot = shotRef.current;
     const ring = ringRef.current;
     const read = readRef.current;
     const fig = layer?.closest("figure");
     // the plate's column: the figure plus the full-cover case link above it
     const host = fig?.parentElement;
-    if (!layer || !ring || !read || !fig || !host) return;
+    if (!layer || !shot || !ring || !read || !fig || !host) return;
 
     const fine = matchMedia("(hover: hover) and (pointer: fine)");
     const reduced = matchMedia("(prefers-reduced-motion: reduce)");
@@ -55,12 +66,17 @@ export function AsBuilt({ src, alt, url }: AsBuiltImage) {
       top = r.top + scrollY;
       readW = read.offsetWidth;
       readH = read.offsetHeight;
+      shot.style.width = `${w}px`;
+      shot.style.height = `${h}px`;
     };
+
+    // size the screenshot layer up front: next/image `fill` needs a sized parent
+    measure();
 
     const x = new Spring(0, springs.glass);
     const y = new Spring(0, springs.glass);
     const r = new Spring(0, springs.aperture);
-    let base = 1; // the ring's laid-out radius; it is scaled from this
+    let base = 1; // the window's and the ring's laid-out radius; both are scaled from it
     let inside = false;
     let flood = false;
     let client = { x: 0, y: 0 };
@@ -69,18 +85,25 @@ export function AsBuilt({ src, alt, url }: AsBuiltImage) {
     const floodR = () => Math.hypot(w, h) / 2 + 8;
     const local = () => ({ x: client.x + scrollX - left, y: client.y + scrollY - top });
 
-    /** One style write per open, so the ring is exactly 1px at rest. */
+    /** One size write per open, so the ring is exactly 1px at rest. */
     const setBase = (radius: number) => {
       base = Math.max(1, radius);
       ring.style.width = ring.style.height = `${base * 2}px`;
+      layer.style.width = layer.style.height = `${base * 2}px`;
     };
 
     const paint = () => {
       const rv = Math.max(0, r.value);
-      layer.style.setProperty("--x", `${x.value.toFixed(2)}px`);
-      layer.style.setProperty("--y", `${y.value.toFixed(2)}px`);
-      layer.style.setProperty("--r", `${rv.toFixed(2)}px`);
       const s = rv / base;
+      // the window's centre sits on (x, y) with radius rv; the screenshot gets
+      // the inverse, so on screen it stays exactly where the figure is
+      if (rv >= 0.5) {
+        layer.style.opacity = "1";
+        layer.style.transform = `translate3d(${x.value - base}px, ${y.value - base}px, 0) scale(${s})`;
+        shot.style.transform = `translate3d(${base - x.value / s}px, ${base - y.value / s}px, 0) scale(${1 / s})`;
+      } else {
+        layer.style.opacity = "0";
+      }
       // a ring much larger than its laid-out size would draw a thick border: hide it
       ring.style.opacity = rv >= 1 && s < 1.25 ? "1" : "0";
       ring.style.transform = `translate3d(${x.value - base}px, ${y.value - base}px, 0) scale(${s})`;
@@ -261,23 +284,27 @@ export function AsBuilt({ src, alt, url }: AsBuiltImage) {
   const toggle = () => {
     const next = !flooded;
     setNear(true);
+    setAnnounced(true);
     setFlooded(next);
     floodRef.current?.(next);
   };
 
   return (
     <>
-      <div ref={layerRef} className="asbuilt absolute inset-0 z-20 pointer-events-none" data-loupe-skip aria-hidden={!flooded}>
-        {near ? (
-          <Image
-            src={src}
-            alt={alt}
-            fill
-            sizes="(min-width: 768px) 56vw, 100vw"
-            loading="lazy"
-            className="object-cover object-top"
-          />
-        ) : null}
+      <div ref={layerRef} className="asbuilt absolute left-0 top-0 z-20 pointer-events-none" data-loupe-skip aria-hidden={!flooded}>
+        <div ref={shotRef} className="asbuilt-shot absolute left-0 top-0">
+          {near ? (
+            <Image
+              src={src}
+              alt={alt}
+              fill
+              sizes="(min-width: 768px) 56vw, 100vw"
+              loading="eager"
+              fetchPriority="low"
+              className="object-cover object-top"
+            />
+          ) : null}
+        </div>
       </div>
       <div ref={ringRef} aria-hidden="true" data-loupe-skip className="asbuilt-ring absolute left-0 top-0 z-30 pointer-events-none rounded-full" />
       <div
@@ -289,20 +316,27 @@ export function AsBuilt({ src, alt, url }: AsBuiltImage) {
         <span className="text-mark">As built</span>
         {url ? (
           <>
-            {" · "}
-            <span className="normal-case tracking-normal">{url}</span>
+            <span className="hidden min-[400px]:inline">{" · "}</span>
+            {/* on a narrow phone the address would be cut off: the label alone says it */}
+            <span className="hidden normal-case tracking-normal min-[400px]:inline">{url}</span>
           </>
         ) : null}
       </div>
+      {/* the visible label names the next view; the accessible name stays
+          constant and aria-pressed carries the state, announced below */}
       <button
         type="button"
         aria-pressed={flooded}
+        aria-label="As built: show the shipped product"
         onClick={toggle}
         className="asbuilt-toggle t-meta absolute right-0 top-0 z-40 grid h-8 items-center justify-items-center border-b border-l border-(--rule-strong) bg-paper px-3 text-ink transition-colors hover:border-mark sm:right-3 sm:top-3 sm:rounded-[2px] sm:border"
       >
         <span className={`col-start-1 row-start-1 ${flooded ? "invisible" : ""}`}>As built</span>
         <span className={`col-start-1 row-start-1 ${flooded ? "" : "invisible"}`}>Drawing</span>
       </button>
+      <span className="sr-only" aria-live="polite">
+        {flooded ? "Showing the shipped product" : announced ? "Showing the drawing" : ""}
+      </span>
     </>
   );
 }
