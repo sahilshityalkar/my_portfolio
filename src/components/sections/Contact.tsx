@@ -2,6 +2,7 @@ import { links, profile } from "@/content/profile";
 import { T } from "@/components/Draftable";
 import { draft } from "@/content/types";
 import { CopyEmail } from "@/components/CopyEmail";
+import { TitleBlock } from "@/components/TitleBlock";
 
 export function Contact() {
   const rows = [
@@ -63,14 +64,16 @@ export function Contact() {
         </ul>
       </div>
 
-      <footer className="t-meta mt-28 flex flex-col justify-between gap-3 border-t border-rule pt-5 text-ink-3 sm:flex-row">
-        <span>
-          © {new Date().getFullYear()} {profile.name}
-        </span>
-        <span>
-          <T v={profile.location} />
-        </span>
-        <span>Built by hand. Press L to see how.</span>
+      <footer className="t-meta mt-28 grid gap-5 border-t border-rule pt-5 text-ink-3">
+        <p className="flex flex-col justify-between gap-3 sm:flex-row">
+          <span>
+            © {new Date().getFullYear()} {profile.name}
+          </span>
+          <span>
+            <T v={profile.location} />
+          </span>
+        </p>
+        <TitleBlock />
       </footer>
     </section>
   );

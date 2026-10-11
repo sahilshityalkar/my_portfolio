@@ -150,12 +150,19 @@ export function Ruler() {
         />
         <div aria-hidden="true" className="absolute inset-y-0 right-0 w-px bg-(--rule-strong)" />
 
-        {/* the slice of the page in view */}
+        {/* the slice of the page in view. It travels by transform on a
+            track-sized carrier (so 100% is the track), never by `top`: moving
+            a box with `top` while scrolling is a layout shift */}
         <div
           aria-hidden="true"
-          className="absolute right-0 w-3 cursor-grab border-y border-l border-mark bg-(--mark-soft) transition-[width] duration-300 group-hover:w-4 group-data-[dragging]:w-4 group-data-[dragging]:cursor-grabbing"
-          style={{ top: "calc(var(--top, 0) * 100%)", height: "max(calc(var(--h, 0.1) * 100%), 10px)" }}
-        />
+          className="pointer-events-none absolute inset-0"
+          style={{ transform: "translate3d(0, calc(var(--top, 0) * 100%), 0)" }}
+        >
+          <div
+            className="pointer-events-auto absolute right-0 top-0 w-3 cursor-grab border-y border-l border-mark bg-(--mark-soft) transition-[width] duration-300 group-hover:w-4 group-data-[dragging]:w-4 group-data-[dragging]:cursor-grabbing"
+            style={{ height: "max(calc(var(--h, 0.1) * 100%), 10px)" }}
+          />
+        </div>
 
         <ol>
           {marks.map((m) => {
