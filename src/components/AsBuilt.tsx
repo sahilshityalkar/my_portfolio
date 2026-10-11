@@ -17,7 +17,7 @@ export type AsBuiltImage = { src: string; alt: string; url?: string };
  * it across the whole plate. Per frame, only three custom properties (feeding
  * clip-path) and two transforms are written: no layout reads, no React state.
  *
- * The screenshot is only mounted when the plate is near the viewport, so it
+ * The screenshot is only mounted once the plate is in view after load, so it
  * costs nothing on first load. Without JS the drawing simply shows.
  */
 export function AsBuilt({ src, alt, url }: AsBuiltImage) {
@@ -224,16 +224,18 @@ export function AsBuilt({ src, alt, url }: AsBuiltImage) {
       kick();
     });
 
-    const io = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((en) => en.isIntersecting)) {
-          setNear(true);
-          io.disconnect();
-        }
-      },
-      { rootMargin: "400px 0px" },
-    );
-    io.observe(fig);
+    // fetch the screenshot only once the page has loaded and the plate is
+    // actually in view (or on first intent: hover, or the toggle), so it never
+    // competes with the first paint or counts toward the initial transfer
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some((en) => en.isIntersecting)) {
+        setNear(true);
+        io.disconnect();
+      }
+    });
+    const watch = () => io.observe(fig);
+    if (document.readyState === "complete") watch();
+    else addEventListener("load", watch, { once: true });
 
     host.addEventListener("pointerenter", enter);
     host.addEventListener("pointermove", move);
@@ -245,6 +247,7 @@ export function AsBuilt({ src, alt, url }: AsBuiltImage) {
       cancelAnimationFrame(raf);
       unsub();
       io.disconnect();
+      removeEventListener("load", watch);
       floodRef.current = null;
       host.removeEventListener("pointerenter", enter);
       host.removeEventListener("pointermove", move);
