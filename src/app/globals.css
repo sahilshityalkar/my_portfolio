@@ -97,9 +97,13 @@ body {
   color: var(--ink);
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+/* In the base layer: unlayered, it would beat every colour utility on a link
+   (text-ink-3, text-mark, hover:text-ink...) and they would silently inherit. */
+@layer base {
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
 }
 
 :focus-visible {
@@ -187,7 +191,9 @@ body::before {
   border-top: 1px solid var(--rule);
 }
 
-/* An underline that draws in from the left, on the same ease as everything. */
+/* An underline that draws in from the left, on the same ease as everything.
+   Unlayered on purpose (a transition utility beside it must not cancel the
+   draw), so the current section's underline is set here, not by a utility. */
 .link-draw {
   background-image: linear-gradient(currentColor, currentColor);
   background-size: 0% 1px;
@@ -196,7 +202,8 @@ body::before {
   transition: background-size 0.5s var(--ease-out);
 }
 .link-draw:hover,
-.link-draw:focus-visible {
+.link-draw:focus-visible,
+.link-draw[aria-current="location"] {
   background-size: 100% 1px;
 }
 
