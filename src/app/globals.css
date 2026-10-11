@@ -331,9 +331,16 @@ body::before {
   inset: 0;
   border-radius: inherit;
   background:
-    repeating-conic-gradient(from -0.5deg, var(--ink) 0 1deg, transparent 1deg 24deg);
+    repeating-conic-gradient(from -0.5deg, var(--tick, var(--ink)) 0 1deg, transparent 1deg 24deg);
   mask: radial-gradient(closest-side, transparent calc(100% - 5px), #000 calc(100% - 5px));
   opacity: 0.6;
+}
+/* By night the parchment ring reads against the drawing but vanishes on the
+   white screenshot inside it, so the charcoal hairline moves inside the ring
+   and the ticks (which sit over the screenshot) are drawn in charcoal too. */
+:root[data-theme="night"] .asbuilt-ring {
+  --tick: var(--paper);
+  box-shadow: inset 0 0 0 1px var(--paper);
 }
 .asbuilt-read {
   opacity: 0;
