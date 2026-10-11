@@ -65,7 +65,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeBootScript }} />
       </head>
-      <body>
+      {/* browser extensions (e.g. ColorZilla) add attributes to <body> before React loads */}
+      <body suppressHydrationWarning>
         <a
           href="#main"
           className="t-meta fixed left-4 top-3 z-[60] -translate-y-20 bg-ink px-3 py-2 text-paper focus:translate-y-0"
