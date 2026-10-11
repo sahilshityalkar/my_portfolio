@@ -2,13 +2,13 @@ import { profile, links } from "@/content/profile";
 import { T } from "@/components/Draftable";
 import { draft } from "@/content/types";
 import { InspectHint } from "@/components/InspectHint";
+import { CopyEmail } from "@/components/CopyEmail";
 import { CapCallout, MeasureCallout, SheetCallout } from "@/components/HeroCallouts";
 
 export function Hero() {
   const [first, ...rest] = profile.name.split(" ");
   const last = rest.join(" ");
   const contact = [
-    { label: "Email", href: links.email ? `mailto:${links.email}` : null },
     { label: "Résumé", href: links.resume },
     { label: "LinkedIn", href: links.linkedin },
     { label: "GitHub", href: links.github },
@@ -24,7 +24,7 @@ export function Hero() {
     >
       <div className="wrap grid-12 gap-y-10" data-spec-grid>
         <p className="t-meta col-span-12 text-ink-3 fade-in" style={{ ["--i" as string]: 0 }}>
-          <span className="text-mark">01</span>&ensp;Index
+          Portfolio · updated {profile.updated}
         </p>
 
         <h1 id="intro-title" className="t-display col-span-12" data-spec-type="Newsreader">
@@ -60,6 +60,7 @@ export function Hero() {
             )}
             <br />
             <T v={profile.location} className="text-ink-3" />
+            <T v={profile.focus} className="block text-balance text-ink-3" />
           </p>
 
           <p
@@ -76,6 +77,18 @@ export function Hero() {
             className="t-meta col-span-12 flex flex-wrap gap-x-5 gap-y-2 lg:col-span-4 lg:flex-col lg:items-end lg:gap-y-1.5 fade-in"
             style={{ ["--i" as string]: 3 }}
           >
+            {links.email ? (
+              <li className="flex flex-wrap items-center gap-x-1 normal-case tracking-normal lg:justify-end">
+                <a href={`mailto:${links.email}`} className="link-draw text-ink [overflow-wrap:anywhere]">
+                  {links.email}
+                </a>
+                <CopyEmail email={links.email} compact />
+              </li>
+            ) : (
+              <li>
+                <T v={draft("Email")} />
+              </li>
+            )}
             {contact.map((c) =>
               c.href ? (
                 <li key={c.label}>
@@ -102,8 +115,8 @@ export function Hero() {
         <div className="col-span-12 flex flex-wrap items-end justify-between gap-x-6 gap-y-4 fade-in" style={{ ["--i" as string]: 5 }}>
           <InspectHint />
           <SheetCallout className="order-last basis-full pb-[0.6875rem] sm:order-none sm:mr-auto sm:basis-auto" />
-          <a href="#work" className="t-meta hidden shrink-0 text-ink-3 hover:text-ink sm:block">
-            02 Selected work ↓
+          <a href="#work" className="t-meta shrink-0 text-ink-3 hover:text-ink">
+            Selected work ↓
           </a>
         </div>
       </div>
