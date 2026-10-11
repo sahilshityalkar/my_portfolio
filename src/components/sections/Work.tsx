@@ -11,14 +11,14 @@ import { SectionHead } from "@/components/SectionHead";
  */
 export function Work() {
   return (
-    <section id="work" aria-labelledby="work-title" data-spec="Work" className="wrap py-24 sm:py-36">
+    <section id="work" aria-labelledby="work-title" data-spec="Work" className="wrap pb-16 pt-10 sm:pb-24 sm:pt-12 lg:pt-8">
       <SectionHead n="02" id="work-title" title="Selected work" aside="1 independent · 2 at Clyra" />
-      <ol className="mt-12 space-y-16 sm:mt-20 sm:space-y-28">
+      <ol className="mt-8 space-y-14 sm:mt-12 sm:space-y-20">
         {work.map((c, i) => {
           const href = `/work/${c.slug}`;
           const external = c.image ? c.links.filter((l): l is { label: string; href: string } => !!l.href) : [];
           return (
-            <li key={c.slug} data-reveal data-spec={`Case ${c.index}`} className="grid-12 group items-end gap-y-6">
+            <li key={c.slug} data-reveal data-spec={`Case ${c.index}`} className="grid-12 group items-start gap-y-6">
               <div className={`col-span-12 md:col-span-7 ${i % 2 ? "md:order-2 md:col-start-6" : ""}`}>
                 <div className="relative">
                   <CaseVisual c={c} seed={i + 3} asBuilt={c.image} />
@@ -39,7 +39,7 @@ export function Work() {
                   </p>
                 ) : null}
               </div>
-              <div className={`col-span-12 md:col-span-4 ${i % 2 ? "md:order-1 md:col-start-1" : "md:col-start-9"}`}>
+              <div className={`col-span-12 md:col-span-4 md:pt-2 ${i % 2 ? "md:order-1 md:col-start-1" : "md:col-start-9"}`}>
                 <p className="t-meta flex gap-3 text-ink-3">
                   <span className="text-mark">{c.index}</span>
                   <T v={c.year} />

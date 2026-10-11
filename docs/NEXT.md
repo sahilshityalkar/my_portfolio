@@ -3,7 +3,22 @@
 Read README.md, docs/DECISIONS.md and PLACEHOLDERS.md first. Everything built
 so far is committed on `main`.
 
-## Planned next step: landing-page "agency" workflow (approved idea, not yet run)
+## Agency run status (stopped mid-run for an account switch)
+
+Concept chosen by the creative director: **"As Built"**. Under the glass the page
+becomes a drawing; on Plate I (ReplyAI) a lens turns the drawing into the real
+product screenshot. Plus live hero callouts and a footer title block.
+
+Done and committed: research (3 agents), creative brief, interaction builder,
+content builder. The layout and polish builder was interrupted; its partial
+edits are committed as "WIP: layout and polish pass (interrupted)".
+
+**Resume from here:** finish the layout and polish track (type, spacing, rhythm,
+Night mode, mobile-specific design across the landing page), then run the QA
+and performance tester, the hiring panel review, and a lead-engineer fix pass,
+as described below.
+
+## The agency workflow plan
 
 Goal: make the landing page creative enough that a recruiter or engineering
 manager wants to hire on sight. Landing page only. Work autonomously:

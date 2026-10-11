@@ -20,14 +20,20 @@ export function Hero() {
       id="intro"
       aria-labelledby="intro-title"
       data-spec="Hero"
-      className="relative flex min-h-[100svh] flex-col justify-end pb-8 pt-[calc(var(--header-h)+2rem)] sm:pb-10"
+      className="relative flex flex-col pb-8 pt-[calc(var(--header-h)+2.5rem)] md:min-h-[100svh] md:justify-end md:pb-10 md:pt-[calc(var(--header-h)+2rem)] lg:min-h-[calc(100svh-5rem)] lg:pb-8"
     >
-      <div className="wrap grid-12 gap-y-10" data-spec-grid>
+      <div className="wrap grid-12 gap-y-6 sm:gap-y-10 lg:gap-y-[clamp(1.75rem,4.2svh,2.5rem)]" data-spec-grid>
         <p className="t-meta col-span-12 text-ink-3 fade-in" style={{ ["--i" as string]: 0 }}>
           Portfolio · updated {profile.updated}
         </p>
 
-        <h1 id="intro-title" className="t-display col-span-12" data-spec-type="Newsreader">
+        {/* on short, wide screens the name gives up a little size so the Work
+            section's rule still peeks above the fold */}
+        <h1
+          id="intro-title"
+          className="t-display col-span-12 lg:text-[clamp(3.4rem,min(12.2vw,19.5svh),12.5rem)]"
+          data-spec-type="Newsreader"
+        >
           <span className="mask-line" style={{ ["--i" as string]: 0 }}>
             <span className="ink">
               <span className="relative inline-block">
@@ -43,7 +49,7 @@ export function Hero() {
           ) : null}
         </h1>
 
-        <div className="col-span-12 grid grid-cols-subgrid gap-y-8 border-t border-rule pt-6">
+        <div className="col-span-12 grid grid-cols-subgrid gap-y-5 border-t border-rule pt-5 sm:gap-y-8 sm:pt-6">
           <p
             className="t-meta col-span-12 text-ink-2 md:col-span-4 lg:col-span-3 fade-in"
             style={{ ["--i" as string]: 1 }}
@@ -78,7 +84,7 @@ export function Hero() {
             style={{ ["--i" as string]: 3 }}
           >
             {links.email ? (
-              <li className="flex flex-wrap items-center gap-x-1 normal-case tracking-normal lg:justify-end">
+              <li className="flex basis-full flex-wrap items-center gap-x-1 normal-case tracking-normal lg:basis-auto lg:justify-end">
                 <a href={`mailto:${links.email}`} className="link-draw text-ink [overflow-wrap:anywhere]">
                   {links.email.split("@")[0]}@<wbr />
                   {links.email.split("@").slice(1).join("@")}

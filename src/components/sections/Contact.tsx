@@ -13,7 +13,7 @@ export function Contact() {
   ].filter((r) => r.label !== "Résumé" || r.href);
 
   return (
-    <section id="contact" aria-labelledby="contact-title" data-spec="Contact" className="wrap pb-10 pt-24 sm:pt-36">
+    <section id="contact" aria-labelledby="contact-title" data-spec="Contact" className="wrap pb-10 pt-16 sm:pt-24">
       <div className="grid-12 gap-y-12 border-t border-(--rule-strong) pt-4">
         <div className="col-span-12" data-reveal>
           <h2 id="contact-title" className="t-meta mb-6 text-ink-3">
@@ -68,7 +68,7 @@ export function Contact() {
         </ul>
       </div>
 
-      <footer className="t-meta mt-28 grid gap-5 border-t border-rule pt-5 text-ink-3">
+      <footer className="t-meta mt-16 grid gap-5 border-t border-rule pt-5 text-ink-3">
         <p>
           © {new Date().getFullYear()} {profile.name} · <T v={profile.location} />
         </p>

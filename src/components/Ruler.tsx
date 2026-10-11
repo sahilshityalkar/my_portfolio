@@ -23,10 +23,12 @@ const SECTIONS = [
  * the native scrollbar is hidden (`html.ruler`, set before first paint by the
  * boot script so the page never changes width after load).
  */
+type Mark = { id: string; n: string; label: string; at: number; crowded: boolean; tall: boolean };
+
 export function Ruler() {
   const active = useStore(section, null);
   const root = useRef<HTMLDivElement>(null);
-  const [marks, setMarks] = useState<{ id: string; n: string; label: string; at: number }[]>([]);
+  const [marks, setMarks] = useState<Mark[]>([]);
 
   useEffect(() => {
     const el = root.current;
@@ -35,10 +37,23 @@ export function Ruler() {
 
     const measure = () => {
       const doc = document.documentElement.scrollHeight;
+      const track = el.clientHeight;
+      const found = SECTIONS.flatMap((s) => {
+        const node = document.getElementById(s.id);
+        return node ? [{ ...s, at: (node.getBoundingClientRect().top + scrollY) / doc }] : [];
+      });
       setMarks(
-        SECTIONS.flatMap((s) => {
-          const node = document.getElementById(s.id);
-          return node ? [{ ...s, at: (node.getBoundingClientRect().top + scrollY) / doc }] : [];
+        found.map((m, i) => {
+          const y = m.at * track;
+          const prev = found[i - 1];
+          const next = found[i + 1];
+          return {
+            ...m,
+            // a name beside the number: hidden when another mark is within 18px
+            crowded: [prev, next].some((o) => o && Math.abs(o.at * track - y) < 18),
+            // a name written down the ruler: hidden when it would reach the next mark
+            tall: !!next && next.at * track - y < m.label.length * 6.2 + 28,
+          };
         }),
       );
       paint();
@@ -172,13 +187,30 @@ export function Ruler() {
                 <a
                   href={`#${m.id}`}
                   aria-current={here ? "location" : undefined}
-                  className="t-meta flex items-center gap-1.5 py-1 pl-2 text-[0.625rem] text-ink-3 transition-colors hover:text-ink aria-[current=location]:text-mark"
+                  className="t-meta relative flex items-center gap-1.5 py-1 pl-2 text-[0.625rem] text-ink-3 opacity-60 transition-[color,opacity] hover:text-ink hover:opacity-100 aria-[current=location]:text-mark aria-[current=location]:opacity-100"
                 >
-                  <span className="pointer-events-none whitespace-nowrap bg-paper px-1 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                  {/* Beside the number. Only wide screens have a margin wide
+                      enough to hold every name without covering the page;
+                      narrower ones show them while the ruler is hovered. */}
+                  <span
+                    className={`pointer-events-none whitespace-nowrap bg-paper px-1 opacity-0 transition-opacity duration-300 group-hover:opacity-100 ${
+                      m.crowded && !here ? "" : "min-[1600px]:opacity-100"
+                    }`}
+                  >
                     {m.label}
                   </span>
                   <span className="bg-paper px-0.5">{m.n}</span>
                   <span aria-hidden="true" className={`block h-px bg-current ${here ? "w-4" : "w-2.5"} transition-[width] duration-500`} />
+                  {/* Narrower screens: the active name runs down the ruler under
+                      its number, inside the margin, so it never covers content */}
+                  {here && !m.tall ? (
+                    <span
+                      aria-hidden="true"
+                      className="pointer-events-none absolute right-[1.375rem] top-full bg-paper py-1 leading-none [writing-mode:vertical-rl] group-hover:invisible min-[1600px]:hidden"
+                    >
+                      {m.label}
+                    </span>
+                  ) : null}
                 </a>
               </li>
             );
