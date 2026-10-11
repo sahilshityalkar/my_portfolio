@@ -8,6 +8,13 @@ import { demo, type Experiment } from "./types";
  */
 export const labUrl = "https://lab.sahilshityalkar.com";
 
+/**
+ * Flip to true once lab.sahilshityalkar.com and each experiment's page are
+ * deployed. While false the landing page lists the experiments without
+ * linking anywhere, so no link on this site leads to a 404.
+ */
+export const labLive = false;
+
 export const lab: Experiment[] = [
   {
     slug: "glass",
