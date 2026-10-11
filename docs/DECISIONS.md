@@ -70,7 +70,8 @@ Experiments live at **lab.sahilshityalkar.com**, a separate application with
 its own repo and deploy. Heavy or unfinished work can never slow down or
 break the site recruiters open, each experiment can use whatever stack suits
 it, and the lab can grow at its own pace. The portfolio features three
-experiments as cards with still preview drawings and links out. A future
+experiments with still preview drawings; they link out once the lab is live
+(`labLive` in `src/content/lab.ts`). A future
 `experiments.json` feed from the lab can replace the hand-written list.
 
 ## Second pass: making the wow visible
@@ -99,6 +100,43 @@ and deep links could leave sections invisible (13 of 24 reveal targets).
 Reveals now never leave content hidden. Each addition was re-measured: zero
 layout shift including the automatic glass demo, desktop LCP about 0.3 s,
 and throttled-mobile LCP 1.4 to 1.6 s.
+
+## Third pass: As built
+
+The glass already turns the page into its engineering drawing. The third pass
+adds the reverse, in one place only: on Plate I, a small lens (or the "As
+built" button) turns the drawing of ReplyAI into the real screenshot of the
+live product. Only ReplyAI gets the lens because it is the only shipped,
+verifiable product; Plates II and III stay drawings. The hero now shows three
+redline callouts measured live from the DOM (cap height, line measure,
+viewport), and the footer's title block prints this visit's measured LCP, CLS
+and transfer size. Rejected for this pass: a plate-to-case morph with View
+Transitions (a transition, not proof), a cooler "vellum" re-skin (replaces
+rather than deepens) and variable-font hover with sound (many small ideas).
+
+Everything else got quieter so those two moments carry the page:
+
+- **Recruiter path on one screen.** The hero shows the email address itself,
+  with a one-click copy, a focus line and a "Selected work" cue at every
+  width. The eyebrow carries a freshness date (`profile.updated`).
+- **Evidence where it is read.** ReplyAI's index entry has a sourced proof
+  line (three replies in under five seconds, 22 of 22 tests passing, live)
+  and direct links to the live site and the source. Stacks on the index list
+  at most four items; the case page keeps the full stack.
+- **No authoring instructions in public.** The Clyra cases' unwritten Outcome
+  and Hindsight sections are `draft()` marks, shown in the quiet dotted
+  "in preparation" style, not demo text telling the owner what to write.
+- **No repetition.** "Leading the frontend at Clyra since January 2025" now
+  appears once, in Experience. The About section opens with what the page
+  proves instead of restating the job, the duplicated "Leading frontend"
+  capability is gone, and the numbered-row pattern is gone from Experience
+  and About.
+- **No dead links.** The lab site isn't deployed yet, so its entries are a
+  plain list behind `labLive = false`; flipping the flag restores the links.
+- **Order follows the reader.** Hero, Work, Experience, About, Lab, Contact:
+  the person comes before the side projects.
+- **Contact is the address.** "Let's talk." became the email address set as
+  the headline, with copy and mail-app actions under it.
 
 ## Day and Night
 
