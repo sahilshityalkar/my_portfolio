@@ -16,7 +16,7 @@ export function CaseScreenshot({ c }: { c: CaseStudy }) {
   if (!c.image) return null;
   return (
     <figure className="border border-(--rule-strong) bg-paper-2">
-      <figcaption className="t-meta flex justify-between gap-4 border-b border-(--rule-strong) px-4 py-2.5 text-ink-3">
+      <figcaption className="t-meta flex justify-between gap-4 border-b border-(--rule-strong) px-4 py-2.5 text-ink-2">
         <span>The shipped product</span>
         {c.image.url ? <span className="truncate">{c.image.url}</span> : null}
       </figcaption>

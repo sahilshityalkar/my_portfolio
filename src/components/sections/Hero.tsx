@@ -49,7 +49,7 @@ export function Hero() {
           ) : null}
         </h1>
 
-        <div className="col-span-12 grid grid-cols-subgrid gap-y-5 border-t border-rule pt-5 sm:gap-y-8 sm:pt-6">
+        <div className="col-span-12 grid grid-cols-subgrid gap-y-4 border-t border-rule pt-5 sm:gap-y-8 sm:pt-6">
           <p
             className="t-meta col-span-12 text-ink-2 md:col-span-4 lg:col-span-3 fade-in"
             style={{ ["--i" as string]: 1 }}

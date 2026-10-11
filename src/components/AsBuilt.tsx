@@ -298,7 +298,7 @@ export function AsBuilt({ src, alt, url }: AsBuiltImage) {
         type="button"
         aria-pressed={flooded}
         onClick={toggle}
-        className="asbuilt-toggle t-meta absolute right-3 top-3 z-40 grid h-8 items-center justify-items-center rounded-[2px] border border-(--rule-strong) bg-paper px-3 text-ink transition-colors hover:border-mark"
+        className="asbuilt-toggle t-meta absolute right-0 top-0 z-40 grid h-8 items-center justify-items-center border-b border-l border-(--rule-strong) bg-paper px-3 text-ink transition-colors hover:border-mark sm:right-3 sm:top-3 sm:rounded-[2px] sm:border"
       >
         <span className={`col-start-1 row-start-1 ${flooded ? "invisible" : ""}`}>As built</span>
         <span className={`col-start-1 row-start-1 ${flooded ? "" : "invisible"}`}>Drawing</span>

@@ -256,7 +256,8 @@ export function Plate({
         </text>
       </svg>
       {asBuilt ? <AsBuilt {...asBuilt} /> : null}
-      <figcaption className="t-meta absolute left-3 top-3 text-ink-3">{caption}</figcaption>
+      {/* ink-2: ink-3 on paper-2 is under 4.5:1 by day */}
+      <figcaption className="t-meta absolute left-3 top-3 text-ink-2">{caption}</figcaption>
     </figure>
   );
 }

@@ -29,7 +29,7 @@ export function Experience() {
               <T as="p" v={r.summary} className="t-lede text-balance" />
               <ul className="mt-8 border-t border-rule">
                 {r.notes.map((n, i) => (
-                  <li key={i} className="border-b border-rule py-4" data-reveal style={{ ["--i" as string]: i }}>
+                  <li key={i} className="border-b border-rule py-4 last:border-b-0" data-reveal style={{ ["--i" as string]: i }}>
                     <T v={n} className="text-ink-2" />
                   </li>
                 ))}

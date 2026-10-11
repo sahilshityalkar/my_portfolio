@@ -51,8 +51,15 @@ export function Work() {
                 </h3>
                 <T as="p" v={c.kicker} className="mt-4 max-w-[38ch] text-ink-2" />
                 {c.proof ? (
-                  <p data-spec="Proof" className="t-meta mt-4 text-balance text-mark">
-                    {c.proof}
+                  <p data-spec="Proof" className="t-meta mt-4 text-mark">
+                    {/* a line may break between claims, never inside one, and
+                        the separator travels with the claim it introduces */}
+                    {c.proof.split(" · ").map((part, k) => (
+                      <span key={k}>
+                        {k ? " " : null}
+                        <span className="whitespace-nowrap">{k ? `· ${part}` : part}</span>
+                      </span>
+                    ))}
                   </p>
                 ) : null}
                 <dl className="t-meta mt-6 grid grid-cols-[6rem_1fr] gap-y-1.5 border-t border-rule pt-4">

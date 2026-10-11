@@ -13,16 +13,17 @@ export function Lab() {
   return (
     <section id="lab" aria-labelledby="lab-title" data-spec="Lab" className="wrap py-16 sm:py-24">
       {/* a compact band, not another big heading: rule, number, a modest title */}
-      <div className="grid-12 items-baseline gap-y-3 border-t border-(--rule-strong) pt-4" data-reveal>
+      <div className="grid-12 items-baseline gap-y-3 border-t border-(--rule-strong) pt-4">
         <p className="t-meta col-span-2 text-mark md:col-span-3">05</p>
         <h2
           id="lab-title"
           className="t-title col-span-10 text-[clamp(1.8rem,3vw,2.6rem)] md:col-span-5"
           data-spec-type="Newsreader"
+          data-reveal
         >
           Lab
         </h2>
-        <div className="t-meta col-span-12 text-ink-3 md:col-span-4 md:text-right">
+        <div className="t-meta col-span-12 text-ink-3 md:col-span-4 md:text-right" data-reveal style={{ ["--i" as string]: 1 }}>
           {labLive ? (
             <a href={labUrl} target="_blank" rel="noreferrer" className="link-draw">
               {host} ↗
