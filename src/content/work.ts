@@ -1,4 +1,4 @@
-import { demo, type CaseStudy } from "./types";
+import { demo, draft, type CaseStudy } from "./types";
 
 /**
  * Case I is written from the public ReplyAI repository, its test report and the
@@ -15,6 +15,9 @@ export const work: CaseStudy[] = [
     year: "2026",
     role: "Independent project: product, interface and engineering",
     stack: "Next.js 16, React 19, TypeScript, Tailwind 4, Clerk, Supabase, Groq, Resend, Vitest",
+    stackShort: "Next.js 16, Supabase, Groq, Vitest",
+    /** From the repo README (three replies in under five seconds) and TEST_REPORT.md (22 of 22). */
+    proof: "3 replies in under 5 s · 22 of 22 tests passing · live",
     summary:
       "Paste a customer complaint, get three professional, ready-to-send replies in under five seconds. Then keep them in the brand’s voice, check them, approve them and send them from one inbox.",
     sections: [
@@ -64,6 +67,7 @@ export const work: CaseStudy[] = [
     year: "2025",
     role: "Frontend Lead",
     stack: demo("Next.js, React, TypeScript, Tailwind CSS, design tokens"),
+    stackShort: demo("Next.js, React, TypeScript"),
     summary: demo(
       "Students upload their own materials, practise with adaptive quizzes, and Clyra maps their knowledge gaps into a plan. My job was making that loop clear, quick and motivating on every device.",
     ),
@@ -84,11 +88,8 @@ export const work: CaseStudy[] = [
         heading: "Decisions",
         body: demo("Made the mastery map the home screen, so progress is the first thing a student sees. Streamed AI-generated content into stable skeleton layouts so nothing jumps as it arrives. Kept quiz interactions optimistic and local-first, so answering never waits on the network."),
       },
-      {
-        heading: "Outcome",
-        body: demo("Describe the result here with real numbers once you can share them: quiz completion, time to a first study plan, or performance on mid-range phones."),
-      },
-      { heading: "In hindsight", body: demo("What you would do differently next time.") },
+      { heading: "Outcome", body: draft("Outcome to be published once results can be shared publicly") },
+      { heading: "In hindsight", body: draft("Reflection in preparation") },
     ],
     links: [{ label: "heyclyra.com", href: "https://heyclyra.com" }],
   },
@@ -101,6 +102,7 @@ export const work: CaseStudy[] = [
     year: "2025",
     role: "Frontend Lead",
     stack: demo("Next.js, React, TypeScript, data visualisation, real-time updates"),
+    stackShort: demo("Next.js, React, TypeScript"),
     summary: demo(
       "Teachers and school leaders get grading in seconds and a live view of every cohort. The challenge was density: a lot of data on one screen that still reads at a glance.",
     ),
@@ -121,11 +123,8 @@ export const work: CaseStudy[] = [
         heading: "Decisions",
         body: demo("Built the cohort heatmap as the anchor view, with drill-down from cohort to class to student to concept. Made every AI grade reviewable and overridable inline, so teachers stay in control. Virtualised large tables and charts so they stay smooth with whole year groups."),
       },
-      {
-        heading: "Outcome",
-        body: demo("Describe the result here with real numbers once you can share them: grading time saved, dashboard adoption, or performance with large cohorts."),
-      },
-      { heading: "In hindsight", body: demo("What you would do differently next time.") },
+      { heading: "Outcome", body: draft("Outcome to be published once results can be shared publicly") },
+      { heading: "In hindsight", body: draft("Reflection in preparation") },
     ],
     links: [{ label: "heyclyra.com", href: "https://heyclyra.com" }],
   },

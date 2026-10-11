@@ -40,6 +40,10 @@ export type CaseStudy = {
   year: Text;
   role: Text;
   stack: Text;
+  /** A short stack line for the index (at most four items); the case page keeps the full `stack`. */
+  stackShort?: Text;
+  /** One verifiable line of evidence, shown on the index under the kicker. Only for facts with a source. */
+  proof?: string;
   summary: Text;
   /** Case-study body. Each section renders with the same editorial template. */
   sections: { heading: string; body: Text }[];
