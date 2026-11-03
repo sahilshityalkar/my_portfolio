@@ -29,8 +29,9 @@ grep -rn "draft(" src/content
 2. [ ] **TOP PRIORITY to verify: the Clyra lines** in
    `src/content/experience.ts`:
    - `summary`: "Leading the frontend of Clyra, the AI school operating
-     system, since January 2025, when the product was still early." The date
-     is verified; "when the product was still early" is not.
+     system, from its early product onward." "From its early product" is
+     not verified. (The start date, Jan 2025, is verified and now shows
+     beside your role in the hero, so the summary no longer repeats it.)
    - Team size: not stated anywhere yet. If you lead a team, say how many
      people (it is the single strongest line for a lead role).
    - The three `notes` (architecture for both products, progress dashboards
@@ -39,22 +40,27 @@ grep -rn "draft(" src/content
      real numbers where you can.
 3. [ ] **Focus line** (`profile.focus`): "React, TypeScript, design systems,
    data-dense product UI", the fourth line under your role in the hero.
-4. [ ] **Availability** (`profile.availability`): "Open to conversations
-   about senior frontend and frontend lead roles. Replies within two working
-   days." Only keep the reply time if you'll honour it.
+4. [ ] **Availability** (`profile.availability`, in Contact): "Open to
+   conversations about senior frontend and frontend lead roles. Replies
+   within two working days." Only keep the reply time if you'll honour it.
+   Its short form, `profile.availabilityShort` ("Open to senior frontend
+   and frontend lead roles"), is on the first screen in the accent colour:
+   delete it (set it to `""`) if you are not looking.
 5. [ ] **About, paragraph 1** (`src/content/about.ts`): the paragraph about
    the part of an interface nobody screenshots. Written for you; make it
    sound like you. Paragraph 2 (MERN to Next.js, ReplyAI) is also demo.
 6. [ ] **Lab entries** (`src/content/lab.ts`): Glass, Springs and Blueprint
    are demo entries. While `labLive = false` they are a plain list with no
    links, so nothing points at lab.sahilshityalkar.com pages that don't
-   exist. When the lab site is deployed, update titles, summaries and slugs
+   exist: Glass and Springs say "In progress", and Blueprint (which is the
+   glass on this very page, `onThisPage: true`) offers "Try it here". If
+   Glass and Springs will not ship soon, consider removing them. When the lab site is deployed, update titles, summaries and slugs
    to match what you published, then set `labLive = true` to restore the
    links and the "All experiments" band.
 7. [ ] **Source repo visibility**: if this site's repo is made public, set
    `links.source` in `profile.ts` to its GitHub URL. The footer title block
    then shows "Source ↗". It stays hidden while `null`.
-8. [ ] **Freshness date**: bump `profile.updated` ("October 2026") whenever
+8. [ ] **Freshness date**: bump `profile.updated` ("November 2026") whenever
    you change content. It shows in the hero eyebrow.
 
 ## Also demo or draft
@@ -68,7 +74,10 @@ grep -rn "draft(" src/content
 - [ ] **Cases II and III, Outcome and In hindsight**: drafts, shown as
       "Outcome to be published once results can be shared publicly" and
       "Reflection in preparation". Replace them with real text (and real
-      numbers) once you can share them.
+      numbers) once you can share them. (A reviewer suggested hiding these
+      draft sections on the case pages instead; that was left alone because
+      the last pass was scoped to the landing page. It is a one-line filter
+      in `src/app/work/[slug]/page.tsx` if you prefer it.)
 - [ ] Check what you're allowed to say publicly about Clyra's internals
 - [ ] Imagery: ReplyAI's case page shows a screenshot of the live site
       (`public/work/replyai.png`), and the same screenshot is what the AS BUILT
@@ -76,9 +85,17 @@ grep -rn "draft(" src/content
       `public/work/` and set `image: { src, alt, url }` on each case; they
       show on the case page after "Decisions", and the index then gives that
       plate the lens too. Only do this for a real, shipped screen.
+- [ ] **A better ReplyAI screenshot.** The current one is the product's
+      marketing page. An engineering manager wants the product itself: the
+      inbox, the three replies, the approval step. Replace
+      `public/work/replyai.png` with a real in-app screen (same 4:3-ish crop,
+      top-aligned). Note: the current screenshot's own button text, "Try it
+      free — no card needed", contains an em dash (it is in the image, so the
+      page's HTML stays dash-free, but it is visible inside the lens).
 
 ### `src/content/about.ts`
-- [ ] Capability "Frontend architecture" is demo (its proof says "Clyra").
+- [ ] Capability "Frontend architecture" is demo (its proof, "Frontend lead
+      at Clyra, see Experience", links to the Experience section).
       "Interface quality" points at the measured title block in the footer,
       and "Full-stack product work" cites the ReplyAI repo: both are real.
 - [x] Toolkit: every item comes from your résumé, the ReplyAI repo or this
