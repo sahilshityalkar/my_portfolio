@@ -958,12 +958,18 @@ export function Loupe() {
         <div
           data-loupe-skip
           aria-hidden="true"
-          className="t-meta pointer-events-none fixed bottom-4 left-(--gutter) z-50 flex gap-4 text-ink-3 fade-in"
+          className="t-meta pointer-events-none fixed bottom-3 left-[calc(var(--gutter)-0.5rem)] z-50 flex gap-4 border-t border-(--rule-strong) bg-paper px-2 py-1.5 tabular-nums text-ink-3 fade-in"
           style={{ ["--i" as string]: 0 }}
         >
+          {/* a paper strip, so the status never prints over the page's own text */}
           <span className="text-mark">{mode === "full" ? "Blueprint" : "Glass"}</span>
-          <span className="hidden sm:inline">{hud.nodes} measured nodes</span>
-          <span>{hud.fps} fps</span>
+          <span className="hidden sm:inline">
+            <span className="inline-block min-w-[3ch] text-right">{hud.nodes}</span> measured nodes
+          </span>
+          {/* a fixed slot: 99 to 120 fps must not move the text after it */}
+          <span>
+            <span className="inline-block min-w-[3ch] text-right">{hud.fps}</span> fps
+          </span>
           <span className="hidden sm:inline">{mode === "lens" ? "Click empty space to flood · Esc to close" : "Click to return · Esc to close"}</span>
         </div>
       ) : null}

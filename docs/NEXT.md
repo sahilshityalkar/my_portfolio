@@ -28,8 +28,12 @@ Layout decisions worth knowing:
   utility on links. Keep new global element rules in a layer for the same
   reason.
 
-**Resume from here:** run the QA and performance tester, the hiring panel
-review, and a lead-engineer fix pass, as described below.
+**Resume from here:** QA (8/10) and the hiring panel (7/10) are done; their full
+reports are in `docs/agency/REVIEW.md`. The lead-engineer fix pass started
+(commit 8db87c9 plus the WIP commit after it) and then died on a network error.
+Next: apply every still-open issue in `docs/agency/REVIEW.md`, re-verify, run
+`npx next build`, then run a second QA and hiring-panel round and repeat until
+both score 9 or higher.
 
 ## The agency workflow plan
 

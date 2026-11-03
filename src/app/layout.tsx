@@ -15,8 +15,11 @@ const newsreader = localFont({
   ],
   variable: "--font-newsreader",
   display: "swap",
-  fallback: ["Iowan Old Style", "Palatino Linotype", "Georgia", "serif"],
-  adjustFontFallback: "Times New Roman",
+  // next/font derives a single roman fallback, so italics fell back to a
+  // synthesized oblique about 4% narrower and the right-aligned surname moved
+  // on swap. Both faces are declared in globals.css instead.
+  adjustFontFallback: false,
+  fallback: ["Newsreader Fallback", "Iowan Old Style", "Palatino Linotype", "Georgia", "serif"],
 });
 
 const plexMono = localFont({
@@ -26,7 +29,12 @@ const plexMono = localFont({
   ],
   variable: "--font-plex-mono",
   display: "swap",
-  fallback: ["ui-monospace", "Menlo", "monospace"],
+  // next/font can only derive a fallback from Arial or Times New Roman, both
+  // proportional, so mono lines wrapped differently until Plex arrived. The
+  // fallback is declared in globals.css instead: Courier New, whose advance
+  // (0.6 em) already matches Plex Mono, with Plex's vertical metrics.
+  adjustFontFallback: false,
+  fallback: ["Plex Mono Fallback", "ui-monospace", "Menlo", "monospace"],
 });
 
 const title = `${profile.name} · ${profile.role}`;

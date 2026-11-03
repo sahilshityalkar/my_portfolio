@@ -71,7 +71,7 @@ export function Hero() {
 
           <p
             data-spec="Statement"
-            className="t-lede relative col-span-12 max-w-[34ch] text-balance md:col-span-8 lg:col-span-5"
+            className="t-lede relative col-span-12 max-w-[18.7em] text-balance md:col-span-8 lg:col-span-5"
           >
             {profile.statement}
             <MeasureCallout />

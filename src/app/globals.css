@@ -48,6 +48,43 @@
   color-scheme: dark;
 }
 
+/* The mono fallback while IBM Plex Mono loads: Courier New's advance is
+   already 0.6 em like Plex Mono's, so only the vertical metrics are matched
+   (Plex: ascent 1025, descent 275, no line gap, per 1000 units). Mono lines
+   then wrap identically before and after the swap. */
+@font-face {
+  font-family: "Plex Mono Fallback";
+  src: local("Courier New"), local("CourierNewPSMT"), local("Menlo");
+  ascent-override: 102.5%;
+  descent-override: 27.5%;
+  line-gap-override: 0%;
+  size-adjust: 100%;
+}
+
+/* The serif fallbacks while Newsreader loads. The roman matches what
+   next/font computed from Times New Roman; the italic gets its own face (a
+   real Times italic, scaled to Newsreader italic's width) instead of an
+   oblique of the roman. Vertical metrics: ascent 1470, descent 530 per 2000,
+   divided by each face's size-adjust. */
+@font-face {
+  font-family: "Newsreader Fallback";
+  font-style: normal;
+  src: local("Times New Roman"), local("TimesNewRomanPSMT");
+  ascent-override: 73.61%;
+  descent-override: 26.54%;
+  line-gap-override: 0%;
+  size-adjust: 99.84%;
+}
+@font-face {
+  font-family: "Newsreader Fallback";
+  font-style: italic;
+  src: local("Times New Roman Italic"), local("TimesNewRomanPS-ItalicMT");
+  ascent-override: 70.33%;
+  descent-override: 25.36%;
+  line-gap-override: 0%;
+  size-adjust: 104.5%;
+}
+
 @theme inline {
   --font-serif: var(--serif);
   --font-mono: var(--mono);
