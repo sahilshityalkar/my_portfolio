@@ -9,7 +9,7 @@ export function InspectHint() {
     <button
       type="button"
       onClick={() => inspect.set(mode !== "off" ? "off" : matchMedia("(pointer: coarse)").matches ? "full" : "lens")}
-      className="t-meta group flex max-w-[44ch] items-center gap-3 text-left text-ink-3 transition-colors hover:text-ink"
+      className="t-meta group flex max-w-[44ch] items-center gap-3 [html:not(.js)_&]:hidden text-left text-ink-3 transition-colors hover:text-ink"
     >
       <span
         aria-hidden="true"

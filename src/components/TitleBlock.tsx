@@ -138,7 +138,7 @@ export function TitleBlock() {
           </>
         ) : null}
       </Cell>
-      <Cell label="Inspect">
+      <Cell label="Inspect" className="[html:not(.js)_&]:hidden">
         <button
           type="button"
           onClick={() => inspect.set(matchMedia("(pointer: coarse)").matches ? "full" : "lens")}

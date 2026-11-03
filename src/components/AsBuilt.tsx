@@ -329,7 +329,7 @@ export function AsBuilt({ src, alt, url }: AsBuiltImage) {
         aria-pressed={flooded}
         aria-label="As built: show the shipped product"
         onClick={toggle}
-        className="asbuilt-toggle t-meta absolute right-0 top-0 z-40 grid h-8 items-center justify-items-center max-[359.98px]:h-7 border-b border-l border-(--rule-strong) bg-paper px-3 text-ink transition-colors hover:border-mark sm:right-3 sm:top-3 sm:rounded-[2px] sm:border"
+        className="asbuilt-toggle t-meta absolute right-0 top-0 z-40 grid h-8 items-center justify-items-center max-[359.98px]:h-7 border-b border-l border-(--rule-strong) bg-paper px-3 text-ink transition-colors hover:border-mark sm:right-2 sm:top-2 sm:rounded-[2px] sm:border lg:right-3 lg:top-3"
       >
         <span className={`col-start-1 row-start-1 ${flooded ? "invisible" : ""}`}>As built</span>
         <span className={`col-start-1 row-start-1 ${flooded ? "" : "invisible"}`}>Drawing</span>

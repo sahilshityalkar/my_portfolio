@@ -388,10 +388,21 @@ function draw(f: Frame) {
   else ctx.arc(cx, cy, Math.max(r, 0), 0, Math.PI * 2);
   ctx.clip();
 
+  // Only what the glass can show is drawn: in lens mode that is the lens's
+  // bounding box, not the viewport. On a slow CPU this is most of the frame.
+  const lens = !f.scan && r < Math.max(W, H) * 0.45;
+  const X0 = lens ? cx - r - 2 : 0;
+  const X1 = lens ? cx + r + 2 : W;
+  const Y0 = lens ? cy - r - 2 : 0;
+  const Y1 = lens ? cy + r + 2 : H;
+  const out = (x: number, y: number, w: number, h: number) => x > X1 || x + w < X0 || y > Y1 || y + h < Y0;
+  // the first line of a regular field at or before `from`
+  const first = (start: number, step: number, from: number) => from - ((((from - start) % step) + step) % step);
+
   // vellum
   ctx.globalAlpha = 0.975;
   ctx.fillStyle = p.paper;
-  ctx.fillRect(0, 0, W, H);
+  ctx.fillRect(X0, Y0, X1 - X0, Y1 - Y0);
   ctx.globalAlpha = 1;
 
   // millimetre paper: an 8px field, emphasised every 64px, locked to the document
@@ -400,24 +411,24 @@ function draw(f: Frame) {
   const oy = -(sy % 64);
   ctx.globalAlpha = 0.09;
   ctx.beginPath();
-  for (let y = oy % 8; y < H; y += 8) {
-    ctx.moveTo(0, Math.round(y) + 0.5);
-    ctx.lineTo(W, Math.round(y) + 0.5);
+  for (let y = first(oy, 8, Y0); y < Y1; y += 8) {
+    ctx.moveTo(X0, Math.round(y) + 0.5);
+    ctx.lineTo(X1, Math.round(y) + 0.5);
   }
-  for (let x = 0; x < W; x += 8) {
-    ctx.moveTo(x + 0.5, 0);
-    ctx.lineTo(x + 0.5, H);
+  for (let x = first(0, 8, X0); x < X1; x += 8) {
+    ctx.moveTo(x + 0.5, Y0);
+    ctx.lineTo(x + 0.5, Y1);
   }
   ctx.stroke();
   ctx.globalAlpha = 0.3;
   ctx.beginPath();
-  for (let y = oy; y < H; y += 64) {
-    ctx.moveTo(0, Math.round(y) + 0.5);
-    ctx.lineTo(W, Math.round(y) + 0.5);
+  for (let y = first(oy, 64, Y0); y < Y1; y += 64) {
+    ctx.moveTo(X0, Math.round(y) + 0.5);
+    ctx.lineTo(X1, Math.round(y) + 0.5);
   }
-  for (let x = 0; x < W; x += 64) {
-    ctx.moveTo(x + 0.5, 0);
-    ctx.lineTo(x + 0.5, H);
+  for (let x = first(0, 64, X0); x < X1; x += 64) {
+    ctx.moveTo(x + 0.5, Y0);
+    ctx.lineTo(x + 0.5, Y1);
   }
   ctx.stroke();
   ctx.globalAlpha = 1;
@@ -445,7 +456,7 @@ function draw(f: Frame) {
   for (const l of model.lines) {
     const x = l.x - (l.fixed ? 0 : sx);
     const y = l.y - (l.fixed ? 0 : sy);
-    if (y > H || y + l.h < 0 || x > W || x + l.w < 0) continue;
+    if (out(x, y, l.w, l.h)) continue;
     ctx.globalAlpha = 0.1;
     ctx.fillRect(x, y, l.w, l.h);
     ctx.globalAlpha = 0.55;
@@ -458,7 +469,7 @@ function draw(f: Frame) {
   for (const m of model.media) {
     const x = m.x - sx;
     const y = m.y - sy;
-    if (y > H || y + m.h < 0) continue;
+    if (out(x, y, m.w, m.h)) continue;
     ctx.strokeStyle = p.ink;
     ctx.lineWidth = 1;
     ctx.globalAlpha = 0.45;
@@ -490,7 +501,8 @@ function draw(f: Frame) {
   };
   for (const t of model.types) {
     const ty = t.y - sy;
-    if (ty > H || ty + t.h < 0) continue;
+    // the tag above the type block reaches about 20px higher than its box
+    if (out(t.x - sx, ty - 20, t.w, t.h + 20)) continue;
     ctx.textBaseline = "alphabetic";
     ctx.strokeStyle = p.ink;
     ctx.lineWidth = Math.max(0.75, t.size / 160);
@@ -498,6 +510,7 @@ function draw(f: Frame) {
     for (const w of t.words) {
       const key = Math.round(w.y);
       rows.set(key, [...(rows.get(key) ?? []), w]);
+      if (out(w.x - sx, w.y - sy, w.w, w.h)) continue;
       ctx.font = w.font;
       LS(w.spacing);
       ctx.strokeText(w.text, w.x - sx, w.y - sy + w.ascent);
@@ -530,7 +543,10 @@ function draw(f: Frame) {
         ctx.stroke();
         ctx.setLineDash([]);
         ctx.globalAlpha = 1;
-        if (first || t.size > 60) {
+        // at small sizes x-height and cap height sit closer than a label is
+        // tall: keep the cap height label, drop the x-height one
+        const crowded = label.startsWith("x-height") && cap - xh < 14;
+        if ((first || t.size > 60) && !crowded) {
           ctx.font = MONO;
           const lw = ctx.measureText(label).width;
           const lx = Math.min(rowEnd + 24, W - lw - 16);
@@ -551,7 +567,7 @@ function draw(f: Frame) {
     const x = b.x - (b.fixed ? 0 : sx);
     const y = b.y - (b.fixed ? 0 : sy);
     if (b.group) byGroup.set(b.group, [...(byGroup.get(b.group) ?? []), b]);
-    if (y > H || y + b.h < 0) continue;
+    if (out(x, y, b.w, b.h + 20)) continue;
     const [pt, pr, pb, pl] = b.pad;
     if (f.hatch && (pt || pr || pb || pl)) {
       ctx.save();

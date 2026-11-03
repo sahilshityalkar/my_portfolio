@@ -145,7 +145,7 @@ export function Ruler() {
     <nav
       aria-label="Page ruler"
       data-loupe-skip
-      className="pointer-events-none fixed bottom-6 right-2 top-[calc(var(--header-h)+1.5rem)] z-30 hidden w-7 lg:block print:hidden"
+      className="pointer-events-none fixed bottom-6 right-2 top-[calc(var(--header-h)+1.5rem)] z-30 hidden w-7 lg:block print:hidden [html:not(.js)_&]:hidden"
     >
       <div
         ref={root}
@@ -187,13 +187,17 @@ export function Ruler() {
                 <a
                   href={`#${m.id}`}
                   aria-current={here ? "location" : undefined}
-                  className="t-meta relative flex items-center gap-1.5 py-1 pl-2 text-[0.625rem] text-ink-3 opacity-60 transition-[color,opacity] hover:text-ink hover:opacity-100 aria-[current=location]:text-mark aria-[current=location]:opacity-100"
+                  className="t-meta relative flex items-center gap-1.5 py-1 pl-1 text-[0.625rem] text-ink-3 transition-colors hover:text-ink aria-[current=location]:text-mark"
                 >
                   {/* Beside the number. Only wide screens have a margin wide
                       enough to hold every name without covering the page;
-                      narrower ones show them while the ruler is hovered. */}
+                      narrower ones show them while the ruler is hovered.
+                      Absolutely placed, so the link (and its hit area) is
+                      only the number and tick: an in-flow label, even
+                      invisible, stretched the link over the page's own
+                      right-aligned links and took their clicks. */}
                   <span
-                    className={`pointer-events-none whitespace-nowrap bg-paper px-1 opacity-0 transition-opacity duration-300 group-hover:opacity-100 ${
+                    className={`pointer-events-none absolute right-full top-1/2 -translate-y-1/2 whitespace-nowrap bg-paper px-1 opacity-0 transition-opacity duration-300 group-hover:opacity-100 ${
                       m.crowded && !here ? "" : "min-[1600px]:opacity-100"
                     }`}
                   >

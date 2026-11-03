@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { profile, links } from "@/content/profile";
 import { inspect, section, theme, useStore } from "@/lib/store";
 import { readTheme, setTheme } from "@/lib/theme";
@@ -19,17 +19,29 @@ export function Header() {
   const t = useStore(theme, "day");
   const here = useStore(section, null);
   const [open, setOpen] = useState(false);
+  const menuButton = useRef<HTMLButtonElement>(null);
 
   useEffect(() => theme.set(readTheme()), []);
 
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    // the page behind the full-screen menu is out of reach: no focus, no clicks
+    const main = document.getElementById("main");
+    const skip = document.getElementById("skip");
+    const opener = menuButton.current;
+    if (main) main.inert = true;
+    if (skip) skip.inert = true;
     document.documentElement.style.overflow = "hidden";
     addEventListener("keydown", onKey);
     return () => {
+      if (main) main.inert = false;
+      if (skip) skip.inert = false;
       document.documentElement.style.overflow = "";
       removeEventListener("keydown", onKey);
+      // back to where the visitor was: the button that opened the menu
+      // (unless a menu link moved focus on purpose)
+      if (!document.activeElement || document.activeElement === document.body) opener?.focus();
     };
   }, [open]);
 
@@ -74,7 +86,7 @@ export function Header() {
             aria-pressed={inspecting}
             aria-label={inspecting ? "Close the glass" : "Inspect this page"}
             onClick={() => inspect.set(inspecting ? "off" : matchMedia("(pointer: coarse)").matches ? "full" : "lens")}
-            className="group flex h-9 items-center gap-2 rounded-full px-2.5 text-ink-2 sm:px-3 transition-colors hover:text-ink aria-pressed:text-mark"
+            className="group flex h-9 items-center gap-2 rounded-full px-2.5 text-ink-2 [html:not(.js)_&]:hidden sm:px-3 transition-colors hover:text-ink aria-pressed:text-mark"
           >
             <svg width="13" height="13" viewBox="0 0 13 13" aria-hidden="true" className="overflow-visible">
               <circle cx="5.5" cy="5.5" r="4.75" fill="none" stroke="currentColor" />
@@ -104,7 +116,7 @@ export function Header() {
             type="button"
             onClick={() => setTheme(t === "day" ? "night" : "day")}
             aria-label={t === "day" ? "Switch to night" : "Switch to day"}
-            className="flex h-9 items-center gap-2 rounded-full px-3 text-ink-2 transition-colors hover:text-ink"
+            className="flex h-9 items-center gap-2 rounded-full px-3 text-ink-2 transition-colors hover:text-ink [html:not(.js)_&]:hidden"
           >
             <span aria-hidden="true" className="relative block size-3 overflow-hidden rounded-full border border-current">
               <span
@@ -133,6 +145,7 @@ export function Header() {
 
           <button
             type="button"
+            ref={menuButton}
             className="flex h-9 items-center px-2 text-ink md:hidden"
             aria-expanded={open}
             aria-controls="menu"
