@@ -30,7 +30,8 @@ export const about: {
     {
       title: "Frontend architecture",
       body: demo("Component systems, design tokens and the data layer underneath them. App Router, Server Components and TypeScript, end to end."),
-      proof: "Clyra",
+      proof: "Frontend lead at Clyra, see Experience",
+      href: "#experience",
     },
     {
       title: "Interface quality",

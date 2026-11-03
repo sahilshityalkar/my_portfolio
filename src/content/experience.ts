@@ -8,7 +8,7 @@ export const experience: Role[] = [
     end: "Present",
     location: "Mumbai",
     summary: demo(
-      "Leading the frontend of Clyra, the AI school operating system, since January 2025, when the product was still early.",
+      "Leading the frontend of Clyra, the AI school operating system, from its early product onward.",
     ),
     notes: [
       demo("Own the frontend architecture for both products: the student app and the institution workspace."),

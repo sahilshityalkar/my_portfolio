@@ -69,11 +69,10 @@ const ready = (el: HTMLElement) => {
 /**
  * A vertical dimension beside the first name, from cap line to baseline.
  * Render it inside an inline-block wrapper around the word (the text node
- * must be the wrapper's first child).
+ * must be the wrapper's first child). It carries no text of its own.
  */
 export function CapCallout() {
   const ref = useRef<HTMLSpanElement>(null);
-  const num = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     const range = document.createRange();
@@ -82,7 +81,7 @@ export function CapCallout() {
       const word = el?.parentElement;
       const text = word?.firstChild;
       const ctx = metrics();
-      if (!el || !word || !text || text.nodeType !== Node.TEXT_NODE || !ctx || !num.current) return;
+      if (!el || !word || !text || text.nodeType !== Node.TEXT_NODE || !ctx) return;
       if (getComputedStyle(el).display === "none") return;
       ctx.font = fontOf(getComputedStyle(word));
       const ascent = ctx.measureText("Hxg").fontBoundingBoxAscent;
@@ -94,22 +93,15 @@ export function CapCallout() {
       const baseline = line.top - word.getBoundingClientRect().top + ascent;
       el.style.setProperty("--cap-top", `${(baseline - cap).toFixed(2)}px`);
       el.style.setProperty("--cap-h", `${cap.toFixed(2)}px`);
-      num.current.textContent = `${Math.round(cap)}`;
+      // an attribute, drawn by CSS: the h1's text stays exactly the name
+      el.dataset.cap = `${Math.round(cap)}`;
       ready(el);
     });
   }, []);
 
-  return (
-    <span ref={ref} aria-hidden="true" data-loupe-skip className="callout callout-cap">
-      <span className="callout-label">
-        Cap{" "}
-        <span ref={num} className="callout-num min-w-[3ch] text-right">
-          ···
-        </span>{" "}
-        px
-      </span>
-    </span>
-  );
+  // The label is generated content (see .callout-cap::after), not text, so
+  // the heading's textContent, reader mode and copy-paste get only the name.
+  return <span ref={ref} aria-hidden="true" data-loupe-skip data-cap="···" className="callout callout-cap" />;
 }
 
 /* ---------------------------------------------------------------- MEASURE */

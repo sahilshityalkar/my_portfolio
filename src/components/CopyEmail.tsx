@@ -42,7 +42,7 @@ export function CopyEmail({ email, compact = false }: { email: string; compact?:
       className={
         compact
           ? "t-meta inline-flex h-7 items-center gap-1.5 rounded-[2px] px-1.5 text-ink-3 transition-colors hover:text-ink"
-          : "t-meta inline-flex h-9 items-center gap-2 rounded-full border border-(--rule-strong) px-4 text-ink transition-colors hover:bg-ink hover:text-paper"
+          : "t-meta inline-flex h-9 items-center gap-2 rounded-[2px] border border-(--rule-strong) px-4 text-ink transition-colors hover:bg-ink hover:text-paper"
       }
     >
       <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true" fill="none" stroke="currentColor">

@@ -3,6 +3,7 @@ import { T } from "@/components/Draftable";
 import { draft } from "@/content/types";
 import { CopyEmail } from "@/components/CopyEmail";
 import { TitleBlock } from "@/components/TitleBlock";
+import { SectionHead } from "@/components/SectionHead";
 
 export function Contact() {
   const rows = [
@@ -13,18 +14,16 @@ export function Contact() {
   ].filter((r) => r.label !== "Résumé" || r.href);
 
   return (
-    <section id="contact" aria-labelledby="contact-title" data-spec="Contact" className="wrap pb-10 pt-16 sm:pt-24">
-      <div className="grid-12 gap-y-12 border-t border-(--rule-strong) pt-4">
+    <section id="contact" aria-labelledby="contact-title" data-spec="Contact" className="wrap pb-8 pt-12 sm:pb-12 sm:pt-24">
+      <SectionHead n="06" id="contact-title" title="Contact" />
+      <div className="grid-12 mt-6 gap-y-10 sm:mt-10 sm:gap-y-12">
         <div className="col-span-12" data-reveal>
-          <h2 id="contact-title" className="t-meta mb-6 text-ink-3">
-            Contact
-          </h2>
           {links.email ? (
             <>
               {/* the address is the headline: nothing to decode, nothing to click through */}
               <a
                 href={`mailto:${links.email}`}
-                className="t-title link-draw [overflow-wrap:anywhere]"
+                className="link-draw font-serif text-[clamp(2rem,6.2vw,5.5rem)] leading-[1.02] tracking-[-0.03em] [overflow-wrap:anywhere]"
                 data-spec-type="Newsreader"
               >
                 {/* break after the @ on narrow screens, never mid-word unless it must */}
@@ -35,7 +34,7 @@ export function Contact() {
                 <CopyEmail email={links.email} />
                 <a
                   href={`mailto:${links.email}`}
-                  className="t-meta inline-flex h-9 items-center rounded-full px-4 text-ink-2 transition-colors hover:text-ink"
+                  className="t-meta inline-flex h-9 items-center rounded-[2px] px-4 text-ink-2 transition-colors hover:text-ink"
                 >
                   Open mail app ↗
                 </a>
@@ -58,7 +57,17 @@ export function Contact() {
                   className="link-draw justify-self-start [overflow-wrap:anywhere]"
                   {...(r.href.startsWith("http") ? { target: "_blank", rel: "noreferrer" } : {})}
                 >
-                  {r.value}
+                  {/* long handles break at a slash, never mid-word */}
+                  {r.value.split("/").map((part, k) => (
+                    <span key={k}>
+                      {k ? (
+                        <>
+                          /<wbr />
+                        </>
+                      ) : null}
+                      {part}
+                    </span>
+                  ))}
                 </a>
               ) : (
                 <T v={draft(`Add your ${r.label} link`)} className="justify-self-start" />
@@ -68,7 +77,7 @@ export function Contact() {
         </ul>
       </div>
 
-      <footer className="t-meta mt-16 grid gap-5 border-t border-rule pt-5 text-ink-3">
+      <footer className="t-meta mt-12 grid sm:mt-16 gap-5 border-t border-rule pt-5 text-ink-3">
         <p>
           © {new Date().getFullYear()} {profile.name} · <T v={profile.location} />
         </p>

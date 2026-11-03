@@ -20,7 +20,7 @@ export function Hero() {
       id="intro"
       aria-labelledby="intro-title"
       data-spec="Hero"
-      className="relative flex flex-col pb-8 pt-[calc(var(--header-h)+2.5rem)] md:min-h-[100svh] md:justify-end md:pb-10 md:pt-[calc(var(--header-h)+2rem)] lg:min-h-[calc(100svh-5rem)] lg:pb-8"
+      className="relative flex flex-col pb-6 pt-[calc(var(--header-h)+2.5rem)] md:pb-10 lg:min-h-[calc(100svh-5rem)] lg:justify-end lg:pb-8 lg:pt-[calc(var(--header-h)+2rem)]"
     >
       <div className="wrap grid-12 gap-y-6 sm:gap-y-10 lg:gap-y-[clamp(1.75rem,4.2svh,2.5rem)]" data-spec-grid>
         <p className="t-meta col-span-12 text-ink-3 fade-in" style={{ ["--i" as string]: 0 }}>
@@ -50,24 +50,30 @@ export function Hero() {
         </h1>
 
         <div className="col-span-12 grid grid-cols-subgrid gap-y-4 border-t border-rule pt-5 sm:gap-y-8 sm:pt-6">
-          <p
-            className="t-meta col-span-12 text-ink-2 md:col-span-4 lg:col-span-3 fade-in"
+          <div
+            data-spec="Role"
+            className="col-span-12 md:col-span-4 lg:col-span-3 fade-in"
             style={{ ["--i" as string]: 1 }}
           >
-            {profile.role}
-            <br />
-            <span className="text-ink-3">at</span>{" "}
-            {profile.companyUrl ? (
-              <a href={profile.companyUrl} target="_blank" rel="noreferrer" className="link-draw text-ink">
-                {profile.company}
-              </a>
-            ) : (
-              profile.company
-            )}
-            <br />
-            <T v={profile.location} className="text-ink-3" />
-            <T v={profile.focus} className="block text-balance text-ink-3" />
-          </p>
+            {/* the recruiter line: who, at which company, since when, in reading
+                size and full ink; the details stay in the drafting hand below */}
+            <p className="text-[1.125rem] leading-snug text-ink sm:text-[1.1875rem]">
+              {profile.role}{" "}
+              <span className="text-ink-2">at</span>{" "}
+              {profile.companyUrl ? (
+                <a href={profile.companyUrl} target="_blank" rel="noreferrer" className="link-draw">
+                  {profile.company}
+                </a>
+              ) : (
+                profile.company
+              )}
+            </p>
+            <p className="t-meta mt-2 text-ink-2">
+              Since {profile.since} · <T v={profile.location} />
+            </p>
+            <T as="p" v={profile.focus} className="t-meta mt-1 text-balance text-ink-3" />
+            <T as="p" v={profile.availabilityShort} className="t-meta mt-3 text-balance text-mark" />
+          </div>
 
           <p
             data-spec="Statement"
@@ -121,7 +127,7 @@ export function Hero() {
 
         <div className="col-span-12 flex flex-wrap items-end justify-between gap-x-6 gap-y-4 fade-in" style={{ ["--i" as string]: 5 }}>
           <InspectHint />
-          <SheetCallout className="order-last basis-full pb-[0.6875rem] sm:order-none sm:mr-auto sm:basis-auto" />
+          <SheetCallout className="hidden pb-[0.6875rem] sm:mr-auto sm:inline" />
           <a href="#work" className="t-meta shrink-0 text-ink-3 hover:text-ink">
             Selected work ↓
           </a>

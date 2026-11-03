@@ -1,21 +1,17 @@
 import Link from "next/link";
 import { about } from "@/content/about";
 import { T } from "@/components/Draftable";
+import { SectionHead } from "@/components/SectionHead";
 
 /**
- * No big title here: the first paragraph is the heading's job. A rule and a
- * small label, then the lede, then what I bring as one row of three.
+ * The shared compact head, then the lede, then what I bring as one row of three.
  */
 export function About() {
   const [lede, ...rest] = about.paragraphs;
   return (
-    <section id="about" aria-labelledby="about-title" data-spec="About" className="wrap py-16 sm:py-24">
-      {/* the rule and label are printed; the paragraphs rise in under them */}
-      <div className="grid-12 gap-y-6 border-t border-(--rule-strong) pt-4">
-        <h2 id="about-title" className="t-meta col-span-12 flex gap-3 text-ink-3">
-          <span className="text-mark">04</span>
-          About
-        </h2>
+    <section id="about" aria-labelledby="about-title" data-spec="About" className="wrap py-12 sm:py-24">
+      <SectionHead n="04" id="about-title" title="About" />
+      <div className="grid-12 mt-6 gap-y-6 sm:mt-10">
         {lede ? (
           <div className="col-span-12 md:col-span-8" data-reveal>
             <T as="p" v={lede} className="t-lede text-pretty" />

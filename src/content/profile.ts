@@ -11,7 +11,8 @@ export const profile = {
   role: "Frontend Lead Engineer",
   company: "Clyra",
   companyUrl: "https://heyclyra.com" as string | null,
-  experience: "2 years",
+  /** Start of the current role (verified). Shown beside the role in the hero. */
+  since: "Jan 2025",
   /** One honest sentence. Shown in the hero and used as the meta description. */
   statement:
     "I build interfaces end to end: the architecture underneath, the motion on top, and the small decisions that make software feel trustworthy.",
@@ -21,8 +22,10 @@ export const profile = {
   availability: demo(
     "Open to conversations about senior frontend and frontend lead roles. Replies within two working days.",
   ) as Text,
+  /** The first screen's one-line version of `availability`. */
+  availabilityShort: demo("Open to senior frontend and frontend lead roles") as Text,
   /** Shown in the hero eyebrow as a freshness signal. Bump it on every content change. */
-  updated: "October 2026",
+  updated: "November 2026",
   /** The canonical domain. NEXT_PUBLIC_SITE_URL overrides it (e.g. for a staging copy). */
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "https://sahilshityalkar.com",
 };

@@ -154,6 +154,8 @@ function Heatmap() {
         {Array.from({ length: rows }, (_, y) =>
           Array.from({ length: cols }, (_, x) => {
             const v = y === slipping ? 0.12 + r() * 0.18 : 0.25 + r() * 0.75;
+            // the row that is slipping is drawn in the pencil colour, so the
+            // plate tells one story at a glance: this cohort needs help
             return (
               <rect
                 key={`${x}-${y}`}
@@ -162,8 +164,8 @@ function Heatmap() {
                 width="26"
                 height="26"
                 rx="3"
-                fill={INK}
-                fillOpacity={v * 0.85}
+                fill={y === slipping ? MARK : INK}
+                fillOpacity={y === slipping ? 0.3 + v : v * 0.85}
                 className="cell"
                 style={d(x + y)}
               />
@@ -197,7 +199,7 @@ function Heatmap() {
       <g className="svg-fade" style={d(2)}>
         <g style={MONO} fill={INK} opacity="0.7">
           <text x="64" y="56">CONCEPTS →</text>
-          <text x="40" y="320" transform="rotate(-90 40 320)">STUDENTS →</text>
+          <text x="46" y="320" transform="rotate(-90 46 320)">STUDENTS →</text>
         </g>
       </g>
     </g>

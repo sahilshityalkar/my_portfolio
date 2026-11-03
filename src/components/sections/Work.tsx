@@ -11,9 +11,9 @@ import { SectionHead } from "@/components/SectionHead";
  */
 export function Work() {
   return (
-    <section id="work" aria-labelledby="work-title" data-spec="Work" className="wrap pb-16 pt-10 sm:pb-24 sm:pt-12 lg:pt-8">
-      <SectionHead n="02" id="work-title" title="Selected work" aside="1 independent · 2 at Clyra" />
-      <ol className="mt-8 space-y-14 sm:mt-12 sm:space-y-20">
+    <section id="work" aria-labelledby="work-title" data-spec="Work" className="wrap pb-12 pt-10 sm:pb-24 sm:pt-12 lg:pt-8">
+      <SectionHead n="02" id="work-title" title="Selected work" aside="1 independent · 2 at Clyra" size="primary" />
+      <ol className="mt-8 space-y-12 sm:mt-12 sm:space-y-20">
         {work.map((c, i) => {
           const href = `/work/${c.slug}`;
           const external = c.image ? c.links.filter((l): l is { label: string; href: string } => !!l.href) : [];

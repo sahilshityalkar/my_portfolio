@@ -7,7 +7,8 @@ import { inspect } from "@/lib/store";
 /** undefined: not measured yet · null: this browser does not report it */
 type Reading = number | null | undefined;
 
-const NOT_REPORTED = "not reported here";
+/** Fits every slot; the full wording is in the title attribute. */
+const NOT_REPORTED = "n/a";
 
 /**
  * The colophon as a drafting title block: what this sheet is, how this visit
@@ -87,6 +88,7 @@ export function TitleBlock() {
 
   const value = (v: Reading, fmt: (n: number) => string, dots: string) =>
     v === undefined ? dots : v === null ? NOT_REPORTED : fmt(v);
+  const why = (v: Reading) => (v === null ? "Not reported by this browser" : undefined);
   const source = (links as { source?: string | null }).source ?? null;
 
   return (
@@ -94,16 +96,17 @@ export function TitleBlock() {
       <Cell label="Sheet">
         <span className="normal-case tracking-normal">sahilshityalkar.com</span>
       </Cell>
-      <Cell label="This visit" className="col-span-2 lg:col-span-1">
+      {/* measured by script, so without it the cell is not offered at all */}
+      <Cell label="This visit" className="col-span-2 lg:col-span-1 [html:not(.js)_&]:hidden">
         <span className="flex flex-wrap gap-x-4 gap-y-1 tabular-nums">
           <span>
-            LCP <Slot w="6ch">{value(lcp, (n) => `${n.toFixed(2)} S`, "···· S")}</Slot>
+            LCP <Slot w="6ch" title={why(lcp)}>{value(lcp, (n) => `${n.toFixed(2)} S`, "···· S")}</Slot>
           </span>
           <span>
-            CLS <Slot w="5ch">{value(cls, (n) => n.toFixed(3), "·····")}</Slot>
+            CLS <Slot w="5ch" title={why(cls)}>{value(cls, (n) => n.toFixed(3), "·····")}</Slot>
           </span>
           <span>
-            Transfer <Slot w="7ch">{value(kb, (n) => `${n} KB`, "··· KB")}</Slot>
+            Transfer <Slot w="7ch" title={why(kb)}>{value(kb, (n) => `${n} KB`, "··· KB")}</Slot>
           </span>
         </span>
       </Cell>
@@ -124,7 +127,9 @@ export function TitleBlock() {
           onClick={() => inspect.set(matchMedia("(pointer: coarse)").matches ? "full" : "lens")}
           className="link-draw uppercase text-ink"
         >
-          Press L
+          {/* same pointer swap as the hero hint: no keyboard on a phone */}
+          <span className="hidden [@media(pointer:fine)]:inline">Press L</span>
+          <span className="[@media(pointer:fine)]:hidden">Tap to inspect</span>
         </button>
       </Cell>
     </div>
@@ -140,9 +145,9 @@ function Cell({ label, className = "", children }: { label: string; className?: 
   );
 }
 
-function Slot({ w, children }: { w: string; children: React.ReactNode }) {
+function Slot({ w, title, children }: { w: string; title?: string; children: React.ReactNode }) {
   return (
-    <span className="inline-block text-ink" style={{ minWidth: w }}>
+    <span className="inline-block text-ink" style={{ minWidth: w }} title={title}>
       {children}
     </span>
   );

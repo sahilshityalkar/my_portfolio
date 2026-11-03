@@ -471,11 +471,16 @@ html:not(.js) .asbuilt-toggle {
   width: 1px;
   background: var(--mark);
 }
-.callout-cap .callout-label {
+/* the label is generated content, so the h1's text is only the name */
+.callout-cap::after {
+  content: "Cap " attr(data-cap) " px";
+  position: absolute;
   left: 12px;
   top: 50%;
   transform: translateY(-50%);
   padding-block: 2px;
+  background: var(--paper);
+  color: var(--ink-3);
 }
 /* MEASURE: a horizontal dimension 10px under the paragraph's widest line */
 .callout-measure {
