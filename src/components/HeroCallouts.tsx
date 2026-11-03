@@ -175,6 +175,7 @@ export function MeasureCallout() {
     let ascent = 0;
     let half = 0;
     let base0 = 0; // the first line's baseline, read from the DOM
+    let dpr = 1;
     let below: HTMLElement[] = []; // rows set under the paragraph (phones, tablets)
     let knobX = 0; // the handle's laid-out x, relative to the paragraph
     let dimY = 0; // the dimension's laid-out y at rest, relative to the paragraph
@@ -225,7 +226,7 @@ export function MeasureCallout() {
         limit = Math.min(limit, textLeft - box.left - 40);
       }
       maxW = Math.max(w0, limit);
-      const dpr = Math.min(devicePixelRatio || 1, 2);
+      dpr = Math.min(devicePixelRatio || 1, 2);
       const cw = maxW + PAD * 2;
       const ch = el.offsetTop + lh * 3 + 24;
       canvas.width = Math.round(cw * dpr);
@@ -289,7 +290,8 @@ export function MeasureCallout() {
       // the paragraph, set at the live measure
       c.fillStyle = colors.ink;
       c.textBaseline = "alphabetic";
-      lines.forEach((line, i) => c!.fillText(line, 0, base0 + i * lh));
+      // every baseline snapped to device pixels, as the DOM snaps them
+      lines.forEach((line, i) => c!.fillText(line, 0, Math.round((base0 + i * lh) * dpr) / dpr));
       // the dimension under it: the measure as set, with its ticks
       const y = dimY + (lines.length - rest) * lh;
       c.fillStyle = colors.mark;

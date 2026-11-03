@@ -25,18 +25,24 @@ export function Work() {
                   <Link href={href} aria-hidden="true" tabIndex={-1} className="absolute inset-0 z-10" />
                 </div>
                 {c.image ? (
-                  <p className="t-meta mt-3 text-ink-3">
-                    {/* the caption names what is showing: AsBuilt sets data-asbuilt */}
-                    <span className="[[data-asbuilt]_&]:hidden">Plate {c.index}: the drawing.</span>
-                    <span className="hidden [[data-asbuilt]_&]:inline">Plate {c.index}, as built: the shipped product.</span>
-                    {/* the toggle needs JS, so the instruction does too; same
-                        pointer swap as the inspect hint */}
-                    <span className="hidden [.js_&]:inline [[data-asbuilt]_&]:hidden!">
-                      {" "}
-                      <span className="hidden [@media(pointer:fine)]:inline">
-                        Hover it, or press As built, to see the shipped product.
+                  <p className="t-meta mt-3 grid text-ink-3">
+                    {/* the caption names what is showing (AsBuilt sets
+                        data-asbuilt); both versions share one grid cell, so
+                        the swap never changes its height */}
+                    <span className="col-start-1 row-start-1 [[data-asbuilt]_&]:invisible">
+                      Plate {c.index}: the drawing.
+                      {/* the toggle needs JS, so the instruction does too; same
+                          pointer swap as the inspect hint */}
+                      <span className="hidden [.js_&]:inline">
+                        {" "}
+                        <span className="hidden [@media(pointer:fine)]:inline">
+                          Hover it, or press As built, to see the shipped product.
+                        </span>
+                        <span className="[@media(pointer:fine)]:hidden">Tap As built to see the shipped product.</span>
                       </span>
-                      <span className="[@media(pointer:fine)]:hidden">Tap As built to see the shipped product.</span>
+                    </span>
+                    <span className="invisible col-start-1 row-start-1 [[data-asbuilt]_&]:visible">
+                      Plate {c.index}, as built: the shipped product.
                     </span>
                   </p>
                 ) : null}
