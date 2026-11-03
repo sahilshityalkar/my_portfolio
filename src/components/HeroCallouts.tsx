@@ -257,7 +257,7 @@ export function MeasureCallout() {
       }
       base0 = Math.round((top + ascent) * dpr) / dpr;
       // rows laid out under the paragraph step down with its extra lines
-      below = [...hero.querySelectorAll<HTMLElement>("[data-measure-yield]")].filter(
+      below = [...document.querySelectorAll<HTMLElement>("[data-measure-yield]")].filter(
         (n) => n.getBoundingClientRect().top >= box.bottom - 1,
       );
       zero = c.measureText("0").width || 1;
@@ -269,8 +269,9 @@ export function MeasureCallout() {
         return v;
       };
       rest = balance(words, w0, measure).length;
-      // never more than two lines beyond the paragraph's own: the page below
-      // yields while the measure is live, but only so far
+      // never more than two lines beyond the paragraph's own; everything
+      // laid out below it (the rows under it on narrow screens, and the Work
+      // section) steps down by transform and steps back on release
       minW = Math.max(zero * 10, w0 * 0.4);
       while (minW < w0 && greedy(words, minW, measure).length > rest + 2) minW += zero;
       knobX = parseFloat(el.style.getPropertyValue("--m-left") || "0") + parseFloat(el.style.getPropertyValue("--m-w") || "0");

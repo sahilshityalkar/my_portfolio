@@ -636,7 +636,8 @@ html:not(.js) .asbuilt-toggle {
 [data-measure-yield] {
   transition: filter 0.3s var(--ease-out);
 }
-[data-measuring] [data-measure-yield] {
+[data-measuring] [data-measure-yield],
+:root:has([data-measuring]) #work {
   filter: opacity(0.12);
 }
 @media (max-width: 639.98px) {
