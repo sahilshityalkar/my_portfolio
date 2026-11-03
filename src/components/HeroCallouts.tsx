@@ -174,6 +174,8 @@ export function MeasureCallout() {
     let zero = 1;
     let ascent = 0;
     let half = 0;
+    let base0 = 0; // the first line's baseline, read from the DOM
+    let below: HTMLElement[] = []; // rows set under the paragraph (phones, tablets)
     let knobX = 0; // the handle's laid-out x, relative to the paragraph
     let dimY = 0; // the dimension's laid-out y at rest, relative to the paragraph
     let words: string[] = [];
@@ -242,6 +244,22 @@ export function MeasureCallout() {
       const fm = c.measureText("Hg");
       ascent = fm.fontBoundingBoxAscent;
       half = (lh - (fm.fontBoundingBoxAscent + fm.fontBoundingBoxDescent)) / 2;
+      // the first line's baseline where the DOM put it (its content box top
+      // plus the font's ascent), snapped to device pixels, so the hand-off
+      // between DOM and canvas does not move the text by a pixel
+      const firstText = [...p.childNodes].find((n) => n.nodeType === Node.TEXT_NODE);
+      let top = half;
+      if (firstText) {
+        const glyph = document.createRange();
+        glyph.setStart(firstText, 0);
+        glyph.setEnd(firstText, 1);
+        top = glyph.getBoundingClientRect().top - box.top;
+      }
+      base0 = Math.round((top + ascent) * dpr) / dpr;
+      // rows laid out under the paragraph step down with its extra lines
+      below = [...hero.querySelectorAll<HTMLElement>("[data-measure-yield]")].filter(
+        (n) => n.getBoundingClientRect().top >= box.bottom - 1,
+      );
       zero = c.measureText("0").width || 1;
       const cache = new Map<string, number>();
       const ctx = c;
@@ -270,18 +288,13 @@ export function MeasureCallout() {
       // the paragraph, set at the live measure
       c.fillStyle = colors.ink;
       c.textBaseline = "alphabetic";
-      lines.forEach((line, i) => c!.fillText(line, 0, i * lh + half + ascent));
+      lines.forEach((line, i) => c!.fillText(line, 0, base0 + i * lh));
       // the dimension under it: the measure as set, with its ticks
       const y = dimY + (lines.length - rest) * lh;
       c.fillStyle = colors.mark;
       c.fillRect(0, y + 2, width, 1);
       c.fillRect(0, y, 1, 5);
       c.fillRect(width - 1, y, 1, 5);
-      // the design measure stays marked on the dimension line, so the way
-      // back is visible without a guide running through the text
-      c.globalAlpha = 0.6;
-      c.fillRect(w0 - 0.5, y - 6, 1, 17);
-      c.globalAlpha = 1;
       // label: MEASURE n CH · n PX · n LINES, numbers a step darker
       c.font = mono;
       if ("letterSpacing" in c) (c as CanvasRenderingContext2D & { letterSpacing: string }).letterSpacing = "0.4px";
@@ -298,6 +311,15 @@ export function MeasureCallout() {
       // centred on the dimension, or beside the handle once the measure is
       // too short to hold it
       let x = tw + 24 < width ? width / 2 - tw / 2 : width + 16;
+      // the design measure stays marked on the dimension line, so the way
+      // back is visible without a guide running through the text (and not
+      // through the label either)
+      if (w0 < x - 8 || w0 > x + tw + 8) {
+        c.fillStyle = colors.mark;
+        c.globalAlpha = 0.6;
+        c.fillRect(w0 - 0.5, y - 6, 1, 17);
+        c.globalAlpha = 1;
+      }
       c.fillStyle = colors.paper;
       c.fillRect(x - 6, y - 4, tw + 12, 13);
       c.textBaseline = "middle";
@@ -307,7 +329,10 @@ export function MeasureCallout() {
         x += c.measureText(t).width;
       }
       // the handle rides the end of the dimension, by transform only
+      const extra = Math.max(0, lines.length - rest) * lh;
       knob.style.transform = `translate3d(${(width - knobX).toFixed(2)}px, ${((lines.length - rest) * lh).toFixed(2)}px, 0)`;
+      // by transform, so they never count as layout shift
+      for (const n of below) n.style.translate = extra ? `0 ${extra.toFixed(2)}px` : "";
       knob.setAttribute("aria-valuenow", `${Math.round(width / zero)}`);
       knob.setAttribute("aria-valuetext", `${Math.round(width / zero)} characters wide, ${lines.length} lines`);
     };
@@ -331,6 +356,7 @@ export function MeasureCallout() {
       cancelAnimationFrame(raf);
       raf = 0;
       hero.removeAttribute("data-measuring");
+      for (const n of below) n.style.translate = "";
       el.classList.remove("is-live");
       p.classList.remove("is-measured");
       knob.style.transform = "";
@@ -419,6 +445,10 @@ export function MeasureCallout() {
     knob.addEventListener("keydown", key);
     knob.addEventListener("blur", release);
     addEventListener("resize", release);
+    // the glass and a live measure never share the stage
+    const unsub = inspect.subscribe(() => {
+      if (inspect.get() !== "off") release();
+    });
     return () => {
       cancelAnimationFrame(raf);
       knob.removeEventListener("pointerdown", down);
@@ -428,6 +458,7 @@ export function MeasureCallout() {
       knob.removeEventListener("keydown", key);
       knob.removeEventListener("blur", release);
       removeEventListener("resize", release);
+      unsub();
       canvas?.remove();
     };
   }, []);

@@ -46,6 +46,19 @@ export function RevealObserver() {
       }, 120);
     };
 
+    // A deep link or a reload partway down: what is already on screen is
+    // shown as it is, with no rise or draw-in (one frame without transitions),
+    // so the first paint there is not held back by the reveal.
+    if (scrollY > 40) {
+      const root = document.documentElement;
+      root.classList.add("reveal-instant");
+      pending().forEach((el) => {
+        const r = el.getBoundingClientRect();
+        if (r.top < innerHeight && r.bottom > 0) show(el);
+      });
+      requestAnimationFrame(() => requestAnimationFrame(() => root.classList.remove("reveal-instant")));
+    }
+
     observe();
     sweep();
     const mo = new MutationObserver(observe);

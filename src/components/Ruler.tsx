@@ -145,7 +145,7 @@ export function Ruler() {
     <nav
       aria-label="Page ruler"
       data-loupe-skip
-      className="pointer-events-none fixed bottom-6 right-2 top-[calc(var(--header-h)+1.5rem)] z-30 hidden w-7 lg:block print:hidden [html:not(.js)_&]:hidden"
+      className="pointer-events-none fixed bottom-6 right-1 top-[calc(var(--header-h)+1.5rem)] z-30 hidden w-7 lg:block print:hidden [html:not(.js)_&]:hidden"
     >
       <div
         ref={root}
@@ -187,7 +187,7 @@ export function Ruler() {
                 <a
                   href={`#${m.id}`}
                   aria-current={here ? "location" : undefined}
-                  className="t-meta relative flex items-center gap-1.5 py-1 pl-1 text-[0.625rem] text-ink-3 transition-colors hover:text-ink aria-[current=location]:text-mark"
+                  className="t-meta relative flex items-center gap-1 py-1 text-[0.625rem] text-ink-3 transition-colors hover:text-ink aria-[current=location]:text-mark"
                 >
                   {/* Beside the number. Only wide screens have a margin wide
                       enough to hold every name without covering the page;
@@ -204,7 +204,8 @@ export function Ruler() {
                     {m.label}
                   </span>
                   <span className="bg-paper px-0.5">{m.n}</span>
-                  <span aria-hidden="true" className={`block h-px bg-current ${here ? "w-4" : "w-2.5"} transition-[width] duration-500`} />
+                  {/* a fixed box, scaled: a width change here was a (tiny) layout shift */}
+                  <span aria-hidden="true" className={`block h-px w-4 origin-right bg-current ${here ? "scale-x-100" : "scale-x-[0.625]"} transition-transform duration-500`} />
                   {/* Narrower screens: the active name runs down the ruler under
                       its number, inside the margin, so it never covers content */}
                   {here && !m.tall ? (
