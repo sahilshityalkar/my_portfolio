@@ -174,8 +174,9 @@ export function MeasureCallout() {
     let zero = 1;
     let ascent = 0;
     let half = 0;
-    let base0 = 0; // the first line's baseline, read from the DOM
+    let tops: number[] = []; // every resting line's content top, from the DOM
     let dpr = 1;
+    let pTop = 0; // the paragraph's page position: the DOM snaps baselines there
     let below: HTMLElement[] = []; // rows set under the paragraph (phones, tablets)
     let knobX = 0; // the handle's laid-out x, relative to the paragraph
     let dimY = 0; // the dimension's laid-out y at rest, relative to the paragraph
@@ -245,18 +246,23 @@ export function MeasureCallout() {
       const fm = c.measureText("Hg");
       ascent = fm.fontBoundingBoxAscent;
       half = (lh - (fm.fontBoundingBoxAscent + fm.fontBoundingBoxDescent)) / 2;
-      // the first line's baseline where the DOM put it (its content box top
-      // plus the font's ascent), snapped to device pixels, so the hand-off
-      // between DOM and canvas does not move the text by a pixel
-      const firstText = [...p.childNodes].find((n) => n.nodeType === Node.TEXT_NODE);
-      let top = half;
-      if (firstText) {
-        const glyph = document.createRange();
-        glyph.setStart(firstText, 0);
-        glyph.setEnd(firstText, 1);
-        top = glyph.getBoundingClientRect().top - box.top;
+      // Each resting line where the DOM laid it out (its content box top;
+      // the baseline is that plus the font's ascent), so the hand-off
+      // between DOM and canvas does not move the text by a pixel. Line boxes
+      // are placed in 1/64px units, so lh times i drifts on the third line.
+      tops = [];
+      for (const n of p.childNodes) {
+        if (n.nodeType !== Node.TEXT_NODE) continue;
+        const r = document.createRange();
+        r.selectNodeContents(n);
+        for (const rect of r.getClientRects()) {
+          const t = rect.top - box.top;
+          if (rect.width > 1 && !tops.some((v) => Math.abs(v - t) < 2)) tops.push(t);
+        }
       }
-      base0 = Math.round((top + ascent) * dpr) / dpr;
+      tops.sort((x, y) => x - y);
+      if (!tops.length) tops = [half];
+      pTop = box.top + scrollY;
       // rows laid out under the paragraph step down with its extra lines
       below = [...document.querySelectorAll<HTMLElement>("[data-measure-yield]")].filter(
         (n) => n.getBoundingClientRect().top >= box.bottom - 1,
@@ -286,12 +292,20 @@ export function MeasureCallout() {
       c.font = font;
       if ("letterSpacing" in c) (c as CanvasRenderingContext2D & { letterSpacing: string }).letterSpacing = tracking;
       const lines = balance(words, width, measure);
-      c.clearRect(-PAD, 0, maxW + PAD * 2, canvas.height);
+      c.clearRect(-PAD - 1, -1, maxW + PAD * 2 + 2, canvas.height + 2);
       // the paragraph, set at the live measure
       c.fillStyle = colors.ink;
       c.textBaseline = "alphabetic";
-      // every baseline snapped to device pixels, as the DOM snaps them
-      lines.forEach((line, i) => c!.fillText(line, 0, Math.round((base0 + i * lh) * dpr) / dpr));
+      // every baseline snapped to device pixels in page space, as the DOM
+      // snaps them (the paragraph itself sits at a fractional position)
+      const last = tops.length - 1;
+      lines.forEach((line, i) => {
+        const t = i <= last ? tops[i]! : (tops[last] ?? 0) + (i - last) * lh;
+        // at 1x the DOM snaps baselines to whole pixels in page space; on
+        // dense screens it places them as laid out
+        const y = dpr < 2 ? Math.round(pTop + t + ascent) - pTop : t + ascent;
+        c!.fillText(line, 0, y);
+      });
       // the dimension under it: the measure as set, with its ticks
       const y = dimY + (lines.length - rest) * lh;
       c.fillStyle = colors.mark;
@@ -365,7 +379,7 @@ export function MeasureCallout() {
       knob.style.transform = "";
       knob.setAttribute("aria-valuenow", `${Math.round(w0 / zero)}`);
       knob.removeAttribute("aria-valuetext");
-      c?.clearRect(-PAD, 0, maxW + PAD * 2, canvas?.height ?? 0);
+      c?.clearRect(-PAD - 1, -1, maxW + PAD * 2 + 2, (canvas?.height ?? 0) + 2);
     };
 
     const tick = (t: number) => {

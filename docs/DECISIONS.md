@@ -169,8 +169,9 @@ made the hero statement wrap onto one more line when the web font arrived
 fallback is now three faces (body, lede, display), plus an italic matched
 to the name as set. Delayed-font CLS is 0.00000 from 320 to 1920.
 
-**Review fixes** (QA 8/10 and hiring panel 7/10, then a second panel at
-7.5/10):
+**Review fixes.** Four rounds with a QA and performance tester and a
+three-person hiring panel took QA from 8 to 9.5 and the panel from 7 to
+8.5; the panel's remaining gap is the owner's own facts. Highlights:
 
 - The recruiter line is set in reading size and full ink: role, company,
   "Since Jan 2025", city, focus and a one-line availability.

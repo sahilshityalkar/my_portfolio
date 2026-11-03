@@ -1,69 +1,84 @@
 # Next session: start here
 
-Read README.md, docs/DECISIONS.md and PLACEHOLDERS.md first. Everything built
-so far is committed on `main`.
+Read README.md, docs/DECISIONS.md (especially "Fourth pass") and
+PLACEHOLDERS.md first. Everything is committed on `main`.
 
-## Agency run status (stopped mid-run for an account switch)
+## Where things stand (November 2026)
 
-Concept chosen by the creative director: **"As Built"**. Under the glass the page
-becomes a drawing; on Plate I (ReplyAI) a lens turns the drawing into the real
-product screenshot. Plus live hero callouts and a footer title block.
+The agency run is finished. The landing page has been through four review
+rounds with a QA and performance tester and a three-person hiring panel
+(technical recruiter, engineering manager hiring a frontend lead, design
+lead). Their reports from the first run are in `docs/agency/REVIEW.md`;
+before and after screenshots are in `docs/agency/shots/`.
 
-Done and committed: research (3 agents), creative brief, interaction builder,
-content builder, and the layout and polish builder (finished after the
-interrupted WIP commit). Measured at the end of the layout track: page height
-5881px at 1440x900 and 7242px at 390x844; the Work rule peeks above the fold
-at 1440x900 and 1366x768; no horizontal overflow from 320 to 1920; CLS 0.000
-over load, scroll, resize, hover and flood; the whole recruiter line fits at
-375x667.
+| Round | QA and performance | Hiring panel |
+| --- | --- | --- |
+| Before this run | 8 | 7 |
+| 1 | 7.5 (found the ruler click bug) | 7.5 |
+| 2 | 8.5 | 8.0 |
+| 3 | 9 | 8.3 |
+| 4 (final) | **9.5** | **8.5** (recruiter 8.5, engineering manager 7, design lead 9.5) |
 
-Layout decisions worth knowing:
-- Section rules and numbers are printed (never revealed), so they show from
-  the first frame; only titles and content rise in.
-- Below 640px the As built toggle is a tab flush in the plate corner (it would
-  otherwise sit on the REPLY 1 card), with its focus ring drawn inside.
-- Below 1600px the Ruler shows the active section's name running down the
-  ruler, since the margin is too narrow to set it beside the number.
-- The anchor reset lives in `@layer base`: unlayered, it beat every colour
-  utility on links. Keep new global element rules in a layer for the same
-  reason.
+The loop stopped there: the panel said the only thing between the page and
+9 or higher is information only the owner can supply (résumé, Clyra team
+size, scope and outcomes, an in-app ReplyAI screenshot), which it valued at
+about +1.5 for the engineering manager. Small fixes from the round-4
+reports were applied after it (canvas baselines from the DOM, the Work
+aside separator, the tablet hero band).
 
-**Resume from here:** QA (8/10) and the hiring panel (7/10) are done; their full
-reports are in `docs/agency/REVIEW.md`. The lead-engineer fix pass started
-(commit 8db87c9 plus the WIP commit after it) and then died on a network error.
-Next: apply every still-open issue in `docs/agency/REVIEW.md`, re-verify, run
-`npx next build`, then run a second QA and hiring-panel round and repeat until
-both score 9 or higher.
+What this run added:
 
-## The agency workflow plan
+- **Drag the measure** (the creative step): the hero's MEASURE dimension
+  ends in a handle; drag it or use the arrow keys and the statement re-sets
+  live on a canvas, then springs back. CLS stays 0 by construction. See
+  DECISIONS.md, "Fourth pass", for how and why.
+- **Size-tiered font fallbacks**, so the web-font swap never shifts the page
+  (CLS 0.00000 from 320 to 1920 with fonts delayed).
+- The recruiter line in reading size, one section-head system, the glass
+  invitation in the field left of the surname, "Selected work" on the first
+  screen from 1024x768 to 1920x1080, an honest Lab list, and many QA fixes
+  (ruler hit areas, menu focus, short screens, deep links, no-JS controls).
 
-Goal: make the landing page creative enough that a recruiter or engineering
-manager wants to hire on sight. Landing page only. Work autonomously:
-research, decide, build, verify, without asking the owner for design calls.
+Measured on the production build (Chromium, Playwright, median of 5):
 
-Team (about 9 agents):
+| Profile | LCP | CLS |
+| --- | --- | --- |
+| Desktop 1440x900 | ~0.13 s | 0 |
+| 390x844, 4x CPU | ~0.23 s | 0 |
+| 390x844, 4x CPU, 1.6 Mbps, 150 ms RTT | ~1.0 s | 0 |
 
-1. **Research (parallel):** trend researcher (Awwwards, FWA, Godly, Codrops,
-   top frontend portfolios); hiring researcher (what makes recruiters and
-   engineering managers act in 10 seconds); audit critic (scores the current
-   landing page from screenshots).
-2. **Decide:** creative director merges the research, explores 3 to 4 concept
-   directions, picks the strongest one that fits "Under the Glass", writes the
-   brief.
-3. **Build (parallel branches):** interaction engineer (signature moment);
-   content and story designer (structure and copy, verified facts only);
-   layout and polish engineer (type, spacing, Night, mobile as its own design).
-4. **Quality gate:** QA and performance tester (320 to 1920px, Day/Night,
-   reduced motion, keyboard, no-WebGL, console, LCP/CLS/fps); hiring-panel
-   reviewer (recruiter, engineering manager, design lead) with one revision
-   round.
-5. Merge, commit every step, push to `main`, report with before/after shots.
+Frame time unthrottled: 16.7 ms for the As built lens, the glass and the
+measure drag. Under a 4x CPU throttle the global glass averages about
+22 to 25 ms (rasterising the full-viewport canvas); sizing the canvas to the
+lens's bounding box is the next step if that matters.
 
-Rules: no invented facts or metrics, no em dashes in visible copy, no
-generic AI look, no loss of performance or accessibility.
+## How to verify
+
+```bash
+npm run build && npm run start   # :3000
+npx tsc --noEmit && npx eslint .
+```
+
+The checklist used every round: no horizontal overflow at 320, 375, 390,
+768, 1024, 1440 and 1920 in Day and Night; reduced motion; keyboard order
+and focus; the glass (L, click empty space to flood) and the As built lens;
+the measure drag; no console errors; CLS 0 including the automatic glass
+demo and long drags; zero U+2014 and U+2013 in the rendered HTML of every
+route.
 
 ## Still pending from the owner
 
-- Real Clyra details, résumé PDF (`public/resume.pdf`), photo for About.
-- Deploy on Vercel and connect sahilshityalkar.com.
-- Lab site at lab.sahilshityalkar.com (separate app).
+In priority order (details in PLACEHOLDERS.md):
+
+1. Résumé PDF at `public/resume.pdf`, then `links.resume = "/resume.pdf"`.
+2. Real Clyra facts: team size, what you own, one outcome you can share.
+   These replace the demo lines in `experience.ts` and cases II and III.
+3. An in-app ReplyAI screenshot (inbox, replies, approval) to replace the
+   marketing-page one in `public/work/replyai.png`.
+4. Confirm or remove the availability lines and the reply-time promise.
+5. Lab site at lab.sahilshityalkar.com, or remove Glass and Springs.
+6. Deploy on Vercel and connect sahilshityalkar.com.
+
+Known, deliberately left: 320x568 phones do not show the Work rule on the
+first screen; the case pages still print their draft Outcome and Hindsight
+sections (this run was scoped to the landing page).

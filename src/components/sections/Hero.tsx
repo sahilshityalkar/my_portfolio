@@ -20,7 +20,7 @@ export function Hero() {
       id="intro"
       aria-labelledby="intro-title"
       data-spec="Hero"
-      className="relative flex flex-col pb-6 pt-[calc(var(--header-h)+2.5rem)] md:pb-10 lg:min-h-[min(calc(100svh-12rem),46rem)] lg:justify-end lg:pb-8 lg:pt-[calc(var(--header-h)+2rem)]"
+      className="relative flex flex-col pb-6 pt-[calc(var(--header-h)+2.5rem)] md:pb-4 lg:min-h-[min(calc(100svh-12rem),46rem)] lg:justify-end lg:pb-8 lg:pt-[calc(var(--header-h)+2rem)]"
     >
       <div className="wrap grid-12 gap-y-6 sm:gap-y-10 lg:gap-y-[clamp(1.75rem,4.2svh,2.5rem)]" data-spec-grid>
         <p className="t-meta col-span-12 text-ink-3 fade-in" style={{ ["--i" as string]: 0 }}>
