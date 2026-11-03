@@ -281,6 +281,11 @@ export function AsBuilt({ src, alt, url }: AsBuiltImage) {
     };
   }, []);
 
+  // the plate's caption names what is showing (toggle, Esc, or the glass)
+  useEffect(() => {
+    layerRef.current?.closest<HTMLElement>("[data-plate-col]")?.toggleAttribute("data-asbuilt", flooded);
+  }, [flooded]);
+
   const toggle = () => {
     const next = !flooded;
     setNear(true);
@@ -311,7 +316,7 @@ export function AsBuilt({ src, alt, url }: AsBuiltImage) {
         ref={readRef}
         aria-hidden="true"
         data-loupe-skip
-        className="asbuilt-read t-meta absolute left-0 top-0 z-30 pointer-events-none whitespace-nowrap bg-paper px-1.5 py-0.5 text-[10px] text-ink-2"
+        className="asbuilt-read t-meta absolute left-0 top-0 z-30 pointer-events-none whitespace-nowrap border border-(--rule-strong) bg-paper px-1.5 py-0.5 text-[10px] text-ink-2"
       >
         <span className="text-mark">As built</span>
         {url ? (

@@ -277,9 +277,10 @@ export function MeasureCallout() {
       c.fillRect(0, y + 2, width, 1);
       c.fillRect(0, y, 1, 5);
       c.fillRect(width - 1, y, 1, 5);
-      // the design measure stays marked, faintly, so the way back is visible
-      c.globalAlpha = 0.45;
-      for (let d = 0; d < y - 4; d += 6) c.fillRect(w0 - 0.5, d, 1, 3);
+      // the design measure stays marked on the dimension line, so the way
+      // back is visible without a guide running through the text
+      c.globalAlpha = 0.6;
+      c.fillRect(w0 - 0.5, y - 6, 1, 17);
       c.globalAlpha = 1;
       // label: MEASURE n CH · n PX · n LINES, numbers a step darker
       c.font = mono;
@@ -457,6 +458,10 @@ export function MeasureCallout() {
         title="Drag to re-set this paragraph"
         className="measure-handle"
       />
+      {/* the invitation, beside the handle, until the measure is taken up */}
+      <span aria-hidden="true" className="measure-cue">
+        Drag
+      </span>
     </span>
   );
 }

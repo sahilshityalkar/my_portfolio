@@ -15,7 +15,7 @@ const host = labUrl.replace(/^https?:\/\//, "");
 export function Lab() {
   const featured = lab.slice(0, 3);
   return (
-    <section id="lab" aria-labelledby="lab-title" data-spec="Lab" className="wrap py-12 sm:py-20">
+    <section id="lab" aria-labelledby="lab-title" data-spec="Lab" className="wrap py-12 sm:py-16">
       <SectionHead
         n="05"
         id="lab-title"

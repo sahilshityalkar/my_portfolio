@@ -19,17 +19,19 @@ export function Work() {
           const external = c.image ? c.links.filter((l): l is { label: string; href: string } => !!l.href) : [];
           return (
             <li key={c.slug} data-reveal data-spec={`Case ${c.index}`} className="grid-12 group items-start gap-y-6">
-              <div className={`col-span-12 md:col-span-7 ${i % 2 ? "md:order-2 md:col-start-6" : ""}`}>
+              <div data-plate-col className={`col-span-12 md:col-span-7 ${i % 2 ? "md:order-2 md:col-start-6" : ""}`}>
                 <div className="relative">
                   <CaseVisual c={c} seed={i + 3} asBuilt={c.image} />
                   <Link href={href} aria-hidden="true" tabIndex={-1} className="absolute inset-0 z-10" />
                 </div>
                 {c.image ? (
                   <p className="t-meta mt-3 text-ink-3">
-                    Plate {c.index}: the drawing.
+                    {/* the caption names what is showing: AsBuilt sets data-asbuilt */}
+                    <span className="[[data-asbuilt]_&]:hidden">Plate {c.index}: the drawing.</span>
+                    <span className="hidden [[data-asbuilt]_&]:inline">Plate {c.index}, as built: the shipped product.</span>
                     {/* the toggle needs JS, so the instruction does too; same
                         pointer swap as the inspect hint */}
-                    <span className="hidden [.js_&]:inline">
+                    <span className="hidden [.js_&]:inline [[data-asbuilt]_&]:hidden!">
                       {" "}
                       <span className="hidden [@media(pointer:fine)]:inline">
                         Hover it, or press As built, to see the shipped product.

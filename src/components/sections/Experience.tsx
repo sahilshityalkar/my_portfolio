@@ -5,7 +5,7 @@ import { SectionHead } from "@/components/SectionHead";
 
 export function Experience() {
   return (
-    <section id="experience" aria-labelledby="experience-title" data-spec="Experience" className="wrap py-12 sm:py-20">
+    <section id="experience" aria-labelledby="experience-title" data-spec="Experience" className="wrap py-12 sm:py-16">
       <SectionHead n="03" id="experience-title" title="Experience" />
       <ol className="mt-8 sm:mt-12">
         {experience.map((r) => (

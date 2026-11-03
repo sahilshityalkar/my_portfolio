@@ -590,7 +590,9 @@ function draw(f: Frame) {
     ctx.font = MONO;
     const dims = `${Math.round(b.w)} × ${Math.round(b.h)}`;
     ctx.fillStyle = p.mark;
-    ctx.fillText(dims, x + b.w - ctx.measureText(dims).width - 4, y + b.h - 5);
+    // just under the box's bottom-right corner: inside it, the label sat on
+    // the last line box of short components
+    ctx.fillText(dims, x + b.w - ctx.measureText(dims).width, y + b.h + 12);
   }
   for (const group of byGroup.values()) {
     const sorted = group.filter((b) => !b.fixed).sort((a, b) => a.y - b.y);
