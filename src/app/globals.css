@@ -419,6 +419,11 @@ body::before {
   will-change: transform;
   background: var(--paper-2);
 }
+/* by night the real screenshot stays untinted, only a touch less bright, so
+   it reads as a lit sheet on the table rather than a white slab */
+:root[data-theme="night"] .asbuilt-shot img {
+  filter: brightness(0.88);
+}
 .asbuilt-ring {
   opacity: 0;
   transform-origin: 50% 50%;
@@ -553,6 +558,68 @@ html:not(.js) .asbuilt-toggle {
   top: 50%;
   transform: translate(-50%, -50%);
   padding: 2px 6px;
+}
+/* The measure's handle: a small drafting diamond at the dimension's end.
+   Dragging it re-sets the paragraph live on a canvas (HeroCallouts.tsx). */
+.measure-handle {
+  position: absolute;
+  right: -6px;
+  top: -3px;
+  width: 11px;
+  height: 11px;
+  pointer-events: auto;
+  cursor: ew-resize;
+  touch-action: none;
+  will-change: transform;
+}
+.measure-handle::before {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border: 1px solid var(--mark);
+  background: var(--paper);
+  transform: rotate(45deg);
+  transition:
+    background-color 0.3s var(--ease-out),
+    transform 0.3s var(--ease-out);
+}
+.measure-handle:hover::before,
+.measure-handle:focus-visible::before,
+.callout-measure.is-live .measure-handle::before {
+  background: var(--mark);
+  transform: rotate(45deg) scale(1.25);
+}
+/* a comfortable target without a bigger mark */
+.measure-handle::after {
+  content: "";
+  position: absolute;
+  inset: -10px;
+}
+/* while the measure is live the canvas draws the dimension; the DOM one hides */
+.callout-measure.is-live {
+  border-color: transparent;
+}
+.callout-measure.is-live::before,
+.callout-measure.is-live .callout-label {
+  visibility: hidden;
+}
+/* the paragraph keeps its place (and its text, for the accessibility tree
+   and selection), drawn by the canvas instead */
+.is-measured {
+  color: transparent;
+}
+.measure-live {
+  position: absolute;
+  top: 0;
+  pointer-events: none;
+}
+/* the rest of the hero steps back while the measure is live (filter, not
+   opacity: those rows own an entrance animation that holds opacity) */
+[data-measure-yield] {
+  transition: filter 0.3s var(--ease-out);
+}
+[data-measuring] [data-measure-yield] {
+  filter: opacity(0.12);
 }
 @media (max-width: 639.98px) {
   .callout-cap,

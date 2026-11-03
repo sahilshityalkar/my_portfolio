@@ -14,7 +14,7 @@ export function Contact() {
   ].filter((r) => r.label !== "Résumé" || r.href);
 
   return (
-    <section id="contact" aria-labelledby="contact-title" data-spec="Contact" className="wrap pb-8 pt-12 sm:pb-12 sm:pt-24">
+    <section id="contact" aria-labelledby="contact-title" data-spec="Contact" className="wrap pb-8 pt-12 sm:pb-12 sm:pt-20">
       <SectionHead n="06" id="contact-title" title="Contact" />
       <div className="grid-12 mt-6 gap-y-10 sm:mt-10 sm:gap-y-12">
         <div className="col-span-12" data-reveal>

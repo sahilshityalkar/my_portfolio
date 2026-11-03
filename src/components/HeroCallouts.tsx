@@ -1,6 +1,9 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { Spring, springs } from "@/lib/spring";
+import { balance, greedy } from "@/lib/measure";
+import { inspect } from "@/lib/store";
 
 /**
  * Measured at rest: three redline callouts on the hero, read from the live DOM
@@ -107,52 +110,330 @@ export function CapCallout() {
 /* ---------------------------------------------------------------- MEASURE */
 
 /**
- * A horizontal dimension under a paragraph, spanning its widest rendered
- * line. Render it as the last child of the (relatively positioned) paragraph.
+ * A horizontal dimension under a paragraph: its measure, the line length it
+ * is set to. Render it as the last child of the (relatively positioned)
+ * paragraph.
+ *
+ * Its end is a handle: drag it (or focus it and use the arrow keys) and the
+ * paragraph is re-set live at the new measure, then springs back on release.
+ * Reflowing the real text during a drag would move the page (a drag is not a
+ * discrete input, so the browser counts it as layout shift), so while the
+ * measure is live the DOM text keeps its place, invisible, and the paragraph
+ * is drawn on a canvas instead, broken into lines by the same rules
+ * (src/lib/measure.ts) with the same font metrics. Nothing in the layout
+ * moves: the footer's CLS stays at 0.000 while you play with it.
  */
 export function MeasureCallout() {
   const ref = useRef<HTMLSpanElement>(null);
   const chars = useRef<HTMLSpanElement>(null);
   const px = useRef<HTMLSpanElement>(null);
+  const handle = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
-    const range = document.createRange();
     return onLayout(() => {
       const el = ref.current;
       const p = el?.parentElement;
       const ctx = metrics();
       if (!el || !p || !ctx || !chars.current || !px.current) return;
       if (getComputedStyle(el).display === "none") return;
-      // every line box of the paragraph's own text, grouped into rendered lines
-      const lines = new Map<number, [number, number]>();
-      for (const n of p.childNodes) {
-        if (n.nodeType !== Node.TEXT_NODE) continue;
-        range.selectNodeContents(n);
-        for (const r of range.getClientRects()) {
-          if (r.width < 1) continue;
-          const k = Math.round(r.top);
-          const [l, rt] = lines.get(k) ?? [r.left, r.right];
-          lines.set(k, [Math.min(l, r.left), Math.max(rt, r.right)]);
-        }
-      }
-      let widest: [number, number] | null = null;
-      for (const span of lines.values()) if (!widest || span[1] - span[0] > widest[1] - widest[0]) widest = span;
-      if (!widest) return;
+      // the measure is the paragraph's own width as set (its line length
+      // limit), the same quantity the handle drags
       const box = p.getBoundingClientRect();
-      const w = widest[1] - widest[0];
       ctx.font = fontOf(getComputedStyle(p));
       const zero = ctx.measureText("0").width || 1;
-      el.style.setProperty("--m-left", `${(widest[0] - box.left).toFixed(2)}px`);
-      el.style.setProperty("--m-w", `${w.toFixed(2)}px`);
-      chars.current.textContent = `${Math.round(w / zero)}`;
-      px.current.textContent = `${Math.round(w)}`;
+      el.style.setProperty("--m-left", "0px");
+      el.style.setProperty("--m-w", `${box.width.toFixed(2)}px`);
+      chars.current.textContent = `${Math.round(box.width / zero)}`;
+      px.current.textContent = `${Math.round(box.width)}`;
+      handle.current?.setAttribute("aria-valuenow", `${Math.round(box.width / zero)}`);
       ready(el);
     });
   }, []);
 
+  useEffect(() => {
+    const el = ref.current;
+    const p = el?.parentElement;
+    const knob = handle.current;
+    const hero = p?.closest("section");
+    if (!el || !p || !knob || !hero) return;
+
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+    const PAD = 160; // canvas room left of the paragraph, for a centred label on a short measure
+    const W = new Spring(0, springs.aperture);
+    let canvas: HTMLCanvasElement | null = null;
+    let c: CanvasRenderingContext2D | null = null;
+    let live = false;
+    let raf = 0;
+    let last = 0;
+    // geometry and type, read once when the measure goes live
+    let w0 = 0; // the paragraph's own measure (its box width)
+    let minW = 0;
+    let maxW = 0;
+    let lh = 0;
+    let rest = 0; // line count at rest
+    let zero = 1;
+    let ascent = 0;
+    let half = 0;
+    let knobX = 0; // the handle's laid-out x, relative to the paragraph
+    let dimY = 0; // the dimension's laid-out y at rest, relative to the paragraph
+    let words: string[] = [];
+    let measure: (s: string) => number = () => 0;
+    let colors = { ink: "", ink2: "", ink3: "", mark: "", paper: "" };
+    let mono = "";
+    let font = "";
+    let tracking = "0px";
+
+    const read = () => {
+      const cs = getComputedStyle(p);
+      const box = p.getBoundingClientRect();
+      w0 = box.width;
+      lh = parseFloat(cs.lineHeight) || parseFloat(cs.fontSize) * 1.3;
+      words = [...p.childNodes]
+        .filter((n) => n.nodeType === Node.TEXT_NODE)
+        .map((n) => n.textContent ?? "")
+        .join("")
+        .trim()
+        .split(/\s+/);
+      const root = getComputedStyle(document.documentElement);
+      colors = {
+        ink: cs.color,
+        ink2: root.getPropertyValue("--ink-2").trim(),
+        ink3: root.getPropertyValue("--ink-3").trim(),
+        mark: root.getPropertyValue("--mark").trim(),
+        paper: root.getPropertyValue("--paper").trim(),
+      };
+      mono = `400 10px ${root.getPropertyValue("--mono")}`;
+
+      if (!canvas) {
+        canvas = document.createElement("canvas");
+        canvas.className = "measure-live";
+        canvas.setAttribute("aria-hidden", "true");
+        canvas.setAttribute("data-loupe-skip", "");
+        p.appendChild(canvas);
+      }
+      // room for the widest allowed measure and a few extra lines
+      const right = hero.querySelector<HTMLElement>("[data-spec=Contact]");
+      const rr = right?.getBoundingClientRect();
+      const wrap = hero.querySelector<HTMLElement>(".wrap")?.getBoundingClientRect();
+      let limit = (wrap?.right ?? innerWidth) - box.left;
+      // beside the contact column (wide screens), stop short of its text
+      if (rr && rr.top < box.bottom && rr.bottom > box.top) {
+        let textLeft = rr.right;
+        for (const a of right!.querySelectorAll("a")) textLeft = Math.min(textLeft, a.getBoundingClientRect().left);
+        limit = Math.min(limit, textLeft - box.left - 40);
+      }
+      maxW = Math.max(w0, limit);
+      const dpr = Math.min(devicePixelRatio || 1, 2);
+      const cw = maxW + PAD * 2;
+      const ch = el.offsetTop + lh * 3 + 24;
+      canvas.width = Math.round(cw * dpr);
+      canvas.height = Math.round(ch * dpr);
+      canvas.style.width = `${cw}px`;
+      canvas.style.height = `${ch}px`;
+      canvas.style.left = `${-PAD}px`;
+      c = canvas.getContext("2d");
+      if (!c) return;
+      c.setTransform(dpr, 0, 0, dpr, PAD * dpr, 0);
+      font = fontOf(cs);
+      tracking = cs.letterSpacing;
+      c.font = font;
+      c.fontKerning = "normal";
+      if ("letterSpacing" in c) (c as CanvasRenderingContext2D & { letterSpacing: string }).letterSpacing = tracking;
+      const fm = c.measureText("Hg");
+      ascent = fm.fontBoundingBoxAscent;
+      half = (lh - (fm.fontBoundingBoxAscent + fm.fontBoundingBoxDescent)) / 2;
+      zero = c.measureText("0").width || 1;
+      const cache = new Map<string, number>();
+      const ctx = c;
+      measure = (s) => {
+        let v = cache.get(s);
+        if (v === undefined) cache.set(s, (v = ctx.measureText(s).width));
+        return v;
+      };
+      rest = balance(words, w0, measure).length;
+      // never more than two lines beyond the paragraph's own: the page below
+      // yields while the measure is live, but only so far
+      minW = Math.max(zero * 10, w0 * 0.4);
+      while (minW < w0 && greedy(words, minW, measure).length > rest + 2) minW += zero;
+      knobX = parseFloat(el.style.getPropertyValue("--m-left") || "0") + parseFloat(el.style.getPropertyValue("--m-w") || "0");
+      dimY = el.offsetTop;
+    };
+
+    const draw = () => {
+      if (!c || !canvas) return;
+      const width = W.value;
+      // the paragraph's own type first: line breaking measures with it
+      c.font = font;
+      if ("letterSpacing" in c) (c as CanvasRenderingContext2D & { letterSpacing: string }).letterSpacing = tracking;
+      const lines = balance(words, width, measure);
+      c.clearRect(-PAD, 0, maxW + PAD * 2, canvas.height);
+      // the paragraph, set at the live measure
+      c.fillStyle = colors.ink;
+      c.textBaseline = "alphabetic";
+      lines.forEach((line, i) => c!.fillText(line, 0, i * lh + half + ascent));
+      // the dimension under it: the measure as set, with its ticks
+      const y = dimY + (lines.length - rest) * lh;
+      c.fillStyle = colors.mark;
+      c.fillRect(0, y + 2, width, 1);
+      c.fillRect(0, y, 1, 5);
+      c.fillRect(width - 1, y, 1, 5);
+      // the design measure stays marked, faintly, so the way back is visible
+      c.globalAlpha = 0.45;
+      for (let d = 0; d < y - 4; d += 6) c.fillRect(w0 - 0.5, d, 1, 3);
+      c.globalAlpha = 1;
+      // label: MEASURE n CH · n PX · n LINES, numbers a step darker
+      c.font = mono;
+      if ("letterSpacing" in c) (c as CanvasRenderingContext2D & { letterSpacing: string }).letterSpacing = "0.4px";
+      const parts: [string, string][] = [
+        ["MEASURE ", colors.ink3],
+        [`${Math.round(width / zero)}`, colors.ink2],
+        [" CH · ", colors.ink3],
+        [`${Math.round(width)}`, colors.ink2],
+        [" PX · ", colors.ink3],
+        [`${lines.length}`, colors.ink2],
+        [lines.length === 1 ? " LINE" : " LINES", colors.ink3],
+      ];
+      const tw = parts.reduce((a, [t]) => a + c!.measureText(t).width, 0);
+      // centred on the dimension, or beside the handle once the measure is
+      // too short to hold it
+      let x = tw + 24 < width ? width / 2 - tw / 2 : width + 16;
+      c.fillStyle = colors.paper;
+      c.fillRect(x - 6, y - 4, tw + 12, 13);
+      c.textBaseline = "middle";
+      for (const [t, col] of parts) {
+        c.fillStyle = col;
+        c.fillText(t, x, y + 3);
+        x += c.measureText(t).width;
+      }
+      // the handle rides the end of the dimension, by transform only
+      knob.style.transform = `translate3d(${(width - knobX).toFixed(2)}px, ${((lines.length - rest) * lh).toFixed(2)}px, 0)`;
+      knob.setAttribute("aria-valuenow", `${Math.round(width / zero)}`);
+      knob.setAttribute("aria-valuetext", `${Math.round(width / zero)} characters wide, ${lines.length} lines`);
+    };
+
+    const start = () => {
+      if (live) return;
+      read();
+      if (!c) return;
+      live = true;
+      W.snap(W.value > 0 && raf ? W.value : w0);
+      knob.setAttribute("aria-valuemin", `${Math.round(minW / zero)}`);
+      knob.setAttribute("aria-valuemax", `${Math.round(maxW / zero)}`);
+      hero.setAttribute("data-measuring", "");
+      el.classList.add("is-live");
+      p.classList.add("is-measured");
+      draw();
+    };
+
+    const finish = () => {
+      live = false;
+      cancelAnimationFrame(raf);
+      raf = 0;
+      hero.removeAttribute("data-measuring");
+      el.classList.remove("is-live");
+      p.classList.remove("is-measured");
+      knob.style.transform = "";
+      knob.setAttribute("aria-valuenow", `${Math.round(w0 / zero)}`);
+      knob.removeAttribute("aria-valuetext");
+      c?.clearRect(-PAD, 0, maxW + PAD * 2, canvas?.height ?? 0);
+    };
+
+    const tick = (t: number) => {
+      const dt = last ? (t - last) / 1000 : 1 / 60;
+      last = t;
+      const moving = W.step(dt);
+      draw();
+      if (moving) raf = requestAnimationFrame(tick);
+      else finish();
+    };
+
+    // let go: spring back to the design measure, then hand back to the DOM
+    const release = () => {
+      if (!live) return;
+      W.target = w0;
+      if (reduced.matches) {
+        W.snap(w0);
+        finish();
+        return;
+      }
+      last = 0;
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(tick);
+    };
+
+    const set = (width: number) => {
+      cancelAnimationFrame(raf);
+      raf = 0;
+      W.snap(Math.min(maxW, Math.max(minW, width)));
+      draw();
+    };
+
+    let from = 0;
+    let fromW = 0;
+    const down = (e: PointerEvent) => {
+      if (e.button !== 0) return;
+      e.preventDefault();
+      knob.setPointerCapture(e.pointerId);
+      // a deliberate act: the automatic glass demonstration gives way
+      dispatchEvent(new Event("glass:yield"));
+      if (inspect.get() !== "off") inspect.set("off");
+      start();
+      from = e.clientX;
+      fromW = W.value;
+    };
+    const move = (e: PointerEvent) => {
+      if (!live || !knob.hasPointerCapture(e.pointerId)) return;
+      set(fromW + (e.clientX - from));
+    };
+    const up = (e: PointerEvent) => {
+      if (knob.hasPointerCapture(e.pointerId)) knob.releasePointerCapture(e.pointerId);
+      release();
+    };
+    const key = (e: KeyboardEvent) => {
+      const step = e.shiftKey ? 5 : 1;
+      let next: number | null = null;
+      if (e.key === "ArrowLeft" || e.key === "ArrowDown") next = -step;
+      else if (e.key === "ArrowRight" || e.key === "ArrowUp") next = step;
+      else if (e.key === "Home" || e.key === "End") next = 0;
+      else if (e.key === "Escape" || e.key === "Enter") {
+        if (live) {
+          e.preventDefault();
+          e.stopPropagation();
+          release();
+        }
+        return;
+      }
+      if (next === null) return;
+      e.preventDefault();
+      start();
+      if (e.key === "Home") set(minW);
+      else if (e.key === "End") set(maxW);
+      else set(W.value + next * zero);
+    };
+
+    knob.addEventListener("pointerdown", down);
+    knob.addEventListener("pointermove", move);
+    knob.addEventListener("pointerup", up);
+    knob.addEventListener("pointercancel", up);
+    knob.addEventListener("keydown", key);
+    knob.addEventListener("blur", release);
+    addEventListener("resize", release);
+    return () => {
+      cancelAnimationFrame(raf);
+      knob.removeEventListener("pointerdown", down);
+      knob.removeEventListener("pointermove", move);
+      knob.removeEventListener("pointerup", up);
+      knob.removeEventListener("pointercancel", up);
+      knob.removeEventListener("keydown", key);
+      knob.removeEventListener("blur", release);
+      removeEventListener("resize", release);
+      canvas?.remove();
+    };
+  }, []);
+
   return (
-    <span ref={ref} aria-hidden="true" data-loupe-skip className="callout callout-measure">
-      <span className="callout-label">
+    <span ref={ref} data-loupe-skip className="callout callout-measure">
+      <span className="callout-label" aria-hidden="true">
         Measure{" "}
         <span ref={chars} className="callout-num min-w-[2ch] text-right">
           ··
@@ -163,6 +444,19 @@ export function MeasureCallout() {
         </span>{" "}
         px
       </span>
+      {/* the end of the dimension is a handle: drag the measure */}
+      <span
+        ref={handle}
+        role="slider"
+        tabIndex={0}
+        aria-label="Measure of this paragraph. Drag or use the arrow keys to re-set it; it springs back on release."
+        aria-orientation="horizontal"
+        aria-valuemin={10}
+        aria-valuemax={60}
+        aria-valuenow={33}
+        title="Drag to re-set this paragraph"
+        className="measure-handle"
+      />
     </span>
   );
 }

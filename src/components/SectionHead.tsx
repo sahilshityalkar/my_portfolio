@@ -5,8 +5,9 @@
  * hierarchy reads at a glance and no two big serif lines stack up.
  *
  * The rule and number are printed, not revealed: they are on the page from
- * the first frame, so the next section's rule can peek above the fold. Only
- * the title and the aside rise in.
+ * the first frame, so the next section's rule can peek above the fold. Work's
+ * title is printed too (it sits on the first screen at desktop sizes); the
+ * other titles and the asides rise in.
  */
 export function SectionHead({
   n,
@@ -29,7 +30,7 @@ export function SectionHead({
         id={id}
         className={`t-title col-span-10 md:col-span-6 ${size === "compact" ? "text-[clamp(1.8rem,3vw,2.6rem)]" : ""}`}
         data-spec-type="Newsreader"
-        data-reveal
+        {...(size === "primary" ? {} : { "data-reveal": "" })}
       >
         {title}
       </h2>

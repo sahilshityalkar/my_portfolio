@@ -11,7 +11,7 @@ import { SectionHead } from "@/components/SectionHead";
  */
 export function Work() {
   return (
-    <section id="work" aria-labelledby="work-title" data-spec="Work" className="wrap pb-12 pt-10 sm:pb-24 sm:pt-12 lg:pt-8">
+    <section id="work" aria-labelledby="work-title" data-spec="Work" className="wrap pb-12 pt-10 sm:pb-16 sm:pt-12 lg:pt-8">
       <SectionHead n="02" id="work-title" title="Selected work" aside="1 independent · 2 at Clyra" size="primary" />
       <ol className="mt-8 space-y-12 sm:mt-12 sm:space-y-20">
         {work.map((c, i) => {
@@ -44,7 +44,7 @@ export function Work() {
                   <span className="text-mark">{c.index}</span>
                   <T v={c.year} />
                 </p>
-                <h3 className="t-title mt-3 transition-transform duration-700 ease-(--ease-out) group-hover:translate-x-2" data-spec-type="Newsreader">
+                <h3 className="t-title mt-3 text-balance transition-transform duration-700 ease-(--ease-out) group-hover:translate-x-2" data-spec-type="Newsreader">
                   <Link href={href} aria-label={`Case study ${c.index}: ${plain(c.title, "in preparation")}`}>
                     <T v={c.title} />
                   </Link>

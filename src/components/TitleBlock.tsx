@@ -47,9 +47,25 @@ export function TitleBlock() {
       });
     };
 
+    // LCP is the first view's metric: like the browser's own reporting, it
+    // stops at the visitor's first interaction or scroll. A section revealed
+    // further down is not this visit's first paint. (A scripted scroll is not
+    // an input, so without this the reading kept growing on scroll-throughs.)
+    let lcpUntil = Infinity;
+    const freeze = () => {
+      lcpUntil = Math.min(lcpUntil, performance.now());
+      removeEventListener("scroll", freeze);
+      removeEventListener("pointerdown", freeze);
+      removeEventListener("keydown", freeze);
+    };
+    addEventListener("scroll", freeze, { passive: true, once: true });
+    addEventListener("pointerdown", freeze, { once: true });
+    addEventListener("keydown", freeze, { once: true });
+
     if (lcpMs !== null) {
       const o = new PerformanceObserver((list) => {
-        const last = list.getEntries().at(-1);
+        // buffered entries painted before the first input still count
+        const last = list.getEntries().filter((e) => e.startTime < lcpUntil).at(-1);
         if (last) lcpMs = last.startTime;
         publish();
       });
@@ -79,6 +95,7 @@ export function TitleBlock() {
     else addEventListener("load", onLoad, { once: true });
 
     return () => {
+      freeze();
       clearTimeout(t);
       cancelAnimationFrame(frame);
       removeEventListener("load", onLoad);

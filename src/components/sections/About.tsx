@@ -9,7 +9,7 @@ import { SectionHead } from "@/components/SectionHead";
 export function About() {
   const [lede, ...rest] = about.paragraphs;
   return (
-    <section id="about" aria-labelledby="about-title" data-spec="About" className="wrap py-12 sm:py-24">
+    <section id="about" aria-labelledby="about-title" data-spec="About" className="wrap py-12 sm:py-20">
       <SectionHead n="04" id="about-title" title="About" />
       <div className="grid-12 mt-6 gap-y-6 sm:mt-10">
         {lede ? (

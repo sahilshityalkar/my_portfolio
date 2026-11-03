@@ -90,7 +90,7 @@ function Entry({ e, live = false }: { e: Experiment; live?: boolean }) {
             Open ↗
           </span>
         ) : e.onThisPage ? (
-          <InspectButton className="link-draw text-ink">
+          <InspectButton className="link-draw uppercase text-ink">
             <span className="hidden [@media(pointer:fine)]:inline">
               Try it here: press <kbd className="font-[inherit] text-mark">L</kbd>
             </span>

@@ -891,6 +891,12 @@ export function Loupe() {
       kick(); // repaint the focus ring
     };
 
+    // another interaction on the page (dragging the hero's measure) wants the stage
+    const onYield = () => {
+      clearTimeout(demoTimer);
+      endDemo(true);
+    };
+
     const onScroll = () => {
       if (demo) endDemo(true);
       if (current !== "off") kick();
@@ -918,6 +924,7 @@ export function Loupe() {
     addEventListener("resize", resize);
     addEventListener("pointermove", onMove, { passive: true });
     addEventListener("scroll", onScroll, { passive: true });
+    addEventListener("glass:yield", onYield);
     addEventListener("keydown", onKey);
     addEventListener("click", onClick);
     addEventListener("focusin", onFocus);
@@ -929,6 +936,7 @@ export function Loupe() {
     return () => {
       clearTimeout(demoTimer);
       endDemo(false);
+      removeEventListener("glass:yield", onYield);
       unsub();
       cancelAnimationFrame(raf);
       clearInterval(hudTimer);
@@ -958,10 +966,11 @@ export function Loupe() {
         <div
           data-loupe-skip
           aria-hidden="true"
-          className="t-meta pointer-events-none fixed bottom-3 left-[calc(var(--gutter)-0.5rem)] z-50 flex gap-4 border-t border-(--rule-strong) bg-paper px-2 py-1.5 tabular-nums text-ink-3 fade-in"
+          className="t-meta pointer-events-none fixed inset-x-0 bottom-0 z-50 flex gap-4 border-t border-(--rule-strong) bg-paper px-(--gutter) py-2.5 tabular-nums text-ink-3 fade-in"
           style={{ ["--i" as string]: 0 }}
         >
-          {/* a paper strip, so the status never prints over the page's own text */}
+          {/* a full-width paper strip along the bottom edge, so the status
+              never prints over (or between) the page's own lines */}
           <span className="text-mark">{mode === "full" ? "Blueprint" : "Glass"}</span>
           <span className="hidden sm:inline">
             <span className="inline-block min-w-[3ch] text-right">{hud.nodes}</span> measured nodes
@@ -970,7 +979,11 @@ export function Loupe() {
           <span>
             <span className="inline-block min-w-[3ch] text-right">{hud.fps}</span> fps
           </span>
-          <span className="hidden sm:inline">{mode === "lens" ? "Click empty space to flood · Esc to close" : "Click to return · Esc to close"}</span>
+          <span className="hidden sm:[@media(pointer:fine)]:inline">
+            {mode === "lens" ? "Click empty space to flood · Esc to close" : "Click to return · Esc to close"}
+          </span>
+          {/* touch: no Esc key, so say where the way out is */}
+          <span className="[@media(pointer:fine)]:hidden">Tap the lens icon to close</span>
         </div>
       ) : null}
     </>
