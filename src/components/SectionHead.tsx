@@ -35,7 +35,7 @@ export function SectionHead({
         {title}
       </h2>
       {aside ? (
-        <div className="t-meta col-span-12 text-ink-3 md:col-span-3 md:text-right" data-reveal style={{ ["--i" as string]: 1 }}>
+        <div className="t-meta col-span-12 text-balance text-ink-3 md:col-span-3 md:text-right" data-reveal style={{ ["--i" as string]: 1 }}>
           {aside}
         </div>
       ) : null}

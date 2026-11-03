@@ -457,6 +457,8 @@ body::before {
 }
 .asbuilt-read {
   opacity: 0;
+  /* solid, so the screenshot never shows through the label */
+  background: var(--paper);
   will-change: transform, opacity;
   max-width: calc(100% - 24px);
   overflow: hidden;

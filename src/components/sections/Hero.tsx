@@ -20,7 +20,7 @@ export function Hero() {
       id="intro"
       aria-labelledby="intro-title"
       data-spec="Hero"
-      className="relative flex flex-col pb-6 pt-[calc(var(--header-h)+2.5rem)] md:pb-10 lg:min-h-[calc(100svh-12rem)] lg:justify-end lg:pb-8 lg:pt-[calc(var(--header-h)+2rem)]"
+      className="relative flex flex-col pb-6 pt-[calc(var(--header-h)+2.5rem)] md:pb-10 lg:min-h-[min(calc(100svh-12rem),46rem)] lg:justify-end lg:pb-8 lg:pt-[calc(var(--header-h)+2rem)]"
     >
       <div className="wrap grid-12 gap-y-6 sm:gap-y-10 lg:gap-y-[clamp(1.75rem,4.2svh,2.5rem)]" data-spec-grid>
         <p className="t-meta col-span-12 text-ink-3 fade-in" style={{ ["--i" as string]: 0 }}>
@@ -71,14 +71,17 @@ export function Hero() {
                 size and full ink; the details stay in the drafting hand below */}
             <p className="font-(family-name:--serif-lede) text-[1.125rem] leading-snug text-ink sm:text-[1.1875rem]">
               {profile.role}{" "}
-              <span className="text-ink-2">at</span>{" "}
-              {profile.companyUrl ? (
-                <a href={profile.companyUrl} target="_blank" rel="noreferrer" className="link-draw">
-                  {profile.company}
-                </a>
-              ) : (
-                profile.company
-              )}
+              {/* "at Clyra" stays together when the column is narrow */}
+              <span className="whitespace-nowrap">
+                <span className="text-ink-2">at</span>{" "}
+                {profile.companyUrl ? (
+                  <a href={profile.companyUrl} target="_blank" rel="noreferrer" className="link-draw">
+                    {profile.company}
+                  </a>
+                ) : (
+                  profile.company
+                )}
+              </span>
             </p>
             <p className="t-meta mt-2 text-ink-2">
               Since {profile.since} · <T v={profile.location} />
