@@ -37,6 +37,10 @@ const plexMono = localFont({
   fallback: ["Plex Mono Fallback", "ui-monospace", "Menlo", "monospace"],
 });
 
+/** Newsreader's own family name, without its fallbacks: the size-tiered
+ * fallback stacks in globals.css (--serif-lede, --serif-display) start with it. */
+const newsreaderFace = (newsreader.style.fontFamily.split(",")[0] ?? "").trim();
+
 const title = `${profile.name} · ${profile.role}`;
 // The hero states the role once, visually; search results still need it in words.
 const description = `${profile.role} at ${profile.company}, Mumbai. ${profile.statement}`;
@@ -69,7 +73,10 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" data-theme="day" className={`${newsreader.variable} ${plexMono.variable}`} suppressHydrationWarning>
+    <html lang="en" data-theme="day" className={`${newsreader.variable} ${plexMono.variable}`}
+      style={{ ["--nr-face" as string]: newsreaderFace }}
+      suppressHydrationWarning
+    >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeBootScript }} />
       </head>

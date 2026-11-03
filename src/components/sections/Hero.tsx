@@ -57,7 +57,7 @@ export function Hero() {
           >
             {/* the recruiter line: who, at which company, since when, in reading
                 size and full ink; the details stay in the drafting hand below */}
-            <p className="text-[1.125rem] leading-snug text-ink sm:text-[1.1875rem]">
+            <p className="font-(family-name:--serif-lede) text-[1.125rem] leading-snug text-ink sm:text-[1.1875rem]">
               {profile.role}{" "}
               <span className="text-ink-2">at</span>{" "}
               {profile.companyUrl ? (

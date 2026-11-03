@@ -49,7 +49,7 @@ export function Header() {
         </Link>
 
         <nav aria-label="Primary" className="hidden md:block">
-          <ul className="t-meta flex gap-5 text-ink-2 lg:gap-6">
+          <ul className="t-meta flex gap-5 whitespace-nowrap text-ink-2 lg:gap-6">
             {nav.map((n) => (
               <li key={n.href}>
                 <a
@@ -59,7 +59,7 @@ export function Header() {
                 >
                   {n.label}
                   {/* the sheet number, as on the ruler and the section heads */}
-                  <span aria-hidden="true" className="ml-1.5 inline-block w-[2ch] text-ink-3 tabular-nums">
+                  <span aria-hidden="true" className="ml-1.5 hidden w-[2ch] text-ink-3 tabular-nums lg:inline-block">
                     {n.n}
                   </span>
                 </a>

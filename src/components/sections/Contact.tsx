@@ -23,7 +23,7 @@ export function Contact() {
               {/* the address is the headline: nothing to decode, nothing to click through */}
               <a
                 href={`mailto:${links.email}`}
-                className="link-draw font-serif text-[clamp(2rem,6.2vw,5.5rem)] leading-[1.02] tracking-[-0.03em] [overflow-wrap:anywhere]"
+                className="link-draw font-(family-name:--serif-display) text-[clamp(2rem,6.2vw,5.5rem)] leading-[1.02] tracking-[-0.03em] [overflow-wrap:anywhere]"
                 data-spec-type="Newsreader"
               >
                 {/* break after the @ on narrow screens, never mid-word unless it must */}
