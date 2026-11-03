@@ -138,6 +138,57 @@ Everything else got quieter so those two moments carry the page:
 - **Contact is the address.** "Let's talk." became the email address set as
   the headline, with copy and mail-app actions under it.
 
+## Fourth pass: the measure, and the review fixes
+
+**Drag the measure.** Research for this pass (Awwwards and FWA winners,
+Cheng Lou's Pretext demos, Lynn Fisher's resize-as-content, Rauno's
+contained gestures) pointed the same way: the most shared engineering
+moment of 2026 is text re-setting itself live. The hero's MEASURE dimension
+now ends in a small drafting diamond. Drag it, or focus it and use the
+arrow keys, and the statement is re-set at the new measure, with the
+dimension reading `MEASURE n CH · n PX · n LINES` and a faint mark at the
+design measure; let go and it springs back.
+
+The hard part is honesty about layout shift. Reflowing the real paragraph
+during a drag moves the page, and a drag is not a discrete input, so
+browsers count it as CLS. So while the measure is live the DOM text keeps
+its place (transparent, still in the accessibility tree and selectable) and
+the paragraph is drawn on a canvas, broken into lines by the same rules as
+CSS: greedy at spaces, plus `text-wrap: balance` reproduced by bisection
+(`src/lib/measure.ts`), with the same font, size and tracking. At rest the
+canvas and the DOM break identically, so the hand-off is invisible. Measured
+CLS over long drags: 0.00000, and the footer title block says so live.
+Rejected: a scroll-driven dimension per section (decoration), a live INP
+readout (small), and a self-sweeping As built lens (hides the hand).
+
+**Fonts that never shift.** Newsreader has optical sizes, so its width
+against Times New Roman changes with size: about 2% wider at lede size,
+5.5% at body size, 9% at display size. A single metric-matched fallback
+made the hero statement wrap onto one more line when the web font arrived
+(CLS 0.006 at 390px on a slow network, on any machine with Times). The
+fallback is now three faces (body, lede, display), plus an italic matched
+to the name as set. Delayed-font CLS is 0.00000 from 320 to 1920.
+
+**Review fixes** (QA 8/10 and hiring panel 7/10, then a second panel at
+7.5/10):
+
+- The recruiter line is set in reading size and full ink: role, company,
+  "Since Jan 2025", city, focus and a one-line availability.
+- One section head system: Work keeps the large title; Experience, About,
+  Lab and Contact use the compact one, and all show their sheet number.
+- On wide screens the empty field left of the surname holds the glass
+  invitation and the viewport readout, like the notes on a drawing; the
+  hero is shorter, so "Selected work" is on the first screen.
+- The CAP label is generated content, so the h1's text is only the name.
+- Lab is a compact list that says plainly where each experiment stands;
+  Blueprint, which is the glass on this page, offers "Try it here".
+- The footer's LCP stops at the first scroll or input, as the browser's
+  own reporting does.
+- The Ruler keeps the active section's name running down the ruler below
+  1600px: the right margin is too narrow to set it beside the number
+  there, and a horizontal label would cover the page. (QA noted this as a
+  difference from the brief; it is deliberate.)
+
 ## Day and Night
 
 Day is the default: warm paper `#f5f2ec`, graphite ink, a single vermilion

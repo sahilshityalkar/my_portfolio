@@ -584,7 +584,11 @@ function draw(f: Frame) {
       const gap0 = a.y + a.h - sy;
       const gap1 = b.y - sy;
       if (gap1 < 0 || gap0 > H) continue;
-      dimension(ctx, Math.max(a.x, b.x) - sx + 24, gap0, gap1, p);
+      // centred over the overlap of the two boxes: at the left edge it
+      // landed on the next box's name tag
+      const l = Math.max(a.x, b.x);
+      const r = Math.min(a.x + a.w, b.x + b.w);
+      dimension(ctx, (r > l + 48 ? (l + r) / 2 : l + 24) - sx, gap0, gap1, p);
     }
   }
 
