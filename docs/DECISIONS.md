@@ -328,9 +328,9 @@ over the name and across the surname, the flood into the blueprint, the
 measure dragged narrower and wider and springing back, the As built lens on
 Plate I and its flood, Night with the glass, and the title block. It was
 recorded headlessly at 1440x900, so it is a reference, not a polished
-capture; record your own at 60 fps for posting. The script is a short
-Playwright file (mouse glides, wheel scrolls, clicks), easy to re-run after
-a change.
+capture; record your own at 60 fps for posting. Re-record it after a
+change with `node docs/record-demo.cjs` (Playwright: mouse glides, wheel
+scrolls, clicks) against a running production build.
 
 ## Verification log
 
