@@ -33,19 +33,19 @@ Attach the link; the share cards are designed for these previews.
 > with the same line-breaking rules as CSS, and hands back to the DOM without
 > moving a pixel. CLS stays at 0.000. [link]
 
-## "One fallback was not enough"
+## "One fallback was not enough for optical sizes"
 
 > One size-adjust cannot match a font whose width changes with its size.
 > How three fallback tiers took font-swap layout shift on my portfolio to
 > zero, and the debugging detour that cost me an hour. [link]
 
-## "Profiling a canvas loupe"
+## "Profiling the glass: the cost was pixels, not code"
 
 > My portfolio's loupe spent its frames repainting pixels that had not
 > changed. A profile, an offscreen canvas and a lens-sized window took it
 > from 21.8 ms to 17.6 ms a frame on a 4x slowed CPU. [link]
 
-## "A portfolio that prints as a résumé"
+## "A portfolio page that prints as a two-page résumé"
 
 > Recruiters forward PDFs, so my portfolio prints as a two-page résumé from
 > the same page: one print stylesheet, no second template. [link]

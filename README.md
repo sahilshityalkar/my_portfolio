@@ -69,6 +69,7 @@ a component.
 | `experience.ts` | Roles: company, title, dates, summary, notes |
 | `work.ts` | Case studies: the home-page cards and each `/work/[slug]` page |
 | `lab.ts` | The three featured lab experiments and the lab URL |
+| `writing.ts`, `posts/*.ts` | The notes in Writing: typed blocks (paragraphs, headings, lists, code, quotes, notes, figures), newest first |
 | `about.ts` | About paragraphs and principles |
 
 **Demo content.** Copy written to complete the design while real details are
@@ -94,6 +95,24 @@ show a real screenshot of the shipped product on its case page.
 hero and Contact. Until then the hero offers **PDF summary**, which prints
 the page as a two-page summary (the print rules are at the end of
 `src/app/globals.css`).
+
+## Writing
+
+Notes live in `src/content/posts/`, one file per post, listed in
+`src/content/writing.ts`. A post is typed content, not markdown: an array of
+blocks (`p`, `h`, `list`, `code`, `quote`, `note`, `figure`), with inline
+`` `code` ``, `*emphasis*` and `[links](url)` only. Each gets a page at
+`/writing/<slug>`, a share card, JSON-LD, a sitemap entry and an item in
+`/feed.xml`. The latest four show on the home page.
+
+House rules: first person and specific; numbers only when measured (and say
+how); no em or en dashes.
+
+## Your wider profile
+
+`docs/profile/` holds drafts for LinkedIn, a GitHub profile README, résumé
+bullets and launch posts, written from verified facts, with `[slots]` for
+what only you can supply.
 
 ## Make the glass see something new
 

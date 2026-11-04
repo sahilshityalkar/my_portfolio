@@ -8,6 +8,7 @@ import { demo, draft, type CaseStudy } from "./types";
 export const work: CaseStudy[] = [
   {
     slug: "replyai",
+    notes: ["a-green-build-is-not-a-working-product"],
     index: "I",
     plate: "replies",
     title: "ReplyAI",

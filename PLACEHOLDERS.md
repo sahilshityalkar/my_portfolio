@@ -43,6 +43,15 @@ are enough; they go into `src/content/` in your words.
 6. **Files:** your résumé PDF, and, if you are allowed to share them, one
    real screenshot of each Clyra product and an in-app ReplyAI screen.
 
+## The notes in Writing were written for you
+
+The five posts in `src/content/posts/` are written in your voice about real
+work: this site's engineering (from its code and measured history) and
+ReplyAI (from its public test report and code). Read each one before you
+share it, change anything that does not sound like you, and make sure you
+can explain every line: interviewers will ask about them. Delete any you
+would rather not stand behind (remove it from `src/content/writing.ts`).
+
 ## In priority order
 
 1. [ ] **Résumé PDF**: put it at `public/resume.pdf` and set

@@ -7,6 +7,7 @@ import { T, plain } from "@/components/Draftable";
 import { isDraft } from "@/content/types";
 import { profile } from "@/content/profile";
 import { JsonLd, personId } from "@/lib/jsonld";
+import { getPost } from "@/content/writing";
 import { CaseScreenshot, CaseVisual } from "@/components/CaseVisual";
 import { ProofLine } from "@/components/ProofLine";
 
@@ -160,6 +161,21 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
             ) : null}
           </Fragment>
         ))}
+        {/* the longer story, where there is one */}
+        {c.notes?.length ? (
+          <div className="col-span-12 border-t border-rule pt-5 md:col-span-8 md:col-start-4">
+            <p className="t-meta text-ink-3">Read the note</p>
+            {c.notes.map((slug) => {
+              const post = getPost(slug);
+              return post ? (
+                <Link key={slug} href={`/writing/${slug}`} className="group mt-2 block">
+                  <span className="font-serif text-[1.5rem] leading-snug transition-colors group-hover:text-mark">{post.title} →</span>
+                  <span className="mt-1 block max-w-[60ch] text-ink-2">{post.dek}</span>
+                </Link>
+              ) : null;
+            })}
+          </div>
+        ) : null}
         {external.length ? (
           <ul className="t-meta col-span-12 flex flex-wrap gap-x-6 gap-y-2 md:col-span-9 md:col-start-4">
             {external.map((l) => (

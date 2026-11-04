@@ -25,6 +25,10 @@ block):
   and the component; a cached lens scene (4x CPU: 17 ms a frame); nothing
   measured while closed; a reveal failsafe if scripts never run; unit
   tests (`npm test`) for the line breaker and the spring.
+- **Writing:** five notes at `/writing` (home section, RSS, share cards),
+  fact-checked against the code and history. Read them before sharing.
+- **`docs/profile/`:** LinkedIn, GitHub README, résumé bullets and launch
+  posts, ready to fill and publish.
 - **A new `docs/demo.webm`** of every signature moment
   (`node docs/record-demo.cjs` re-records it).
 

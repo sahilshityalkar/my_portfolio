@@ -218,6 +218,23 @@ three-person hiring panel took QA from 8 to 9.5 and the panel from 7 to
   live links sit under the kicker; unwritten sections are left out rather
   than shown as "in preparation".
 
+## Sixth pass: writing
+
+Hiring managers judge a senior engineer by how they explain their work, so
+the site gained a Writing section (sheet 05) with five notes, each about
+work a reader can check: ReplyAI's green-build bug (from its public test
+report, code and schema verifier), and four pieces of this site's own
+engineering (the measure, the font fallbacks, profiling the glass, the
+print résumé), with numbers only as measured in this repository's history.
+An independent editor fact-checked every post against the code and the
+history and corrected what did not trace.
+
+Posts are typed content (`src/content/posts/*.ts`), not markdown: no parser
+dependency, and every block renders in the site's own typography. Each post
+has its own share card, BlogPosting JSON-LD, a sitemap entry and an RSS
+item; the ReplyAI case links to its note. Print leaves Writing out, so the
+résumé stays two pages.
+
 ## Day and Night
 
 Day is the default: warm paper `#f5f2ec`, graphite ink, a single vermilion
