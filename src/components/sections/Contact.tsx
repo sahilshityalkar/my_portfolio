@@ -4,6 +4,7 @@ import { draft } from "@/content/types";
 import { CopyEmail } from "@/components/CopyEmail";
 import { TitleBlock } from "@/components/TitleBlock";
 import { SectionHead } from "@/components/SectionHead";
+import { PrintButton } from "@/components/PrintButton";
 
 export function Contact() {
   const rows = [
@@ -38,6 +39,11 @@ export function Contact() {
                 >
                   Open mail app ↗
                 </a>
+                {links.resume ? null : (
+                  <PrintButton className="t-meta inline-flex h-9 items-center rounded-[2px] px-4 text-ink-2 transition-colors hover:text-ink">
+                    Save a PDF summary ↓
+                  </PrintButton>
+                )}
               </div>
             </>
           ) : (
@@ -82,6 +88,10 @@ export function Contact() {
           © {new Date().getFullYear()} {profile.name} · <T v={profile.location} />
         </p>
         <TitleBlock />
+        {/* paper only: where this came from, and what the screen has that paper can't */}
+        <p className="print-note hidden">
+          Printed from sahilshityalkar.com. On screen the page measures itself: press L to look under the glass.
+        </p>
       </footer>
     </section>
   );

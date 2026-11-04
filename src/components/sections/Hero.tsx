@@ -4,6 +4,7 @@ import { draft } from "@/content/types";
 import { InspectHint } from "@/components/InspectHint";
 import { CopyEmail } from "@/components/CopyEmail";
 import { CapCallout, MeasureCallout, SheetCallout } from "@/components/HeroCallouts";
+import { PrintButton } from "@/components/PrintButton";
 
 export function Hero() {
   const [first, ...rest] = profile.name.split(" ");
@@ -137,6 +138,17 @@ export function Hero() {
                   <T v={draft(c.label)} />
                 </li>
               ),
+            )}
+            {/* no résumé file yet: the page prints as one, ready to forward */}
+            {links.resume ? null : (
+              <li>
+                <PrintButton className="link-draw uppercase text-ink">
+                  PDF summary
+                  <span aria-hidden="true" className="ml-1 text-ink-3">
+                    ↓
+                  </span>
+                </PrintButton>
+              </li>
             )}
           </ul>
         </div>
