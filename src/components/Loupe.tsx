@@ -637,8 +637,15 @@ function draw(f: Frame) {
     return;
   }
 
+  rim(f);
+}
+
+/** The lens's rim: a hairline bezel with degree ticks, crosshair and live readout. */
+function rim(f: Frame) {
+  const { ctx, W, H, cx, cy, r, p } = f;
+  const sx = window.scrollX;
+  const sy = window.scrollY;
   if (r > 4 && r < Math.hypot(W, H) * 0.9) {
-    // the rim: a hairline bezel with degree ticks, crosshair and live readout
     ctx.strokeStyle = p.ink;
     ctx.lineWidth = 1;
     ctx.beginPath();
@@ -674,6 +681,32 @@ function draw(f: Frame) {
     ctx.fillStyle = p.ink3;
     ctx.fillText(read, cx - rw / 2, cy + r + 20);
   }
+}
+
+/**
+ * The lens, from a cache: the scene only changes when the page scrolls,
+ * resizes, is remeasured or re-themed, never when the pointer moves, so it
+ * is rendered once into `scene` (viewport-sized) and each frame blits just
+ * the circle under the lens, then draws the rim.
+ */
+function drawLens(f: Frame, scene: HTMLCanvasElement) {
+  const { ctx, W, H, cx, cy, r } = f;
+  ctx.clearRect(0, 0, W, H);
+  if (r < 0.5) return;
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, Math.max(r, 0), 0, Math.PI * 2);
+  ctx.clip();
+  const x0 = Math.max(0, Math.floor(cx - r - 1));
+  const y0 = Math.max(0, Math.floor(cy - r - 1));
+  const x1 = Math.min(W, Math.ceil(cx + r + 1));
+  const y1 = Math.min(H, Math.ceil(cy + r + 1));
+  if (x1 > x0 && y1 > y0) {
+    const k = scene.width / W; // the scene's device pixels per CSS px
+    ctx.drawImage(scene, x0 * k, y0 * k, (x1 - x0) * k, (y1 - y0) * k, x0, y0, x1 - x0, y1 - y0);
+  }
+  ctx.restore();
+  rim(f);
 }
 
 /* ------------------------------------------------------------------ component */
@@ -721,14 +754,54 @@ export function Loupe() {
     let slowFrames = 0;
     let dirty = true;
 
+    /* The canvas is a window. Flooded (or scanning on touch) it covers the
+       viewport; as a lens it is only as big as the lens and its readout,
+       moved by transform, and the drawing is offset to match, so every
+       routine below still works in viewport coordinates. Rasterising a
+       full-viewport canvas every frame for a 380px lens was most of the
+       frame on a slow CPU. */
+    let small = false;
+    let box = 0; // the small window's side, CSS px
+    // the scene behind the lens, rendered only when something it shows changes
+    const scene = document.createElement("canvas");
+    const sctx = scene.getContext("2d");
+    let sceneKey = "";
+    let sceneModel: Model | null = null;
+    let scenePalette: Palette | null = null;
+    const windowFor = () => {
+      const r = lensRadius();
+      // the aperture spring overshoots a little; the readout hangs below
+      return Math.ceil(r * 2.3 + 64);
+    };
+    const size = (w: number, h: number) => {
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+      canvas.style.width = `${w}px`;
+      canvas.style.height = `${h}px`;
+    };
+    const layout = (toSmall: boolean) => {
+      small = toSmall;
+      if (small) {
+        box = windowFor();
+        size(box, box);
+      } else {
+        size(W, H);
+        canvas.style.transform = "";
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+    };
+    // place the small window around the lens; returns the drawing offset
+    const place = (cx: number, cy: number) => {
+      const bx = Math.round(cx - box / 2);
+      const by = Math.round(cy - box / 2 + 16);
+      canvas.style.transform = `translate3d(${bx}px, ${by}px, 0)`;
+      ctx.setTransform(dpr, 0, 0, dpr, -bx * dpr, -by * dpr);
+    };
+
     const resize = () => {
       W = document.documentElement.clientWidth;
       H = innerHeight;
-      canvas.width = Math.round(W * dpr);
-      canvas.height = Math.round(H * dpr);
-      canvas.style.width = `${W}px`;
-      canvas.style.height = `${H}px`;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      layout(small);
       pattern = hatch(ctx, palette.mark, dpr);
       stale = true;
       kick();
@@ -764,7 +837,13 @@ export function Loupe() {
         else moving = s.step(dt) || moving;
       }
 
-      draw({
+      // lens or full window: a lens that has opened past its own size is
+      // flooding, so it needs the whole viewport
+      const wantSmall = !coarse.matches && current !== "full" && radius.value <= lensRadius() * 1.12;
+      if (wantSmall !== small) layout(wantSmall);
+      if (small) place(px.value, py.value);
+
+      const frame: Frame = {
         ctx,
         W,
         H,
@@ -774,10 +853,30 @@ export function Loupe() {
         reveal: scan.value,
         scan: coarse.matches,
         p: palette,
-        hatch: frameAvg < 20 ? pattern : null,
+        hatch: pattern,
         model,
         fps: Math.round(1000 / frameAvg),
-      });
+      };
+      if (small && sctx) {
+        // re-render the scene only when what it shows has changed
+        const focused = document.activeElement;
+        const key = `${scrollX},${scrollY},${W},${H},${dpr},${focused instanceof HTMLElement && focused.matches(":focus-visible") ? focused.getBoundingClientRect().top : ""}`;
+        if (key !== sceneKey || model !== sceneModel || palette !== scenePalette) {
+          if (scene.width !== Math.round(W * dpr) || scene.height !== Math.round(H * dpr)) {
+            scene.width = Math.round(W * dpr);
+            scene.height = Math.round(H * dpr);
+          }
+          sctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          // a lens wider than the viewport: the whole scene, no culling, no rim
+          draw({ ...frame, ctx: sctx, cx: W / 2, cy: H / 2, r: Math.hypot(W, H) * 2, scan: false, reveal: 1 });
+          sceneKey = key;
+          sceneModel = model;
+          scenePalette = palette;
+        }
+        drawLens(frame, scene);
+      } else {
+        draw({ ...frame, hatch: frameAvg < 20 ? pattern : null });
+      }
       dirty = false;
 
       if (current === "off" && radius.value < 0.5 && scan.value <= 0.001) {
