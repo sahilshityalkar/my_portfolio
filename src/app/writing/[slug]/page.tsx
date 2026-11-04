@@ -96,14 +96,14 @@ export default async function PostPage({ params }: PageProps<"/writing/[slug]">)
           <Prose body={post.body} />
 
           {post.links?.length ? (
-            <p className="t-meta mt-12 flex flex-wrap gap-x-6 gap-y-2 border-t border-rule pt-5">
+            <p className="t-meta mt-12 flex flex-wrap gap-x-6 gap-y-1 border-t border-rule pt-5">
               {post.links.map((l) =>
                 l.href.startsWith("/") ? (
-                  <Link key={l.href} href={l.href} className="link-draw text-ink">
+                  <Link key={l.href} href={l.href} className="link-draw inline-flex min-h-6 items-center text-ink">
                     {l.label} →
                   </Link>
                 ) : (
-                  <a key={l.href} href={l.href} target="_blank" rel="noreferrer" className="link-draw text-ink">
+                  <a key={l.href} href={l.href} target="_blank" rel="noreferrer" className="link-draw inline-flex min-h-6 items-center text-ink">
                     {l.label} ↗
                   </a>
                 ),
@@ -118,22 +118,22 @@ export default async function PostPage({ params }: PageProps<"/writing/[slug]">)
             <p className="mt-2 font-serif text-[1.35rem] leading-snug">
               {profile.name}, {profile.role} at {profile.company}
             </p>
-            <p className="t-meta mt-3 flex flex-wrap gap-x-5 gap-y-2">
-              <Link href="/" className="link-draw text-ink">
+            <p className="t-meta mt-3 flex flex-wrap gap-x-5 gap-y-1">
+              <Link href="/" className="link-draw inline-flex min-h-6 items-center text-ink">
                 Portfolio →
               </Link>
               {links.email ? (
-                <a href={`mailto:${links.email}`} className="link-draw text-ink normal-case tracking-normal">
+                <a href={`mailto:${links.email}`} className="link-draw inline-flex min-h-6 items-center text-ink normal-case tracking-normal">
                   {links.email}
                 </a>
               ) : null}
               {links.linkedin ? (
-                <a href={links.linkedin} target="_blank" rel="noreferrer" className="link-draw text-ink">
+                <a href={links.linkedin} target="_blank" rel="noreferrer" className="link-draw inline-flex min-h-6 items-center text-ink">
                   LinkedIn ↗
                 </a>
               ) : null}
               {links.github ? (
-                <a href={links.github} target="_blank" rel="noreferrer" className="link-draw text-ink">
+                <a href={links.github} target="_blank" rel="noreferrer" className="link-draw inline-flex min-h-6 items-center text-ink">
                   GitHub ↗
                 </a>
               ) : null}
