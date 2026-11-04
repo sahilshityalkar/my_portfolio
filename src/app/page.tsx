@@ -5,10 +5,13 @@ import { About } from "@/components/sections/About";
 import { Lab } from "@/components/sections/Lab";
 import { Contact } from "@/components/sections/Contact";
 import { Ruler } from "@/components/Ruler";
+import { JsonLd, person } from "@/lib/jsonld";
+import { profile } from "@/content/profile";
 
 export default function Home() {
   return (
     <>
+      <JsonLd data={{ "@type": "ProfilePage", url: profile.siteUrl, mainEntity: person() }} />
       <Hero />
       <Work />
       <Experience />

@@ -103,7 +103,7 @@ export function Hero() {
             data-spec="Contact"
             data-measure-yield
             aria-label="Contact and links"
-            className="t-meta col-span-12 flex flex-wrap gap-x-5 gap-y-2 lg:col-span-4 lg:flex-col lg:items-end lg:gap-y-1.5 fade-in"
+            className="t-meta col-span-12 flex flex-wrap gap-x-5 gap-y-2 lg:col-span-4 lg:flex-col lg:items-end lg:gap-y-2.5 fade-in"
             style={{ ["--i" as string]: 3 }}
           >
             {links.email ? (

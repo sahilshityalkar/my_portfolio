@@ -5,6 +5,8 @@ import { notFound } from "next/navigation";
 import { getCase, work } from "@/content/work";
 import { T, plain } from "@/components/Draftable";
 import { isDraft } from "@/content/types";
+import { profile } from "@/content/profile";
+import { JsonLd, personId } from "@/lib/jsonld";
 import { CaseScreenshot, CaseVisual } from "@/components/CaseVisual";
 
 export const dynamicParams = false;
@@ -18,10 +20,22 @@ export async function generateMetadata({ params }: PageProps<"/work/[slug]">): P
   const c = getCase(slug);
   if (!c) return {};
   const title = plain(c.title, `Case study ${c.index}`);
+  const description = plain(c.summary, `Case study ${c.index}`);
+  // metadata merges shallowly: without these the case pages would share
+  // the home page's social card
   return {
     title,
-    description: plain(c.summary, `Case study ${c.index}`),
+    description,
     alternates: { canonical: `/work/${c.slug}` },
+    openGraph: {
+      type: "article",
+      url: `/work/${c.slug}`,
+      siteName: profile.name,
+      title: `${title} · ${profile.name}`,
+      description,
+      locale: "en_IN",
+    },
+    twitter: { card: "summary_large_image", title: `${title} · ${profile.name}`, description, creator: "@SK_sahil05" },
   };
 }
 
@@ -38,6 +52,29 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
 
   return (
     <article data-spec="CaseStudy" className="pt-[calc(var(--header-h)+3rem)]">
+      <JsonLd
+        data={{
+          "@graph": [
+            {
+              "@type": "CreativeWork",
+              name: plain(c.title, `Case study ${c.index}`),
+              url: `${profile.siteUrl}/work/${c.slug}`,
+              author: { "@id": personId },
+              // a shipped product (one with a live site) is what the case is about
+              ...(c.image && external[0]
+                ? { about: { "@type": "SoftwareApplication", name: plain(c.title, ""), url: external[0].href } }
+                : {}),
+            },
+            {
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                { "@type": "ListItem", position: 1, name: "Selected work", item: `${profile.siteUrl}/#work` },
+                { "@type": "ListItem", position: 2, name: plain(c.title, `Case study ${c.index}`) },
+              ],
+            },
+          ],
+        }}
+      />
       <header className="wrap grid-12 gap-y-8" data-spec-grid>
         <nav aria-label="Breadcrumb" className="t-meta col-span-12 flex gap-3 text-ink-3 fade-in">
           <Link href="/#work" className="link-draw hover:text-ink">

@@ -1,7 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata: Metadata = { title: "Not in the collection", robots: { index: false } };
+// Next marks a 404 noindex itself; this page only needs its own words and no
+// canonical (it would otherwise inherit the home page's)
+export const metadata: Metadata = {
+  title: "Not in the collection",
+  description: "This page is not part of the portfolio of Sahil Shityalkar.",
+  alternates: { canonical: null },
+  openGraph: null,
+  twitter: null,
+};
 
 export default function NotFound() {
   return (

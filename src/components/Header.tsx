@@ -84,7 +84,8 @@ export function Header() {
           <button
             type="button"
             aria-pressed={inspecting}
-            aria-label={inspecting ? "Close the glass" : "Inspect this page"}
+            aria-label={inspecting ? "Close the glass" : "Inspect the page"}
+            aria-keyshortcuts="L"
             onClick={() => inspect.set(inspecting ? "off" : matchMedia("(pointer: coarse)").matches ? "full" : "lens")}
             className="group flex h-9 items-center gap-2 rounded-full px-2.5 text-ink-2 [html:not(.js)_&]:hidden sm:px-3 transition-colors hover:text-ink aria-pressed:text-mark"
           >
@@ -107,15 +108,20 @@ export function Header() {
                 Close
               </span>
             </span>
-            <kbd className="hidden rounded border border-(--rule-strong) px-1 font-[inherit] text-[0.625rem] text-ink-3 lg:inline">
-              L
-            </kbd>
+            {/* the key cap's letter is generated content, so the button's
+                visible text stays "Inspect", which its name begins with
+                (aria-keyshortcuts announces the L) */}
+            <kbd
+              aria-hidden="true"
+              data-key="L"
+              className="hidden rounded border border-(--rule-strong) px-1 font-[inherit] text-[0.625rem] text-ink-3 after:content-[attr(data-key)] lg:inline"
+            />
           </button>
 
           <button
             type="button"
             onClick={() => setTheme(t === "day" ? "night" : "day")}
-            aria-label={t === "day" ? "Switch to night" : "Switch to day"}
+            aria-label={t === "day" ? "Day theme, switch to night" : "Night theme, switch to day"}
             className="flex h-9 items-center gap-2 rounded-full px-3 text-ink-2 transition-colors hover:text-ink [html:not(.js)_&]:hidden"
           >
             <span aria-hidden="true" className="relative block size-3 overflow-hidden rounded-full border border-current">

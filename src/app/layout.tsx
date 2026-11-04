@@ -58,10 +58,9 @@ export const metadata: Metadata = {
     siteName: profile.name,
     title,
     description,
-    locale: "en",
+    locale: "en_IN",
   },
-  twitter: { card: "summary_large_image", title, description },
-  robots: { index: true, follow: true },
+  twitter: { card: "summary_large_image", title, description, creator: "@SK_sahil05" },
 };
 
 export const viewport: Viewport = {
