@@ -1,0 +1,37 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { posts } from "@/content/writing";
+import { profile } from "@/content/profile";
+import { PostList } from "@/components/PostList";
+
+export const metadata: Metadata = {
+  title: "Writing",
+  description: `Notes on frontend engineering by ${profile.name}: performance, layout, typography and shipping products that work.`,
+  alternates: { canonical: "/writing", types: { "application/rss+xml": "/feed.xml" } },
+};
+
+export default function WritingIndex() {
+  return (
+    <div className="wrap pb-20 pt-[calc(var(--header-h)+3rem)]">
+      <nav aria-label="Breadcrumb" className="t-meta flex gap-3 text-ink-3">
+        <Link href="/#writing" className="link-draw hover:text-ink">
+          ← Index
+        </Link>
+      </nav>
+      <h1 className="t-display mt-6 hyphens-manual" data-spec-type="Newsreader">
+        Writing
+      </h1>
+      <p className="t-lede mt-6 max-w-[40ch] text-ink-2">
+        Notes on the engineering behind work I can show: what broke, what I measured, and what I changed.
+      </p>
+      <p className="t-meta mt-4 text-ink-3">
+        <a href="/feed.xml" className="link-draw hover:text-ink">
+          RSS feed
+        </a>
+      </p>
+      <div className="mt-12">
+        <PostList posts={posts} headingLevel="h2" />
+      </div>
+    </div>
+  );
+}

@@ -3,6 +3,7 @@ import { Work } from "@/components/sections/Work";
 import { Experience } from "@/components/sections/Experience";
 import { About } from "@/components/sections/About";
 import { Lab } from "@/components/sections/Lab";
+import { Writing } from "@/components/sections/Writing";
 import { Contact } from "@/components/sections/Contact";
 import { Ruler } from "@/components/Ruler";
 import { JsonLd, person } from "@/lib/jsonld";
@@ -16,6 +17,7 @@ export default function Home() {
       <Work />
       <Experience />
       <About />
+      <Writing />
       <Lab />
       <Contact />
       <Ruler />

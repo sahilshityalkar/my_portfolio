@@ -261,6 +261,117 @@ body::before {
   }
 }
 
+/* ------------------------------------------------------------------ prose
+   Posts (components/Prose.tsx): a reading measure of about 66 characters,
+   the serif at a reading size, code in the drafting hand on paper-2 framed
+   like the site's specimens. A long code line scrolls inside its block,
+   never the page. */
+@layer components {
+  .prose {
+    max-width: 40rem;
+    font-size: 1.125rem;
+    line-height: 1.68;
+    color: var(--ink);
+  }
+  .prose > * + * {
+    margin-top: 1.25em;
+  }
+  .prose h2 {
+    margin-top: 2.4em;
+    font-size: 1.6rem;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    scroll-margin-top: calc(var(--header-h) + 1.5rem);
+  }
+  .prose h2 + * {
+    margin-top: 0.7em;
+  }
+  .prose ul,
+  .prose ol {
+    padding-left: 1.4em;
+  }
+  .prose ul {
+    list-style: none;
+  }
+  .prose ul > li {
+    position: relative;
+  }
+  .prose ul > li::before {
+    content: "";
+    position: absolute;
+    left: -1.1em;
+    top: 0.78em;
+    width: 0.5em;
+    height: 1px;
+    background: var(--mark);
+  }
+  .prose ol {
+    list-style: decimal;
+  }
+  .prose ol > li::marker {
+    font-family: var(--mono);
+    font-size: 0.8em;
+    color: var(--mark);
+  }
+  .prose li + li {
+    margin-top: 0.45em;
+  }
+  .prose :not(pre) > code {
+    font-family: var(--mono);
+    font-size: 0.82em;
+    padding: 0.08em 0.3em;
+    border-radius: 2px;
+    background: var(--paper-2);
+    overflow-wrap: anywhere;
+  }
+  .prose-link:hover {
+    color: var(--mark);
+  }
+  .prose-code {
+    border: 1px solid var(--rule-strong);
+    background: var(--paper-2);
+    max-width: min(48rem, 100%);
+  }
+  .prose-code figcaption {
+    padding: 0.45rem 0.9rem;
+    border-bottom: 1px solid var(--rule-strong);
+    color: var(--ink-2);
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .prose-code pre {
+    overflow-x: auto;
+    padding: 0.9rem;
+    font-family: var(--mono);
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    color: var(--ink);
+    tab-size: 2;
+  }
+  .prose blockquote {
+    border-left: 1px solid var(--mark);
+    padding-left: 1.1em;
+    font-style: italic;
+    color: var(--ink-2);
+  }
+  .prose-note {
+    border-top: 1px solid var(--rule-strong);
+    border-bottom: 1px solid var(--rule-strong);
+    padding: 0.8em 0;
+    font-size: 0.95em;
+    color: var(--ink-2);
+  }
+  .prose-figure img {
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--rule-strong);
+  }
+  .prose-figure figcaption {
+    margin-top: 0.5rem;
+    color: var(--ink-3);
+  }
+}
+
 /* ------------------------------------------------------------------ layout */
 
 .wrap {
@@ -293,6 +404,10 @@ body::before {
 .link-draw:hover,
 .link-draw:focus-visible,
 .link-draw[aria-current="location"] {
+  background-size: 100% 1px;
+}
+/* in running text a link is always underlined: the reader must see it */
+.prose .link-draw {
   background-size: 100% 1px;
 }
 
@@ -847,6 +962,7 @@ html:not(.js) .asbuilt-toggle {
   [data-plate-col],
   #intro div[data-measure-yield],
   #lab,
+  #writing,
   #contact > :not(footer),
   #contact footer > :not(.print-note),
   .measure-handle,

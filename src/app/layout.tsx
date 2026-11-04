@@ -53,7 +53,7 @@ export const metadata: Metadata = {
   description,
   applicationName: profile.name,
   authors: [{ name: profile.name }],
-  alternates: { canonical: "/" },
+  alternates: { canonical: "/", types: { "application/rss+xml": "/feed.xml" } },
   openGraph: {
     type: "website",
     url: "/",
