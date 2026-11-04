@@ -190,6 +190,34 @@ three-person hiring panel took QA from 8 to 9.5 and the panel from 7 to
   there, and a horizontal label would cover the page. (QA noted this as a
   difference from the brief; it is deliberate.)
 
+## Fifth pass: paper, metadata, and the glass on slow machines
+
+- **The page prints.** Printing used to give six mostly blank pages: the
+  reveal states hid every section not yet scrolled to, and the fixed header
+  repeated. Recruiters forward PDFs, and there is no résumé file yet, so
+  print now sets the home page as a two-page A4 summary: name, role and
+  contact with the addresses written out, the statement, the three cases as
+  rows (what it is; then role, stack and links), experience, education,
+  what I bring and the toolkit. Screen-only things (the glass, plates,
+  measure, lab, colophon) step out, and it is always black on white. The
+  hero's links end with **PDF summary** until `links.resume` is set.
+- **The glass got cheap on slow CPUs.** A profile at 4x CPU showed the lens
+  spent its frames rasterising the whole scene on every pointer move,
+  though the scene only changes on scroll, resize, remeasure, focus or
+  theme. It now renders once into an offscreen canvas and each frame blits
+  the circle under the lens; the visible canvas is a lens-sized window
+  moved by transform. 4x CPU: 21.8 ms avg and 50 ms p95 before, 17.6 ms and
+  16.8 ms after.
+- **Metadata, measured.** An independent Lighthouse and axe-core audit
+  found case pages sharing the home page's social card (Next merges
+  metadata shallowly), no structured data, two buttons whose names did not
+  begin with their visible text, hero links 3px short of the 24px target
+  spacing, and a 404 with the home page's canonical. All fixed; Lighthouse
+  is 100 in every category, mobile and desktop, on every route.
+- **Case pages lead with proof.** ReplyAI's verified proof line and its
+  live links sit under the kicker; unwritten sections are left out rather
+  than shown as "in preparation".
+
 ## Day and Night
 
 Day is the default: warm paper `#f5f2ec`, graphite ink, a single vermilion
@@ -271,7 +299,7 @@ How:
   does the same.
 - No WebGL on this site at all: experiments live on the lab site.
 - Fonts are instanced and subset with fontTools. Newsreader went from 279 KB
-  to 142 KB: the roman keeps optical sizes 12–72 and weights 300–500, and the
+  to 142 KB: the roman keeps optical sizes 12 to 72 and weights 300 to 500, and the
   italic, which only appears at display sizes, is pinned to optical size 60.
 
 ### Measured
@@ -287,7 +315,7 @@ disabled, measured in Chromium through Playwright and CDP:
 The transfer breaks down as ~170 KB fonts, ~160 KB JavaScript (React and the
 Next.js runtime), 20 KB HTML and 8 KB CSS. The glass under a 4×-throttled CPU
 averaged 14 ms per frame (p95 28 ms) while moving and flooding. Unthrottled
-it holds the display rate: the HUD reads 138–144 fps on a 144 Hz panel.
+it holds the display rate: the HUD reads 138 to 144 fps on a 144 Hz panel.
 
 After cutting the hero's entrance delays from 300 ms to 120 ms, the final
 production build measures **2.1 s** mobile LCP on the same throttled profile.

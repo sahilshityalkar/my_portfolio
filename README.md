@@ -1,10 +1,21 @@
-# Portfolio — Under the Glass
+# Portfolio: Under the Glass
 
 Personal portfolio of Sahil Shityalkar, Frontend Lead Engineer at Clyra.
 
 A calm, editorial site with one secret: press **L** (or tap **Inspect**) and a
 glass slides over the page, showing its live engineering drawing, measured
-from the DOM. The concept and every trade-off are in
+from the DOM. Three smaller moments carry the same idea without a keypress:
+
+- **As built:** on the ReplyAI plate, a lens turns the drawing into the
+  shipped product.
+- **The measure:** drag the handle at the end of the hero's MEASURE
+  dimension and the statement re-sets live at the new line length (drawn on
+  a canvas with the same line-breaking rules, so the page never shifts).
+- **The title block:** the footer prints this visit's measured LCP, CLS and
+  transfer size.
+
+Print the home page (or use **PDF summary**) and it sets itself as a
+two-page A4 summary. The concept and every trade-off are in
 [docs/DECISIONS.md](docs/DECISIONS.md), and a recording of the signature flow
 is in [docs/demo.webm](docs/demo.webm).
 
@@ -70,14 +81,19 @@ grep -rn "demo(" src/content
 ```
 
 Values that are simply unknown can use `draft("hint")`. These render as
-quiet, dotted-underlined italic notes, so the site never looks broken.
+quiet, dotted-underlined italic notes, so the site never looks broken. On
+case pages a section whose text is a draft is left out entirely, and the
+numbering follows.
 
 **Images.** Each case study is drawn as a technical plate (`plate:
 "replies" | "mastery" | "heatmap"`). Add `image: { src, alt, url }` to also
 show a real screenshot of the shipped product on its case page.
 
 **Résumé.** Drop the PDF into `public/` (e.g. `public/resume.pdf`) and set
-`links.resume = "/resume.pdf"`. A Résumé button appears in the header.
+`links.resume = "/resume.pdf"`. A Résumé button appears in the header, the
+hero and Contact. Until then the hero offers **PDF summary**, which prints
+the page as a two-page summary (the print rules are at the end of
+`src/app/globals.css`).
 
 ## Make the glass see something new
 
