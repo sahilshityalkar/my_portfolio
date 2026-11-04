@@ -1,5 +1,5 @@
 import { profile, links } from "@/content/profile";
-import { T } from "@/components/Draftable";
+import { T, plain } from "@/components/Draftable";
 import { draft } from "@/content/types";
 import { InspectHint } from "@/components/InspectHint";
 import { CopyEmail } from "@/components/CopyEmail";
@@ -86,7 +86,21 @@ export function Hero() {
             <p className="t-meta mt-2 text-ink-2">
               Since {profile.since} · <T v={profile.location} />
             </p>
-            <T as="p" v={profile.focus} className="t-meta mt-1 text-balance text-ink-3" />
+            {/* the stack: a line breaks between items, and a separator stays
+                with the item before it */}
+            <p className="t-meta mt-1 text-ink-3">
+              {plain(profile.focus)
+                .split(" · ")
+                .map((item, k, all) => (
+                  <span key={item}>
+                    {k ? " " : null}
+                    <span className="whitespace-nowrap">
+                      {item}
+                      {k < all.length - 1 ? " ·" : null}
+                    </span>
+                  </span>
+                ))}
+            </p>
             <T as="p" v={profile.availabilityShort} className="t-meta mt-3 text-balance text-mark" />
           </div>
 
@@ -139,7 +153,8 @@ export function Hero() {
             )}
             {/* no résumé file yet: the page prints as one, ready to forward */}
             {links.resume ? null : (
-              <li>
+              // on wide screens the header carries it
+              <li className="lg:hidden">
                 <PrintButton className="link-draw uppercase text-ink">
                   PDF summary
                   <span aria-hidden="true" className="ml-1 text-ink-3">

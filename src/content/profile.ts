@@ -18,7 +18,11 @@ export const profile = {
     "I build interfaces end to end: the architecture underneath, the motion on top, and the small decisions that make software feel trustworthy.",
   location: "Mumbai, India" as Text,
   /** The fourth line under the role in the hero: what you work on, in nouns. */
-  focus: demo("React, TypeScript, design systems, data-dense product UI") as Text,
+  /**
+   * The stack, in the words a recruiter searches for: every item is in the
+   * Toolkit (about.ts), which comes from the résumé and the ReplyAI repo.
+   */
+  focus: "TypeScript · React · Next.js · Node.js · PostgreSQL" as Text,
   availability: demo(
     "Open to conversations about senior frontend and frontend lead roles. Replies within two working days.",
   ) as Text,

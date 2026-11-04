@@ -38,8 +38,10 @@ grep -rn "draft(" src/content
      and cohort heatmaps, shared component library and review practice).
      Plausible for the role, not confirmed. Keep only what's true and add
      real numbers where you can.
-3. [ ] **Focus line** (`profile.focus`): "React, TypeScript, design systems,
-   data-dense product UI", the fourth line under your role in the hero.
+3. [x] **Stack line** (`profile.focus`): now "TypeScript · React · Next.js ·
+   Node.js · PostgreSQL", the words recruiters search for, all taken from
+   the Toolkit (your résumé and the ReplyAI repo). Reorder or swap to lead
+   with what you want to be hired for.
 4. [ ] **Availability** (`profile.availability`, in Contact): "Open to
    conversations about senior frontend and frontend lead roles. Replies
    within two working days." Only keep the reply time if you'll honour it.

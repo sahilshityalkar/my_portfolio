@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { profile, links } from "@/content/profile";
 import { inspect, openGlass, section, theme, useStore } from "@/lib/store";
 import { readTheme, setTheme } from "@/lib/theme";
+import { PrintButton } from "@/components/PrintButton";
 import { sections } from "@/content/sections";
 
 export const nav = sections.filter((s) => s.id !== "intro").map((s) => ({ href: `/#${s.id}`, label: s.label, n: s.n }));
@@ -135,6 +136,8 @@ export function Header() {
             </span>
           </button>
 
+          {/* where recruiters look for a résumé: the real file once it exists,
+              until then the page itself, printed as a two-page summary */}
           {links.resume ? (
             <a
               href={links.resume}
@@ -142,7 +145,11 @@ export function Header() {
             >
               Résumé
             </a>
-          ) : null}
+          ) : (
+            <PrintButton className="hidden h-9 items-center rounded-full border border-(--rule-strong) px-4 text-ink transition-colors hover:bg-ink hover:text-paper lg:flex">
+              PDF summary
+            </PrintButton>
+          )}
 
           <button
             type="button"
