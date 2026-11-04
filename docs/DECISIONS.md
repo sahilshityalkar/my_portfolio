@@ -322,10 +322,15 @@ production build measures **2.1 s** mobile LCP on the same throttled profile.
 Every route was swept on production with no console errors or warnings.
 Re-run the audit with Lighthouse (see the README) on your deployed URL.
 
-`docs/demo.webm` is a 30-second recording of the signature flow on the
-production build: hero → glass → flood → scroll the live blueprint → Night →
-close. It was recorded headlessly, so it's a reference, not a polished capture;
-record your own at 60 fps for posting.
+`docs/demo.webm` is a 46-second recording of every signature moment on the
+production build (November 2026): the name drafting and inking, the glass
+over the name and across the surname, the flood into the blueprint, the
+measure dragged narrower and wider and springing back, the As built lens on
+Plate I and its flood, Night with the glass, and the title block. It was
+recorded headlessly at 1440x900, so it is a reference, not a polished
+capture; record your own at 60 fps for posting. The script is a short
+Playwright file (mouse glides, wheel scrolls, clicks), easy to re-run after
+a change.
 
 ## Verification log
 
