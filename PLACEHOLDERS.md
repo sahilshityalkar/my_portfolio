@@ -20,6 +20,29 @@ Unwritten sections use `draft("…")` instead. They render in a quiet, dotted
 grep -rn "draft(" src/content
 ```
 
+## Questions for you (answer these and the page can say more, truthfully)
+
+Every reviewer, recruiter and hiring panel landed on the same gap: the page
+proves craft, but the lead role rests on demo copy. Short answers to these
+are enough; they go into `src/content/` in your words.
+
+1. **Team:** how many engineers do you lead at Clyra, and who do you report
+   to? Have you hired, interviewed or mentored anyone?
+2. **Clyra notes:** which of the three Experience notes are true as written
+   (architecture of both products; progress dashboards and cohort
+   heatmaps; component library, tokens and code review)? One real number
+   for each you keep (pages or features shipped, a performance change, a
+   release cadence).
+3. **Before Clyra (2021 to 2024):** internships, freelance work or first
+   jobs, with dates. Without them, "Lead" straight after a degree invites
+   doubt.
+4. **Logistics recruiters ask first:** remote, hybrid or Mumbai on site?
+   Open to relocating? Notice period?
+5. **Tools:** do you use Jest, Playwright, Testing Library or Storybook? Do
+   you own a design system? (Only true items go in the Toolkit.)
+6. **Files:** your résumé PDF, and, if you are allowed to share them, one
+   real screenshot of each Clyra product and an in-app ReplyAI screen.
+
 ## In priority order
 
 1. [ ] **Résumé PDF**: put it at `public/resume.pdf` and set
