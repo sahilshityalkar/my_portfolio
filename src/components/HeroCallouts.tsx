@@ -139,8 +139,13 @@ export function MeasureCallout() {
       // the measure is the paragraph's own width as set (its line length
       // limit), the same quantity the handle drags
       const box = p.getBoundingClientRect();
-      ctx.font = fontOf(getComputedStyle(p));
+      const cs = getComputedStyle(p);
+      ctx.font = fontOf(cs);
+      // the same tracking the live canvas uses, so "n ch" agrees in both
+      const tracked = ctx as CanvasRenderingContext2D & { letterSpacing?: string };
+      if ("letterSpacing" in tracked) tracked.letterSpacing = cs.letterSpacing;
       const zero = ctx.measureText("0").width || 1;
+      if ("letterSpacing" in tracked) tracked.letterSpacing = "0px";
       el.style.setProperty("--m-left", "0px");
       el.style.setProperty("--m-w", `${box.width.toFixed(2)}px`);
       chars.current.textContent = `${Math.round(box.width / zero)}`;
@@ -158,7 +163,8 @@ export function MeasureCallout() {
     if (!el || !p || !knob || !hero) return;
 
     const reduced = matchMedia("(prefers-reduced-motion: reduce)");
-    const PAD = 160; // canvas room left of the paragraph, for a centred label on a short measure
+    const PAD = 160; // canvas room beside the paragraph, for a centred label on a short measure
+    let padL = PAD;
     const W = new Spring(0, springs.aperture);
     let canvas: HTMLCanvasElement | null = null;
     let c: CanvasRenderingContext2D | null = null;
@@ -213,6 +219,7 @@ export function MeasureCallout() {
         canvas.className = "measure-live";
         canvas.setAttribute("aria-hidden", "true");
         canvas.setAttribute("data-loupe-skip", "");
+        canvas.style.display = "none";
         p.appendChild(canvas);
       }
       // room for the widest allowed measure and a few extra lines
@@ -228,16 +235,19 @@ export function MeasureCallout() {
       }
       maxW = Math.max(w0, limit);
       dpr = Math.min(devicePixelRatio || 1, 2);
-      const cw = maxW + PAD * 2;
+      // room for a centred label either side, but never past the viewport's
+      // edges: a canvas wider than the page scrolls it sideways on a phone
+      padL = Math.min(PAD, box.left);
+      const cw = Math.min(maxW + padL + PAD, document.documentElement.clientWidth - box.left + padL);
       const ch = el.offsetTop + lh * 3 + 24;
       canvas.width = Math.round(cw * dpr);
       canvas.height = Math.round(ch * dpr);
       canvas.style.width = `${cw}px`;
       canvas.style.height = `${ch}px`;
-      canvas.style.left = `${-PAD}px`;
+      canvas.style.left = `${-padL}px`;
       c = canvas.getContext("2d");
       if (!c) return;
-      c.setTransform(dpr, 0, 0, dpr, PAD * dpr, 0);
+      c.setTransform(dpr, 0, 0, dpr, padL * dpr, 0);
       font = fontOf(cs);
       tracking = cs.letterSpacing;
       c.font = font;
@@ -292,7 +302,7 @@ export function MeasureCallout() {
       c.font = font;
       if ("letterSpacing" in c) (c as CanvasRenderingContext2D & { letterSpacing: string }).letterSpacing = tracking;
       const lines = balance(words, width, measure);
-      c.clearRect(-PAD - 1, -1, maxW + PAD * 2 + 2, canvas.height + 2);
+      c.clearRect(-padL - 1, -1, maxW + padL + PAD + 2, canvas.height + 2);
       // the paragraph, set at the live measure
       c.fillStyle = colors.ink;
       c.textBaseline = "alphabetic";
@@ -363,6 +373,7 @@ export function MeasureCallout() {
       knob.setAttribute("aria-valuemin", `${Math.round(minW / zero)}`);
       knob.setAttribute("aria-valuemax", `${Math.round(maxW / zero)}`);
       hero.setAttribute("data-measuring", "");
+      if (canvas) canvas.style.display = "";
       el.classList.add("is-live");
       p.classList.add("is-measured");
       draw();
@@ -379,7 +390,9 @@ export function MeasureCallout() {
       knob.style.transform = "";
       knob.setAttribute("aria-valuenow", `${Math.round(w0 / zero)}`);
       knob.removeAttribute("aria-valuetext");
-      c?.clearRect(-PAD - 1, -1, maxW + PAD * 2 + 2, (canvas?.height ?? 0) + 2);
+      c?.clearRect(-padL - 1, -1, maxW + padL + PAD + 2, (canvas?.height ?? 0) + 2);
+      // out of the layout until the measure is taken up again
+      if (canvas) canvas.style.display = "none";
     };
 
     const tick = (t: number) => {

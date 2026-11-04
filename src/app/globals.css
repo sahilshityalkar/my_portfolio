@@ -352,13 +352,11 @@ body::before {
    Readable from the first frame; reduced motion lands straight on the ink. */
 .mask-line > span.ink {
   -webkit-text-stroke-color: var(--ink);
-  animation:
-    rise 1.25s var(--ease-out) both,
-    ink 1s var(--ease-in-out) both;
-  /* fully inked by about 1.45s: the name is read in the first glance */
-  animation-delay:
-    calc(var(--i, 0) * 90ms + 60ms),
-    calc(var(--i, 0) * 140ms + 300ms);
+  /* No rise: the name is on the page, readable as its drafted outline, from
+     the very first frame (nothing on the first screen waits); the ink soaks
+     in by about 1.45s. */
+  animation: ink 1s var(--ease-in-out) both;
+  animation-delay: calc(var(--i, 0) * 140ms + 300ms);
 }
 @keyframes ink {
   from {
@@ -768,6 +766,13 @@ html:not(.js) .asbuilt-toggle {
 /* Short phone screens (375x667 and the like): the hero tightens so the whole
    recruiter line, the work cue and the Work rule all fit on the first screen.
    Unlayered, so it wins over the utilities it adjusts. */
+/* The hero never widens the page, whatever is drawn in it (the measure's
+   canvas, a callout): clip, unlike hidden, makes no scroll container and
+   does not reach the viewport, which mobile browsers would ignore. */
+#intro {
+  overflow-x: clip;
+}
+
 /* Wide screens: "Sahil" sits left and "Shityalkar" right, so the surname
    rises into the field beside the first name instead of starting a full
    line below it; the hero gives the first screen back to the work. */
@@ -1017,5 +1022,9 @@ html:not(.js) .asbuilt-toggle {
   }
   .print-note {
     display: block !important;
+  }
+  /* case pages: a figure is never split across two sheets */
+  article figure {
+    break-inside: avoid;
   }
 }

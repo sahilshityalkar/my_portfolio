@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import { Spring } from "@/lib/spring";
 
 /**
@@ -8,10 +9,22 @@ import { Spring } from "@/lib/spring";
  * spring instead of jumping. Critically damped, so it never overshoots the
  * section, and it takes about the same time near or far. Any wheel, touch or
  * key input hands control straight back to the reader. Reduced motion jumps.
+ *
+ * Back and Forward return to where the reader was: the scroll position is
+ * kept in the history entry being left (alongside Next's own state), and a
+ * popstate restores it, or goes to the hash's section when there is none.
  */
 const travel = { stiffness: 110, damping: 21 }; // ≈ 2·√k: critical damping
 
 export function SmoothAnchors() {
+  // the page the router is showing; on popstate it still names the page
+  // being left, so a Back between pages is told apart from one within a page
+  const pathname = usePathname();
+  const shown = useRef(pathname);
+  useEffect(() => {
+    shown.current = pathname;
+  }, [pathname]);
+
   useEffect(() => {
     const reduced = matchMedia("(prefers-reduced-motion: reduce)");
     let raf = 0;
@@ -56,7 +69,10 @@ export function SmoothAnchors() {
       const max = document.documentElement.scrollHeight - innerHeight;
       const to = Math.min(max, Math.max(0, target.getBoundingClientRect().top + window.scrollY - offset));
 
-      if (location.hash !== url.hash) history.pushState(null, "", url.hash);
+      if (location.hash !== url.hash) {
+        history.replaceState({ ...history.state, anchorY: window.scrollY }, "");
+        history.pushState(null, "", url.hash);
+      }
       // move focus for keyboard and screen-reader users without a second jump
       if (!target.hasAttribute("tabindex")) target.setAttribute("tabindex", "-1");
       target.focus({ preventScroll: true });
@@ -65,14 +81,30 @@ export function SmoothAnchors() {
       else glide(to);
     };
 
+    const onPop = () => {
+      stop();
+      // only same-page entries (#work to #lab, or back to the top): between
+      // pages the router restores scroll itself
+      if (location.pathname !== shown.current) return;
+      const y = (history.state as { anchorY?: unknown } | null)?.anchorY;
+      const hash = location.hash ? document.getElementById(decodeURIComponent(location.hash.slice(1))) : null;
+      // after the browser's (and the router's) own handling of the entry
+      requestAnimationFrame(() => {
+        if (typeof y === "number") window.scrollTo({ top: y, behavior: "instant" });
+        else if (hash) hash.scrollIntoView({ behavior: "instant" });
+      });
+    };
+
     const interrupt = () => raf && stop();
     document.addEventListener("click", onClick);
+    addEventListener("popstate", onPop);
     addEventListener("wheel", interrupt, { passive: true });
     addEventListener("touchstart", interrupt, { passive: true });
     addEventListener("keydown", interrupt);
     return () => {
       stop();
       document.removeEventListener("click", onClick);
+      removeEventListener("popstate", onPop);
       removeEventListener("wheel", interrupt);
       removeEventListener("touchstart", interrupt);
       removeEventListener("keydown", interrupt);

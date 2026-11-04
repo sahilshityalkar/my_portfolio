@@ -562,6 +562,12 @@ function draw(f: Frame) {
   }
 
   // component boxes, padding and redline gaps
+  const placed: [number, number, number, number][] = [];
+  const free = (x: number, y: number, w: number, h: number) => {
+    if (placed.some(([px, py, pw, ph]) => x < px + pw && x + w > px && y < py + ph && y + h > py)) return false;
+    placed.push([x, y, w, h]);
+    return true;
+  };
   const byGroup = new Map<Element, Box[]>();
   for (const b of model.boxes) {
     const x = b.x - (b.fixed ? 0 : sx);
@@ -584,16 +590,22 @@ function draw(f: Frame) {
     ctx.setLineDash([6, 3]);
     ctx.strokeRect(Math.round(x) + 0.5, Math.round(y) + 0.5, Math.round(b.w) - 1, Math.round(b.h) - 1);
     ctx.setLineDash([]);
-    // keep the tag readable below the fixed header while its box scrolls past
+    // keep the tag readable below the fixed header while its box scrolls past;
+    // tags pinned there (or any two labels) never print over one another
     const headerH = b.fixed ? 15 : 78;
-    tag(ctx, b.label, Math.round(x), Math.min(Math.max(Math.round(y), headerH), Math.round(y + b.h)), p);
+    const ty = Math.min(Math.max(Math.round(y), headerH), Math.round(y + b.h));
+    ctx.font = MONO;
+    if (free(Math.round(x), ty - 15, ctx.measureText(b.label).width + 10, 15)) tag(ctx, b.label, Math.round(x), ty, p);
     ctx.font = MONO;
     const dims = `${Math.round(b.w)} × ${Math.round(b.h)}`;
-    ctx.fillStyle = p.mark;
     // just under the box's bottom-right corner: inside it, the label sat on
     // the last line box of short components
     const dw = ctx.measureText(dims).width;
-    ctx.fillText(dims, Math.min(x + b.w - dw, W - dw - 6), y + b.h + 12);
+    const dx = Math.min(x + b.w - dw, W - dw - 6);
+    if (free(dx, y + b.h + 2, dw, 12)) {
+      ctx.fillStyle = p.mark;
+      ctx.fillText(dims, dx, y + b.h + 12);
+    }
   }
   for (const group of byGroup.values()) {
     const sorted = group.filter((b) => !b.fixed).sort((a, b) => a.y - b.y);
@@ -1056,8 +1068,12 @@ export function Loupe() {
     // transitions end in bursts (a reveal, a row of underlines): one remeasure
     // after the burst, not one per event
     let settle = 0;
-    const onSettle = () => {
+    // a link's colour or underline ending changes nothing the glass draws
+    const GEOMETRY = /^(transform|translate|scale|rotate|width|height|inset|top|left|right|bottom|margin|padding|font|letter-spacing|line-height|max-width|grid)/;
+    const onSettle = (e?: Event) => {
       if (current === "off") return;
+      if (e instanceof TransitionEvent && !GEOMETRY.test(e.propertyName)) return;
+      if ((e instanceof TransitionEvent || e instanceof AnimationEvent) && e.target instanceof Element && e.target.closest("a, button")) return;
       clearTimeout(settle);
       settle = window.setTimeout(() => {
         stale = true;
@@ -1071,9 +1087,9 @@ export function Loupe() {
     });
     onTheme.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 
-    const ro = new ResizeObserver(onSettle);
+    const ro = new ResizeObserver(() => onSettle());
     ro.observe(document.body);
-    document.fonts?.ready.then(onSettle);
+    document.fonts?.ready.then(() => onSettle());
 
     resize();
     const unsub = inspect.subscribe(() => apply(inspect.get()));
@@ -1129,7 +1145,8 @@ export function Loupe() {
         >
           {/* a full-width paper strip along the bottom edge, so the status
               never prints over (or between) the page's own lines */}
-          <span className="text-mark">{mode === "full" ? "Blueprint" : "Glass"}</span>
+          {/* one slot for both names: the flood must not move the readings */}
+          <span className="inline-block min-w-[9ch] text-mark">{mode === "full" ? "Blueprint" : "Glass"}</span>
           <span className="hidden sm:inline">
             <span className="inline-block min-w-[3ch] text-right">{hud.nodes}</span> measured nodes
           </span>

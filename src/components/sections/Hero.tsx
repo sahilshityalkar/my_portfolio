@@ -65,8 +65,7 @@ export function Hero() {
         <div className="col-span-12 grid grid-cols-subgrid gap-y-4 border-t border-rule pt-5 sm:gap-y-8 sm:pt-6">
           <div
             data-spec="Role"
-            className="col-span-12 md:col-span-4 lg:col-span-3 fade-in"
-            style={{ ["--i" as string]: 1 }}
+            className="col-span-12 md:col-span-4 lg:col-span-3"
           >
             {/* the recruiter line: who, at which company, since when, in reading
                 size and full ink; the details stay in the drafting hand below */}
@@ -103,8 +102,7 @@ export function Hero() {
             data-spec="Contact"
             data-measure-yield
             aria-label="Contact and links"
-            className="t-meta col-span-12 flex flex-wrap gap-x-5 gap-y-2 lg:col-span-4 lg:flex-col lg:items-end lg:gap-y-2.5 fade-in"
-            style={{ ["--i" as string]: 3 }}
+            className="t-meta col-span-12 flex flex-wrap gap-x-5 gap-y-2 lg:col-span-4 lg:flex-col lg:items-end lg:gap-y-2.5"
           >
             {links.email ? (
               <li className="flex basis-full flex-wrap items-center gap-x-1 normal-case tracking-normal lg:basis-auto lg:justify-end">
