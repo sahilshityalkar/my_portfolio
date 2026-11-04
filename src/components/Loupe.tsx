@@ -721,6 +721,14 @@ export function Loupe() {
   const mode = useStore(inspect, "off");
   const [hud, setHud] = useState({ fps: 0, nodes: 0 });
   const [visible, setVisible] = useState(false);
+  const fpsRef = useRef(0);
+
+  // the HUD's frame rate, twice a second, only while the glass is showing
+  useEffect(() => {
+    if (!visible) return;
+    const t = setInterval(() => setHud((h) => (h.fps === fpsRef.current ? h : { ...h, fps: fpsRef.current })), 500);
+    return () => clearInterval(t);
+  }, [visible]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -753,6 +761,8 @@ export function Loupe() {
     let frameAvg = 16.7;
     let slowFrames = 0;
     let dirty = true;
+    let focusGen = 0; // bumps on every focus change: the cached scene draws the ring
+    const inUse = () => current !== "off" || radius.value > 0.5 || scan.value > 0.001;
 
     /* The canvas is a window. Flooded (or scanning on touch) it covers the
        viewport; as a lens it is only as big as the lens and its readout,
@@ -798,12 +808,18 @@ export function Loupe() {
       ctx.setTransform(dpr, 0, 0, dpr, -bx * dpr, -by * dpr);
     };
 
+    // While the glass is closed nothing is measured or allocated: a resize
+    // (a phone's URL bar hides on every scroll) only marks the work as due.
+    let laidOut = false;
     const resize = () => {
       W = document.documentElement.clientWidth;
       H = innerHeight;
-      layout(small);
-      pattern = hatch(ctx, palette.mark, dpr);
       stale = true;
+      laidOut = false;
+      if (!inUse()) return;
+      layout(small);
+      laidOut = true;
+      pattern = hatch(ctx, palette.mark, dpr);
       kick();
     };
 
@@ -818,6 +834,7 @@ export function Loupe() {
       const dt = last ? (now - last) / 1000 : 1 / 60;
       last = now;
       frameAvg += (dt * 1000 - frameAvg) * 0.1;
+      fpsRef.current = Math.round(1000 / frameAvg);
 
       // adaptive quality: sustained slow frames drop resolution and hatching
       if (frameAvg > 24 && dpr > 1) {
@@ -828,6 +845,11 @@ export function Loupe() {
         }
       } else slowFrames = 0;
 
+      if (!laidOut) {
+        layout(small);
+        laidOut = true;
+        pattern = hatch(ctx, palette.mark, dpr);
+      }
       if (stale) remeasure();
 
       const snap = reduced.matches;
@@ -859,8 +881,7 @@ export function Loupe() {
       };
       if (small && sctx) {
         // re-render the scene only when what it shows has changed
-        const focused = document.activeElement;
-        const key = `${scrollX},${scrollY},${W},${H},${dpr},${focused instanceof HTMLElement && focused.matches(":focus-visible") ? focused.getBoundingClientRect().top : ""}`;
+        const key = `${scrollX},${scrollY},${W},${H},${dpr},${focusGen}`;
         if (key !== sceneKey || model !== sceneModel || palette !== scenePalette) {
           if (scene.width !== Math.round(W * dpr) || scene.height !== Math.round(H * dpr)) {
             scene.width = Math.round(W * dpr);
@@ -936,18 +957,20 @@ export function Loupe() {
     };
     const demoTimer = window.setTimeout(() => {
       if (!matchMedia("(pointer: fine)").matches || reduced.matches || current !== "off" || window.scrollY > 40) return;
-      try {
-        if (sessionStorage.getItem("glass-demo")) return;
-        sessionStorage.setItem("glass-demo", "1");
-      } catch {
-        return;
-      }
+      // only on the home page, with the surname on screen; the once-per-session
+      // flag is spent only when the demonstration actually runs
       const word = document.querySelector<HTMLElement>("#intro-title .mask-line:nth-child(2) > span")?.firstChild;
       if (!word) return;
       const r = document.createRange();
       r.selectNodeContents(word);
       const b = r.getBoundingClientRect();
       if (b.width < 50 || b.bottom < 0 || b.top > H) return;
+      try {
+        if (sessionStorage.getItem("glass-demo")) return;
+        sessionStorage.setItem("glass-demo", "1");
+      } catch {
+        return;
+      }
       const y = b.top + b.height * 0.55;
       const at = (f: number) => b.left + b.width * f;
       demo = { from: { ...pointer }, timers: [] };
@@ -1004,6 +1027,7 @@ export function Loupe() {
 
     // keyboard users: the glass travels to whatever has focus
     const onFocus = (e: FocusEvent) => {
+      focusGen++;
       if (current === "off" || !(e.target instanceof Element)) return;
       if (current === "lens") {
         const r = e.target.getBoundingClientRect();
@@ -1011,6 +1035,12 @@ export function Loupe() {
         py.target = r.top + r.height / 2;
       }
       kick(); // repaint the focus ring
+    };
+
+    // focus leaving for nothing (to the body) must also clear the drawn ring
+    const onBlur = () => {
+      focusGen++;
+      if (current !== "off") kick();
     };
 
     // another interaction on the page (dragging the hero's measure) wants the stage
@@ -1023,10 +1053,16 @@ export function Loupe() {
       if (demo) endDemo(true);
       if (current !== "off") kick();
     };
+    // transitions end in bursts (a reveal, a row of underlines): one remeasure
+    // after the burst, not one per event
+    let settle = 0;
     const onSettle = () => {
       if (current === "off") return;
-      stale = true;
-      kick();
+      clearTimeout(settle);
+      settle = window.setTimeout(() => {
+        stale = true;
+        kick();
+      }, 120);
     };
     const onTheme = new MutationObserver(() => {
       palette = readPalette();
@@ -1050,18 +1086,17 @@ export function Loupe() {
     addEventListener("keydown", onKey);
     addEventListener("click", onClick);
     addEventListener("focusin", onFocus);
+    addEventListener("focusout", onBlur);
     document.addEventListener("transitionend", onSettle);
     document.addEventListener("animationend", onSettle);
 
-    const hudTimer = setInterval(() => setHud((h) => ({ ...h, fps: Math.round(1000 / frameAvg) })), 500);
-
     return () => {
       clearTimeout(demoTimer);
+      clearTimeout(settle);
       endDemo(false);
       removeEventListener("glass:yield", onYield);
       unsub();
       cancelAnimationFrame(raf);
-      clearInterval(hudTimer);
       ro.disconnect();
       onTheme.disconnect();
       removeEventListener("resize", resize);
@@ -1070,6 +1105,7 @@ export function Loupe() {
       removeEventListener("keydown", onKey);
       removeEventListener("click", onClick);
       removeEventListener("focusin", onFocus);
+      removeEventListener("focusout", onBlur);
       document.removeEventListener("transitionend", onSettle);
       document.removeEventListener("animationend", onSettle);
     };

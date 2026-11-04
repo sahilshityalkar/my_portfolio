@@ -191,10 +191,13 @@ body {
   }
 }
 
-:focus-visible {
-  outline: 1.5px solid var(--mark);
-  outline-offset: 3px;
-  border-radius: 2px;
+/* in the base layer too, so a rounded-full control keeps its shape on focus */
+@layer base {
+  :focus-visible {
+    outline: 1.5px solid var(--mark);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
 }
 
 /* sections receive focus programmatically after an in-page jump; no ring */

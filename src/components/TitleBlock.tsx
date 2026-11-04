@@ -73,9 +73,22 @@ export function TitleBlock() {
       observers.push(o);
     }
     if (shift !== null) {
+      // CLS as the browsers define it: the largest session window, where a
+      // window collects shifts less than 1 s apart and spans at most 5 s
+      let windowValue = 0;
+      let windowStart = 0;
+      let windowLast = 0;
       const o = new PerformanceObserver((list) => {
         for (const e of list.getEntries() as (PerformanceEntry & { value: number; hadRecentInput: boolean })[]) {
-          if (!e.hadRecentInput) shift = (shift ?? 0) + e.value;
+          if (e.hadRecentInput) continue;
+          if (windowValue && e.startTime - windowLast < 1000 && e.startTime - windowStart < 5000) {
+            windowValue += e.value;
+          } else {
+            windowValue = e.value;
+            windowStart = e.startTime;
+          }
+          windowLast = e.startTime;
+          shift = Math.max(shift ?? 0, windowValue);
         }
         publish();
       });
@@ -106,7 +119,7 @@ export function TitleBlock() {
   const value = (v: Reading, fmt: (n: number) => string, dots: string) =>
     v === undefined ? dots : v === null ? NOT_REPORTED : fmt(v);
   const why = (v: Reading) => (v === null ? "Not reported by this browser" : undefined);
-  const source = (links as { source?: string | null }).source ?? null;
+  const source = links.source;
 
   return (
     <div className="titleblock t-meta grid grid-flow-dense grid-cols-2 gap-px border border-(--rule-strong) bg-(--rule-strong) lg:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)_minmax(0,1.3fr)_auto]">

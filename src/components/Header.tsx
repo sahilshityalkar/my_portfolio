@@ -83,11 +83,11 @@ export function Header() {
         <div className="t-meta flex items-center gap-1 sm:gap-2">
           <button
             type="button"
-            aria-pressed={inspecting}
+            data-on={inspecting || undefined}
             aria-label={inspecting ? "Close the glass" : "Inspect the page"}
             aria-keyshortcuts="L"
             onClick={() => inspect.set(inspecting ? "off" : matchMedia("(pointer: coarse)").matches ? "full" : "lens")}
-            className="group flex h-9 items-center gap-2 rounded-full px-2.5 text-ink-2 [html:not(.js)_&]:hidden sm:px-3 transition-colors hover:text-ink aria-pressed:text-mark"
+            className="group flex h-9 items-center gap-2 rounded-full px-2.5 text-ink-2 [html:not(.js)_&]:hidden sm:px-3 transition-colors hover:text-ink data-[on]:text-mark"
           >
             <svg width="13" height="13" viewBox="0 0 13 13" aria-hidden="true" className="overflow-visible">
               <circle cx="5.5" cy="5.5" r="4.75" fill="none" stroke="currentColor" />
@@ -97,7 +97,7 @@ export function Header() {
                 cy="5.5"
                 r="2"
                 fill="currentColor"
-                className="origin-center scale-0 transition-transform duration-500 [transform-box:fill-box] group-aria-pressed:scale-100"
+                className="origin-center scale-0 transition-transform duration-500 [transform-box:fill-box] group-data-[on]:scale-100"
               />
             </svg>
             {/* both labels share one cell, so switching never resizes the button

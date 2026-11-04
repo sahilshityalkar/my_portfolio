@@ -5,7 +5,7 @@ import { Loupe } from "@/components/Loupe";
 import { RevealObserver } from "@/components/Reveal";
 import { SmoothAnchors } from "@/components/SmoothAnchors";
 import { profile } from "@/content/profile";
-import { themeBootScript } from "@/lib/theme";
+import { PAPER, themeBootScript } from "@/lib/theme-boot";
 import "./globals.css";
 
 const newsreader = localFont({
@@ -63,12 +63,9 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image", title, description, creator: "@SK_sahil05" },
 };
 
-export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f5f2ec" },
-    { media: "(prefers-color-scheme: dark)", color: "#11100f" },
-  ],
-};
+// Day is the default whatever the OS prefers; a chosen Night is applied by
+// the boot script and setTheme (lib/theme.ts)
+export const viewport: Viewport = { themeColor: PAPER.day };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (

@@ -2,13 +2,7 @@
 
 import { theme, type Theme } from "./store";
 
-const KEY = "theme";
-
-/** The paper of each theme: the browser chrome (theme-color) follows the page. */
-export const PAPER = { day: "#f5f2ec", night: "#11100f" } as const;
-
-/** Inline, render-blocking script: applies the saved theme before first paint. */
-export const themeBootScript = `(function(){try{var d=document.documentElement;d.classList.add('js');var t=localStorage.getItem('${KEY}');if(t==='night'||t==='day'){d.dataset.theme=t;var m=document.createElement('meta');m.name='theme-color';m.id='theme-color';m.content=t==='night'?'${PAPER.night}':'${PAPER.day}';document.head.prepend(m)}}catch(e){}if(location.pathname==='/'&&matchMedia('(min-width: 1024px)').matches){d.classList.add('ruler')}})();`;
+import { PAPER, THEME_KEY as KEY } from "./theme-boot";
 
 export function readTheme(): Theme {
   return document.documentElement.dataset.theme === "night" ? "night" : "day";

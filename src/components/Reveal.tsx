@@ -13,6 +13,9 @@ import { useEffect } from "react";
  */
 export function RevealObserver() {
   useEffect(() => {
+    // the boot script's failsafe stands down: the observer is here
+    document.documentElement.dataset.revealReady = "1";
+    document.documentElement.classList.add("js");
     const show = (el: Element) => el.setAttribute("data-in", "");
 
     const io = new IntersectionObserver(

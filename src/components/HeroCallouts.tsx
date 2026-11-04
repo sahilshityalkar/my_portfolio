@@ -455,6 +455,15 @@ export function MeasureCallout() {
       else set(W.value + next * zero);
     };
 
+    // the real bounds (they depend on the layout) are read when the handle is
+    // focused, which is when assistive tech announces them
+    const onFocus = () => {
+      if (live) return;
+      read();
+      knob.setAttribute("aria-valuemin", `${Math.round(minW / zero)}`);
+      knob.setAttribute("aria-valuemax", `${Math.round(maxW / zero)}`);
+    };
+    knob.addEventListener("focus", onFocus);
     knob.addEventListener("pointerdown", down);
     knob.addEventListener("pointermove", move);
     knob.addEventListener("pointerup", up);
@@ -468,6 +477,7 @@ export function MeasureCallout() {
     });
     return () => {
       cancelAnimationFrame(raf);
+      knob.removeEventListener("focus", onFocus);
       knob.removeEventListener("pointerdown", down);
       knob.removeEventListener("pointermove", move);
       knob.removeEventListener("pointerup", up);
@@ -500,9 +510,7 @@ export function MeasureCallout() {
         tabIndex={0}
         aria-label="Measure of this paragraph. Drag or use the arrow keys to re-set it; it springs back on release."
         aria-orientation="horizontal"
-        aria-valuemin={10}
-        aria-valuemax={60}
-        aria-valuenow={33}
+        aria-valuenow={34}
         title="Drag to re-set this paragraph"
         className="measure-handle"
       />

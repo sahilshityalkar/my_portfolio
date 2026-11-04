@@ -327,17 +327,16 @@ export function AsBuilt({ src, alt, url }: AsBuiltImage) {
           </>
         ) : null}
       </div>
-      {/* the visible label names the next view; the accessible name stays
-          constant and aria-pressed carries the state, announced below */}
+      {/* a toggle: one name, the state in aria-pressed (inked when on), and
+          the change announced below */}
       <button
         type="button"
         aria-pressed={flooded}
-        aria-label="As built: show the shipped product"
+        title={flooded ? "Back to the drawing" : "Show the shipped product"}
         onClick={toggle}
-        className="asbuilt-toggle t-meta absolute right-0 top-0 z-40 grid h-8 items-center justify-items-center max-[359.98px]:h-7 border-b border-l border-(--rule-strong) bg-paper px-3 text-ink transition-colors hover:border-mark sm:right-2 sm:top-2 sm:rounded-[2px] sm:border lg:right-3 lg:top-3"
+        className="asbuilt-toggle t-meta absolute right-0 top-0 z-40 flex h-8 items-center border-b border-l border-(--rule-strong) bg-paper px-3 text-ink transition-colors hover:border-mark aria-pressed:border-ink aria-pressed:bg-ink aria-pressed:text-paper max-[359.98px]:h-7 sm:right-2 sm:top-2 sm:rounded-[2px] sm:border lg:right-3 lg:top-3"
       >
-        <span className={`col-start-1 row-start-1 ${flooded ? "invisible" : ""}`}>As built</span>
-        <span className={`col-start-1 row-start-1 ${flooded ? "" : "invisible"}`}>Drawing</span>
+        As built
       </button>
       <span className="sr-only" aria-live="polite">
         {flooded ? "Showing the shipped product" : announced ? "Showing the drawing" : ""}
