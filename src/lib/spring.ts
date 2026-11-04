@@ -6,7 +6,9 @@
  * is clamped so a backgrounded tab does not explode the simulation on return.
  *
  * This is the whole motion language of the site: one integrator, a few named
- * presets, used by the loupe, the theme transition and the reveal system.
+ * presets, used by the glass (Loupe), the As built lens, the hero's measure
+ * and in-page scrolling. (Reveals and the theme change are CSS and View
+ * Transitions.)
  */
 export type SpringConfig = { stiffness: number; damping: number; mass?: number };
 

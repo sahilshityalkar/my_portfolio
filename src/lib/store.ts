@@ -35,6 +35,9 @@ export function useStore<T>(store: Store<T>, server: T): T {
 export type InspectMode = "off" | "lens" | "full";
 export const inspect = createStore<InspectMode>("off");
 
+/** Open the glass: a lens that follows a fine pointer, the whole blueprint on touch. */
+export const openGlass = () => inspect.set(matchMedia("(pointer: coarse)").matches ? "full" : "lens");
+
 export type Theme = "day" | "night";
 export const theme = createStore<Theme>("day");
 

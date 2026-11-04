@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { links } from "@/content/profile";
-import { inspect } from "@/lib/store";
+import { links, profile } from "@/content/profile";
+import { openGlass } from "@/lib/store";
 
 /** undefined: not measured yet · null: this browser does not report it */
 type Reading = number | null | undefined;
@@ -124,7 +124,7 @@ export function TitleBlock() {
   return (
     <div className="titleblock t-meta grid grid-flow-dense grid-cols-2 gap-px border border-(--rule-strong) bg-(--rule-strong) lg:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)_minmax(0,1.3fr)_auto]">
       <Cell label="Sheet">
-        <span className="normal-case tracking-normal">sahilshityalkar.com</span>
+        <span className="normal-case tracking-normal">{profile.siteUrl.replace(/^https?:\/\//, "")}</span>
       </Cell>
       {/* measured by script, so without it the cell is not offered at all */}
       <Cell label="This visit" className="col-span-2 lg:col-span-1 [html:not(.js)_&]:hidden">
@@ -154,7 +154,7 @@ export function TitleBlock() {
       <Cell label="Inspect" className="[html:not(.js)_&]:hidden">
         <button
           type="button"
-          onClick={() => inspect.set(matchMedia("(pointer: coarse)").matches ? "full" : "lens")}
+          onClick={openGlass}
           className="link-draw uppercase text-ink"
         >
           {/* same pointer swap as the hero hint: no keyboard on a phone */}

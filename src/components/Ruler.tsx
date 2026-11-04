@@ -2,15 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import { section, useStore } from "@/lib/store";
+import { sections } from "@/content/sections";
 
-const SECTIONS = [
-  { id: "intro", n: "01", label: "Intro" },
-  { id: "work", n: "02", label: "Work" },
-  { id: "experience", n: "03", label: "Experience" },
-  { id: "about", n: "04", label: "About" },
-  { id: "lab", n: "05", label: "Lab" },
-  { id: "contact", n: "06", label: "Contact" },
-];
+const SECTIONS = sections;
 
 /**
  * A drafting ruler down the right edge: the whole page mapped onto its length,

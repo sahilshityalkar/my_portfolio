@@ -2,6 +2,7 @@ import Link from "next/link";
 import { about } from "@/content/about";
 import { T } from "@/components/Draftable";
 import { SectionHead } from "@/components/SectionHead";
+import { sheet } from "@/content/sections";
 
 /**
  * The shared compact head, then the lede, then what I bring as one row of three.
@@ -10,7 +11,7 @@ export function About() {
   const [lede, ...rest] = about.paragraphs;
   return (
     <section id="about" aria-labelledby="about-title" data-spec="About" className="wrap py-12 sm:py-16">
-      <SectionHead n="04" id="about-title" title="About" />
+      <SectionHead n={sheet("about")} id="about-title" title="About" />
       <div className="grid-12 mt-6 gap-y-6 sm:mt-10">
         {lede ? (
           <div className="col-span-12 md:col-span-8" data-reveal>

@@ -29,8 +29,8 @@
   --serif: var(--font-newsreader), "Iowan Old Style", "Palatino Linotype", Georgia, serif;
   /* the same face with a size-matched fallback (see the @font-face tiers);
      --nr-face is Newsreader's own family name, set on <html> in layout.tsx */
-  --serif-lede: newsreader, "Newsreader Fallback Lede", Georgia, serif;
-  --serif-display: newsreader, "Newsreader Fallback Display", Georgia, serif;
+  --serif-lede: var(--nr-face, newsreader), "Newsreader Fallback Lede", Georgia, serif;
+  --serif-display: var(--nr-face, newsreader), "Newsreader Fallback Display", Georgia, serif;
   --mono: var(--font-plex-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
 
   color-scheme: light;
@@ -763,9 +763,6 @@ html:not(.js) .asbuilt-toggle {
   }
 }
 
-/* Short phone screens (375x667 and the like): the hero tightens so the whole
-   recruiter line, the work cue and the Work rule all fit on the first screen.
-   Unlayered, so it wins over the utilities it adjusts. */
 /* The hero never widens the page, whatever is drawn in it (the measure's
    canvas, a callout): clip, unlike hidden, makes no scroll container and
    does not reach the viewport, which mobile browsers would ignore. */
@@ -790,6 +787,9 @@ html:not(.js) .asbuilt-toggle {
   }
 }
 
+/* Short phone screens (375x667 and the like): the hero tightens so the whole
+   recruiter line, the work cue and the Work rule all fit on the first screen.
+   Unlayered, so it wins over the utilities it adjusts. */
 @media (max-width: 1023.98px) and (max-height: 700px) {
   #intro {
     padding-top: calc(var(--header-h) + 1.25rem);

@@ -58,8 +58,9 @@ function onLayout(fn: () => void) {
   };
 }
 
-let canvas: CanvasRenderingContext2D | null = null;
-const metrics = () => (canvas ??= document.createElement("canvas").getContext("2d"));
+/** One shared 2D context for text metrics (never drawn on, never in the page). */
+let metricsCtx: CanvasRenderingContext2D | null = null;
+const metrics = () => (metricsCtx ??= document.createElement("canvas").getContext("2d"));
 const fontOf = (cs: CSSStyleDeclaration) => `${cs.fontStyle} ${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
 
 /** Fade in once there is something true to show. */

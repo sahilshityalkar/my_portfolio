@@ -3,6 +3,7 @@ import { work } from "@/content/work";
 import { T, plain } from "@/components/Draftable";
 import { CaseVisual } from "@/components/CaseVisual";
 import { SectionHead } from "@/components/SectionHead";
+import { sheet } from "@/content/sections";
 import { ProofLine } from "@/components/ProofLine";
 
 /**
@@ -10,15 +11,31 @@ import { ProofLine } from "@/components/ProofLine";
  * pointer-only link (hidden from the accessibility tree and the tab order),
  * the title is the accessible link, and the AS BUILT toggle sits above both.
  */
+/** "1 independent · 2 at Clyra", counted from work.ts. */
+function Tally() {
+  const counts = new Map<string, number>();
+  for (const c of work) counts.set(c.at ?? "", (counts.get(c.at ?? "") ?? 0) + 1);
+  const parts = [...counts].map(([at, n]) => (at ? `${n} at ${at}` : `${n} independent`));
+  return (
+    <>
+      {/* a separator stays with the part before it, never starting a line */}
+      {parts.map((part, k) => (
+        <span key={part}>
+          {k ? " " : null}
+          <span className="whitespace-nowrap">
+            {part}
+            {k < parts.length - 1 ? " ·" : null}
+          </span>
+        </span>
+      ))}
+    </>
+  );
+}
+
 export function Work() {
   return (
     <section id="work" aria-labelledby="work-title" data-spec="Work" data-measure-yield className="wrap pb-12 pt-10 sm:pb-16 sm:pt-12 lg:pt-8">
-      <SectionHead n="02" id="work-title" title="Selected work" aside={
-          <>
-            {/* the separator stays with the first half, never starting a line */}
-            <span className="whitespace-nowrap">1 independent ·</span> <span className="whitespace-nowrap">2 at Clyra</span>
-          </>
-        } size="primary" />
+      <SectionHead n={sheet("work")} id="work-title" title="Selected work" aside={<Tally />} size="primary" />
       <ol className="mt-8 space-y-12 sm:mt-12 sm:space-y-20">
         {work.map((c, i) => {
           const href = `/work/${c.slug}`;

@@ -3,16 +3,11 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { profile, links } from "@/content/profile";
-import { inspect, section, theme, useStore } from "@/lib/store";
+import { inspect, openGlass, section, theme, useStore } from "@/lib/store";
 import { readTheme, setTheme } from "@/lib/theme";
+import { sections } from "@/content/sections";
 
-export const nav = [
-  { href: "/#work", label: "Work", n: "02" },
-  { href: "/#experience", label: "Experience", n: "03" },
-  { href: "/#about", label: "About", n: "04" },
-  { href: "/#lab", label: "Lab", n: "05" },
-  { href: "/#contact", label: "Contact", n: "06" },
-];
+export const nav = sections.filter((s) => s.id !== "intro").map((s) => ({ href: `/#${s.id}`, label: s.label, n: s.n }));
 
 export function Header() {
   const mode = useStore(inspect, "off");
@@ -86,7 +81,7 @@ export function Header() {
             data-on={inspecting || undefined}
             aria-label={inspecting ? "Close the glass" : "Inspect the page"}
             aria-keyshortcuts="L"
-            onClick={() => inspect.set(inspecting ? "off" : matchMedia("(pointer: coarse)").matches ? "full" : "lens")}
+            onClick={() => (inspecting ? inspect.set("off") : openGlass())}
             className="group flex h-9 items-center gap-2 rounded-full px-2.5 text-ink-2 [html:not(.js)_&]:hidden sm:px-3 transition-colors hover:text-ink data-[on]:text-mark"
           >
             <svg width="13" height="13" viewBox="0 0 13 13" aria-hidden="true" className="overflow-visible">

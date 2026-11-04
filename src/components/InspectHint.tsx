@@ -1,6 +1,6 @@
 "use client";
 
-import { inspect, useStore } from "@/lib/store";
+import { inspect, openGlass, useStore } from "@/lib/store";
 
 /** The invitation. Never required, always one keypress away. */
 export function InspectHint() {
@@ -8,7 +8,7 @@ export function InspectHint() {
   return (
     <button
       type="button"
-      onClick={() => inspect.set(mode !== "off" ? "off" : matchMedia("(pointer: coarse)").matches ? "full" : "lens")}
+      onClick={() => (mode !== "off" ? inspect.set("off") : openGlass())}
       className="t-meta group flex max-w-[44ch] items-center gap-3 [html:not(.js)_&]:hidden text-left text-ink-3 transition-colors hover:text-ink"
     >
       <span

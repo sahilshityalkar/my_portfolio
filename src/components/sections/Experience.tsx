@@ -2,11 +2,12 @@ import { education, experience } from "@/content/experience";
 import { profile } from "@/content/profile";
 import { T } from "@/components/Draftable";
 import { SectionHead } from "@/components/SectionHead";
+import { sheet } from "@/content/sections";
 
 export function Experience() {
   return (
     <section id="experience" aria-labelledby="experience-title" data-spec="Experience" className="wrap py-12 sm:py-16">
-      <SectionHead n="03" id="experience-title" title="Experience" />
+      <SectionHead n={sheet("experience")} id="experience-title" title="Experience" />
       <ol className="mt-8 sm:mt-12">
         {experience.map((r) => (
           <li key={r.company} className="grid-12 gap-y-8" data-reveal>

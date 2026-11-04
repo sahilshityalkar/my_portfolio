@@ -51,6 +51,8 @@ export type CaseStudy = {
   links: Link[];
   /** A real screenshot of the shipped product (file in /public), shown on the case page. */
   image?: { src: string; alt: string; url?: string };
+  /** Where the work was done; absent for independent work. */
+  at?: string;
   /** The technical drawing that represents this project on the index and the case page. */
   plate?: "replies" | "mastery" | "heatmap";
 };

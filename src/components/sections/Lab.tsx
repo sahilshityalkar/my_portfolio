@@ -2,6 +2,7 @@ import { lab, labHref, labLive, labUrl } from "@/content/lab";
 import type { Experiment } from "@/content/types";
 import { LabPreview } from "@/components/LabPreview";
 import { SectionHead } from "@/components/SectionHead";
+import { sheet } from "@/content/sections";
 import { InspectButton } from "@/components/InspectButton";
 
 const host = labUrl.replace(/^https?:\/\//, "");
@@ -17,7 +18,7 @@ export function Lab() {
   return (
     <section id="lab" aria-labelledby="lab-title" data-spec="Lab" className="wrap py-12 sm:py-16">
       <SectionHead
-        n="05"
+        n={sheet("lab")}
         id="lab-title"
         title="Lab"
         aside={

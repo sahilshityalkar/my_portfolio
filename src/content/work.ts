@@ -60,6 +60,7 @@ export const work: CaseStudy[] = [
   },
   {
     slug: "clyra-student-app",
+    at: "Clyra",
     index: "II",
     plate: "mastery",
     title: demo("Clyra student app"),
@@ -95,6 +96,7 @@ export const work: CaseStudy[] = [
   },
   {
     slug: "clyra-institutions",
+    at: "Clyra",
     index: "III",
     plate: "heatmap",
     title: demo("Clyra for schools"),
