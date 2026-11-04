@@ -3,54 +3,47 @@
 Read README.md, docs/DECISIONS.md (especially "Fourth pass") and
 PLACEHOLDERS.md first. Everything is committed on `main`.
 
-## Where things stand (November 2026)
+## Where things stand (4 November 2026)
 
-The agency run is finished. The landing page has been through four review
-rounds with a QA and performance tester and a three-person hiring panel
-(technical recruiter, engineering manager hiring a frontend lead, design
-lead). Their reports from the first run are in `docs/agency/REVIEW.md`;
-before and after screenshots are in `docs/agency/shots/`.
+Everything is committed on `main`. Two sessions of autonomous work with
+independent reviewers (QA and performance, a hiring panel, a senior code
+reviewer, a Lighthouse/axe/metadata auditor, a tech recruiter). Every
+finding that did not need the owner's facts has been fixed.
 
-| Round | QA and performance | Hiring panel |
-| --- | --- | --- |
-| Before this run | 8 | 7 |
-| 1 | 7.5 (found the ruler click bug) | 7.5 |
-| 2 | 8.5 | 8.0 |
-| 3 | 9 | 8.3 |
-| 4 (final) | **9.5** | **8.5** (recruiter 8.5, engineering manager 7, design lead 9.5) |
+The site now has, beyond the concept (glass, blueprint, As built, title
+block):
+- **Drag the measure** on the hero statement (canvas re-set, CLS 0).
+- **A two-page print résumé** of the home page ("Résumé (PDF)" in the
+  header and hero until `links.resume` exists).
+- **A first screen that never waits:** role, company, city, stack and
+  contact on the first painted frame; "Selected work" and the top of
+  Plate I on screen from 1366x768 up.
+- **Search and share:** a 143-character meta description in recruiters'
+  words, a per-case share card, JSON-LD (ProfilePage/Person, CreativeWork,
+  BreadcrumbList), favicon and apple icon, theme-color that follows Night.
+- **Engineering:** the glass split into `glass/model.ts`, `glass/draw.ts`
+  and the component; a cached lens scene (4x CPU: 17 ms a frame); nothing
+  measured while closed; a reveal failsafe if scripts never run; unit
+  tests (`npm test`) for the line breaker and the spring.
+- **A new `docs/demo.webm`** of every signature moment
+  (`node docs/record-demo.cjs` re-records it).
 
-The loop stopped there: the panel said the only thing between the page and
-9 or higher is information only the owner can supply (résumé, Clyra team
-size, scope and outcomes, an in-app ReplyAI screenshot), which it valued at
-about +1.5 for the engineering manager. Small fixes from the round-4
-reports were applied after it (canvas baselines from the DOM, the Work
-aside separator, the tablet hero band).
+Measured on the production build (Chromium):
 
-What this run added:
+| Check | Result |
+| --- | --- |
+| Lighthouse, every route | 100 / 100 / 100 / 100 desktop; mobile performance 99 to 100 (one noisy run at 91) |
+| LCP desktop / 390 at 4x CPU / plus 1.6 Mbps, 150 ms | about 0.13 s / 0.22 s / 0.92 s |
+| CLS | 0 everywhere: load, glass demo, scroll, As built, glass, measure drags, fonts delayed on a slow network |
+| Overflow 320 to 1920, Day and Night, after using the measure | 0 |
+| Em or en dashes in rendered HTML, every route | 0 |
+| Glass lens, 4x CPU | 17 ms average, 16.8 ms p95 |
 
-- **Drag the measure** (the creative step): the hero's MEASURE dimension
-  ends in a handle; drag it or use the arrow keys and the statement re-sets
-  live on a canvas, then springs back. CLS stays 0 by construction. See
-  DECISIONS.md, "Fourth pass", for how and why.
-- **Size-tiered font fallbacks**, so the web-font swap never shifts the page
-  (CLS 0.00000 from 320 to 1920 with fonts delayed).
-- The recruiter line in reading size, one section-head system, the glass
-  invitation in the field left of the surname, "Selected work" on the first
-  screen from 1024x768 to 1920x1080, an honest Lab list, and many QA fixes
-  (ruler hit areas, menu focus, short screens, deep links, no-JS controls).
-
-Measured on the production build (Chromium, Playwright, median of 5):
-
-| Profile | LCP | CLS |
-| --- | --- | --- |
-| Desktop 1440x900 | ~0.13 s | 0 |
-| 390x844, 4x CPU | ~0.23 s | 0 |
-| 390x844, 4x CPU, 1.6 Mbps, 150 ms RTT | ~1.0 s | 0 |
-
-Frame time unthrottled: 16.7 ms for the As built lens, the glass and the
-measure drag. Under a 4x CPU throttle the global glass averages about
-22 to 25 ms (rasterising the full-viewport canvas); sizing the canvas to the
-lens's bounding box is the next step if that matters.
+Review scores at the end: QA 7 (fresh reviewer, all its findings since
+fixed), code review 7.5 (all bugs fixed), recruiter 6 and hiring panel 7.
+The recruiter and panel scores are capped by the same thing: the lead
+role rests on demo copy. **The six questions at the top of
+PLACEHOLDERS.md are the highest-leverage next step.**
 
 ## How to verify
 
