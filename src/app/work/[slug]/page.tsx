@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getCase, work } from "@/content/work";
 import { T, plain } from "@/components/Draftable";
+import { isDraft } from "@/content/types";
 import { CaseScreenshot, CaseVisual } from "@/components/CaseVisual";
 
 export const dynamicParams = false;
@@ -30,6 +31,10 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
   if (!c) notFound();
   const i = work.indexOf(c);
   const next = work[(i + 1) % work.length]!;
+  // a section not written yet is left out, not shown as a placeholder; it
+  // appears (and the numbering follows) once its text is in work.ts
+  const sections = c.sections.filter((s) => !isDraft(s.body));
+  const external = c.links.filter((l): l is { label: string; href: string } => !!l.href);
 
   return (
     <article data-spec="CaseStudy" className="pt-[calc(var(--header-h)+3rem)]">
@@ -48,7 +53,31 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
             </span>
           </span>
         </h1>
-        <T as="p" v={c.kicker} className="t-lede col-span-12 max-w-[40ch] md:col-span-7 fade-in" />
+        <div className="col-span-12 md:col-span-7 fade-in">
+          <T as="p" v={c.kicker} className="t-lede max-w-[40ch]" />
+          {c.proof ? (
+            <p data-spec="Proof" className="t-meta mt-5 text-mark">
+              {c.proof.split(" · ").map((part, k) => (
+                <span key={k}>
+                  {k ? " " : null}
+                  <span className="whitespace-nowrap">{k ? `· ${part}` : part}</span>
+                </span>
+              ))}
+            </p>
+          ) : null}
+          {external.length ? (
+            <p className="t-meta mt-4 flex flex-wrap gap-x-5 gap-y-2">
+              {external.map((l) => (
+                <a key={l.label} href={l.href} target="_blank" rel="noreferrer" className="link-draw text-ink">
+                  {l.label}
+                  <span aria-hidden="true" className="ml-1 text-ink-3">
+                    ↗
+                  </span>
+                </a>
+              ))}
+            </p>
+          ) : null}
+        </div>
         <dl
           data-spec="Facts"
           className="t-meta col-span-12 grid grid-cols-1 gap-4 border-t border-rule pt-4 min-[400px]:grid-cols-3 md:col-span-5 md:col-start-8 fade-in"
@@ -74,7 +103,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
 
       <div className="wrap grid-12 mt-20 gap-y-16 sm:mt-28">
         <T as="p" v={c.summary} className="t-lede col-span-12 md:col-span-8 md:col-start-4" />
-        {c.sections.map((s, n) => (
+        {sections.map((s, n) => (
           <Fragment key={s.heading}>
             <section className="col-span-12 grid grid-cols-subgrid gap-y-4 border-t border-rule pt-5" data-reveal>
               <h2 className="t-meta col-span-12 flex gap-3 md:col-span-3">
@@ -91,17 +120,15 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
             ) : null}
           </Fragment>
         ))}
-        {c.links.length ? (
-          <ul className="t-meta col-span-12 flex gap-6 md:col-span-9 md:col-start-4">
-            {c.links.map((l) =>
-              l.href ? (
-                <li key={l.label}>
-                  <a href={l.href} className="link-draw" target="_blank" rel="noreferrer">
-                    {l.label} ↗
-                  </a>
-                </li>
-              ) : null,
-            )}
+        {external.length ? (
+          <ul className="t-meta col-span-12 flex flex-wrap gap-x-6 gap-y-2 md:col-span-9 md:col-start-4">
+            {external.map((l) => (
+              <li key={l.label}>
+                <a href={l.href} className="link-draw" target="_blank" rel="noreferrer">
+                  {l.label} ↗
+                </a>
+              </li>
+            ))}
           </ul>
         ) : null}
       </div>

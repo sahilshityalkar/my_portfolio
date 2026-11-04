@@ -71,13 +71,11 @@ grep -rn "draft(" src/content
       summary, and the My role / Problem / Decisions sections. The
       *Context* section describes Clyra's public product and is accurate.
 - [ ] **Case III, Clyra institution workspace**: same as Case II
-- [ ] **Cases II and III, Outcome and In hindsight**: drafts, shown as
-      "Outcome to be published once results can be shared publicly" and
-      "Reflection in preparation". Replace them with real text (and real
-      numbers) once you can share them. (A reviewer suggested hiding these
-      draft sections on the case pages instead; that was left alone because
-      the last pass was scoped to the landing page. It is a one-line filter
-      in `src/app/work/[slug]/page.tsx` if you prefer it.)
+- [ ] **Cases II and III, Outcome and In hindsight**: still `draft()` in
+      `work.ts`. The case pages leave unwritten sections out (the
+      numbering follows), so nothing reads "in preparation" in public.
+      Write them, with real numbers, once you can share them, and they
+      appear automatically.
 - [ ] Check what you're allowed to say publicly about Clyra's internals
 - [ ] Imagery: ReplyAI's case page shows a screenshot of the live site
       (`public/work/replyai.png`), and the same screenshot is what the AS BUILT
