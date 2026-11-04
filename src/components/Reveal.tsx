@@ -28,7 +28,7 @@ export function RevealObserver() {
           }
         }
       },
-      { rootMargin: "0px 0px -8% 0px", threshold: 0.01 },
+      { rootMargin: "0px", threshold: 0 },
     );
 
     const pending = () => document.querySelectorAll("[data-reveal]:not([data-in])");
@@ -39,7 +39,7 @@ export function RevealObserver() {
     const sweep = () => {
       clearTimeout(t);
       t = window.setTimeout(() => {
-        const fold = innerHeight * 0.92;
+        const fold = innerHeight;
         pending().forEach((el) => {
           if (el.getBoundingClientRect().top < fold) {
             show(el);

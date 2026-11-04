@@ -3,6 +3,7 @@ import { work } from "@/content/work";
 import { T, plain } from "@/components/Draftable";
 import { CaseVisual } from "@/components/CaseVisual";
 import { SectionHead } from "@/components/SectionHead";
+import { ProofLine } from "@/components/ProofLine";
 
 /**
  * No interactive element nests inside another: the plate is covered by a
@@ -63,18 +64,7 @@ export function Work() {
                   </Link>
                 </h3>
                 <T as="p" v={c.kicker} className="mt-4 max-w-[38ch] text-ink-2" />
-                {c.proof ? (
-                  <p data-spec="Proof" className="t-meta mt-4 text-mark">
-                    {/* a line may break between claims, never inside one, and
-                        the separator travels with the claim it introduces */}
-                    {c.proof.split(" · ").map((part, k) => (
-                      <span key={k}>
-                        {k ? " " : null}
-                        <span className="whitespace-nowrap">{k ? `· ${part}` : part}</span>
-                      </span>
-                    ))}
-                  </p>
-                ) : null}
+                {c.proof ? <ProofLine proof={c.proof} className="mt-4" /> : null}
                 <dl className="t-meta mt-6 grid grid-cols-[6rem_1fr] gap-y-1.5 border-t border-rule pt-4">
                   <dt className="text-ink-3">Role</dt>
                   <T as="dd" v={c.role} />

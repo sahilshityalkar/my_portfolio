@@ -31,16 +31,18 @@ export function Contact() {
                 {links.email.split("@")[0]}@<wbr />
                 {links.email.split("@").slice(1).join("@")}
               </a>
-              <div className="mt-6 flex flex-wrap gap-2">
+              {/* the bordered copy button, then plain text actions: wrapped onto a
+                  new line on a phone they still start at the column's edge */}
+              <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
                 <CopyEmail email={links.email} />
                 <a
                   href={`mailto:${links.email}`}
-                  className="t-meta inline-flex h-9 items-center rounded-[2px] px-4 text-ink-2 transition-colors hover:text-ink"
+                  className="t-meta link-draw inline-flex items-center text-ink-2 hover:text-ink"
                 >
                   Open mail app ↗
                 </a>
                 {links.resume ? null : (
-                  <PrintButton className="t-meta inline-flex h-9 items-center rounded-[2px] px-4 text-ink-2 transition-colors hover:text-ink">
+                  <PrintButton className="t-meta link-draw inline-flex items-center text-ink-2 hover:text-ink">
                     Save a PDF summary ↓
                   </PrintButton>
                 )}

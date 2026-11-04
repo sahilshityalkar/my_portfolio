@@ -8,6 +8,7 @@ import { isDraft } from "@/content/types";
 import { profile } from "@/content/profile";
 import { JsonLd, personId } from "@/lib/jsonld";
 import { CaseScreenshot, CaseVisual } from "@/components/CaseVisual";
+import { ProofLine } from "@/components/ProofLine";
 
 export const dynamicParams = false;
 
@@ -92,16 +93,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
         </h1>
         <div className="col-span-12 md:col-span-7 fade-in">
           <T as="p" v={c.kicker} className="t-lede max-w-[40ch]" />
-          {c.proof ? (
-            <p data-spec="Proof" className="t-meta mt-5 text-mark">
-              {c.proof.split(" · ").map((part, k) => (
-                <span key={k}>
-                  {k ? " " : null}
-                  <span className="whitespace-nowrap">{k ? `· ${part}` : part}</span>
-                </span>
-              ))}
-            </p>
-          ) : null}
+          {c.proof ? <ProofLine proof={c.proof} className="mt-5" /> : null}
           {external.length ? (
             <p className="t-meta mt-4 flex flex-wrap gap-x-5 gap-y-2">
               {external.map((l) => (
@@ -134,9 +126,20 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
         </dl>
       </header>
 
-      <div className="wrap mt-16" data-reveal>
-        <CaseVisual c={c} seed={i + 3} />
-      </div>
+      {/* A shipped product opens with the product itself; its drawing follows
+          the decisions. Without one, the drawing opens, at a size that leaves
+          the text within reach. */}
+      {c.image ? (
+        <div className="wrap mt-16" data-reveal>
+          <CaseScreenshot c={c} />
+        </div>
+      ) : (
+        <div className="wrap grid-12 mt-16" data-reveal>
+          <div className="col-span-12 lg:col-span-8 lg:col-start-3">
+            <CaseVisual c={c} seed={i + 3} />
+          </div>
+        </div>
+      )}
 
       <div className="wrap grid-12 mt-20 gap-y-16 sm:mt-28">
         <T as="p" v={c.summary} className="t-lede col-span-12 md:col-span-8 md:col-start-4" />
@@ -149,10 +152,10 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
               </h2>
               <T as="p" v={s.body} className="col-span-12 max-w-[62ch] text-[1.15rem] text-ink-2 md:col-span-8 md:col-start-4" />
             </section>
-            {/* the product itself, right after the decisions that shaped it */}
+            {/* the drawing of the idea, right after the decisions that shaped it */}
             {s.heading === "Decisions" && c.image ? (
-              <div className="col-span-12" data-reveal>
-                <CaseScreenshot c={c} />
+              <div className="col-span-12 lg:col-span-8 lg:col-start-3" data-reveal>
+                <CaseVisual c={c} seed={i + 3} />
               </div>
             ) : null}
           </Fragment>

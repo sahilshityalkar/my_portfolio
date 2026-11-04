@@ -23,7 +23,7 @@ export function SectionHead({
   size?: "primary" | "compact";
 }) {
   return (
-    <div className={`grid-12 gap-y-3 border-t border-(--rule-strong) pt-4 ${size === "primary" ? "items-end gap-y-4" : "items-baseline"}`}>
+    <div data-section-head className={`grid-12 gap-y-3 border-t border-(--rule-strong) pt-4 ${size === "primary" ? "items-end gap-y-4" : "items-baseline"}`}>
       {/* the sheet number sits in the corner under the rule, like a drawing's */}
       <p className="t-meta col-span-2 self-start text-mark md:col-span-3">{n}</p>
       <h2

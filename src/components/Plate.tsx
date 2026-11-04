@@ -166,7 +166,7 @@ function Heatmap() {
                 rx="3"
                 fill={y === slipping ? MARK : INK}
                 fillOpacity={y === slipping ? 0.3 + v : v * 0.85}
-                className="cell"
+                className={y === slipping ? "cell slip" : "cell"}
                 style={d(x + y)}
               />
             );

@@ -33,8 +33,9 @@ export function About() {
               <T as="p" v={c.body} className="mt-1.5 max-w-[44ch] text-ink-2" />
               <p className="t-meta mt-3 text-ink-3 lg:mt-auto lg:pt-4">
                 <span className="text-mark">Proof</span>&ensp;
+                {c.printProof ? <span className="hidden print:inline">{c.printProof}</span> : null}
                 {c.href?.startsWith("#") ? (
-                  <a href={c.href} className="link-draw text-ink">
+                  <a href={c.href} className={`link-draw text-ink ${c.printProof ? "print:hidden" : ""}`}>
                     {c.proof}
                   </a>
                 ) : c.href ? (

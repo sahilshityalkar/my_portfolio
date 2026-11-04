@@ -6,6 +6,8 @@ export type Capability = {
   /** The evidence a reviewer can check: a project, a measured result, this site. */
   proof: string;
   href?: string;
+  /** On paper, when the proof points at something only the screen has. */
+  printProof?: string;
 };
 
 /**
@@ -38,6 +40,7 @@ export const about: {
       body: "Accessible, responsive and fast by default: semantic HTML, full keyboard support, reduced-motion care and performance budgets.",
       proof: "Measured in the footer of this page",
       href: "#contact",
+      printProof: "Measured live in every visitor's browser at sahilshityalkar.com",
     },
     {
       title: "Full-stack product work",

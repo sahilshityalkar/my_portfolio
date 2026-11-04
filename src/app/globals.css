@@ -430,7 +430,11 @@ body::before {
 /* by night the real screenshot stays untinted, only a touch less bright, so
    it reads as a lit sheet on the table rather than a white slab */
 :root[data-theme="night"] .asbuilt-shot img {
-  filter: brightness(0.88);
+  filter: brightness(0.8);
+}
+/* by night the brass row of Plate III must stay the brightest thing on it */
+:root[data-theme="night"] .slip {
+  fill-opacity: 0.92;
 }
 .asbuilt-ring {
   opacity: 0;
@@ -764,6 +768,15 @@ html:not(.js) .asbuilt-toggle {
 /* Short phone screens (375x667 and the like): the hero tightens so the whole
    recruiter line, the work cue and the Work rule all fit on the first screen.
    Unlayered, so it wins over the utilities it adjusts. */
+/* Wide screens: "Sahil" sits left and "Shityalkar" right, so the surname
+   rises into the field beside the first name instead of starting a full
+   line below it; the hero gives the first screen back to the work. */
+@media (min-width: 1024px) {
+  #intro-title .mask-line + .mask-line {
+    margin-top: calc(-0.2em - var(--rise, 0.34em));
+  }
+}
+
 /* Short laptop screens (1366x768, 1280x800): the name gives up a little
    more height so the Work title is whole on the first screen. */
 @media (min-width: 1024px) and (max-height: 820px) {
@@ -959,6 +972,18 @@ html:not(.js) .asbuilt-toggle {
   #work h3 a::after,
   #intro [data-spec="Role"] a::after {
     content: none !important;
+  }
+  /* a section head on paper: number, title, and its aside on one line */
+  [data-section-head] {
+    display: flex !important;
+    align-items: baseline;
+    gap: 6mm;
+  }
+  [data-section-head] > h2 {
+    flex: 1;
+  }
+  [data-section-head] > div {
+    white-space: nowrap;
   }
   #about ul {
     grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
