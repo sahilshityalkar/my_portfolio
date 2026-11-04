@@ -43,7 +43,9 @@ const newsreaderFace = (newsreader.style.fontFamily.split(",")[0] ?? "").trim();
 
 const title = `${profile.name} · ${profile.role}`;
 // The hero states the role once, visually; search results still need it in words.
-const description = `${profile.role} at ${profile.company}, Mumbai. ${profile.statement}`;
+// Under 160 characters, so search results show it whole, and in the words a
+// recruiter searches for; every claim is on the page (stack, About)
+const description = `${profile.role} at ${profile.company}, Mumbai. TypeScript, React and Next.js, with a focus on performance, accessibility and full-stack product work.`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(profile.siteUrl),

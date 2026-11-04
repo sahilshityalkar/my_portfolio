@@ -1,4 +1,6 @@
 import { links, profile } from "@/content/profile";
+import { about } from "@/content/about";
+import { education } from "@/content/experience";
 
 /**
  * Structured data, from verified facts only (see PLACEHOLDERS.md): who this
@@ -22,6 +24,11 @@ export function person() {
       ...(profile.companyUrl ? { url: profile.companyUrl } : {}),
     },
     address: { "@type": "PostalAddress", addressLocality: "Mumbai", addressCountry: "IN" },
+    description: profile.statement,
+    image: `${profile.siteUrl}/opengraph-image`,
+    // the Toolkit's languages and frontend groups, as listed on the page
+    knowsAbout: about.toolkit.filter((g) => g.group === "Languages" || g.group === "Frontend").flatMap((g) => g.items),
+    alumniOf: education.map((e) => ({ "@type": "CollegeOrUniversity", name: e.school })),
     sameAs,
   };
 }

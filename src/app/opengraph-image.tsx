@@ -60,9 +60,9 @@ export default async function OG() {
       <div style={{ width: "100%", height: "100%", display: "flex", background: PAPER, color: INK, position: "relative" }}>
         <div style={{ position: "absolute", left: 64, right: 64, top: 52, display: "flex", justifyContent: "space-between", fontFamily: "Plex", fontSize: 18, letterSpacing: 1.5, color: INK3, textTransform: "uppercase" }}>
           <span style={{ display: "flex", gap: 14 }}>
-            <span style={{ color: MARK }}>01</span> Index
+            <span style={{ color: MARK }}>Portfolio</span> Updated {profile.updated}
           </span>
-          <span>Portfolio</span>
+          <span style={{ textTransform: "none", letterSpacing: 0 }}>{profile.siteUrl.replace(/^https?:\/\//, "")}</span>
         </div>
 
         {name(INK, 0, 0)}
@@ -89,7 +89,8 @@ export default async function OG() {
           <span>
             {profile.role} · {profile.company}
           </span>
-          <span style={{ color: MARK }}>Press L to look under the glass</span>
+          {/* in a chat preview the stack says more than an instruction */}
+          <span style={{ color: MARK }}>TypeScript · React · Next.js · Mumbai</span>
         </div>
       </div>
     ),

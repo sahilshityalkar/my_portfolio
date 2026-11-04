@@ -11,7 +11,7 @@ export function PrintButton({ className = "", children }: { className?: string; 
       type="button"
       onClick={() => window.print()}
       className={`${className} [html:not(.js)_&]:hidden`}
-      title="A two-page summary of this page, ready to save as PDF or print"
+      title="This page as a two-page résumé: save it as PDF, or print it"
     >
       {children}
     </button>

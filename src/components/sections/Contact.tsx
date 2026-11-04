@@ -44,7 +44,7 @@ export function Contact() {
                 </a>
                 {links.resume ? null : (
                   <PrintButton className="t-meta link-draw inline-flex items-center text-ink-2 hover:text-ink">
-                    Save a PDF summary ↓
+                    Save the résumé as PDF ↓
                   </PrintButton>
                 )}
               </div>

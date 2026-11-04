@@ -14,7 +14,9 @@ const host = labUrl.replace(/^https?:\/\//, "");
  * runs on this page (the glass) can be tried right here.
  */
 export function Lab() {
-  const featured = lab.slice(0, 3);
+  // until the lab site is live, only what can be seen today: the experiment
+  // that runs on this page (the others wait in lab.ts for their release)
+  const featured = lab.filter((e) => labLive || e.onThisPage).slice(0, 3);
   return (
     <section id="lab" aria-labelledby="lab-title" data-spec="Lab" className="wrap py-12 sm:py-16">
       <SectionHead
@@ -36,6 +38,7 @@ export function Lab() {
         <p className="col-span-12 max-w-[46ch] text-ink-2 lg:col-span-3" data-reveal>
           Small experiments in motion, rendering and layout, each about a single idea. They live on their own site, so
           they can be as heavy as they need to be without slowing this one down.
+          {labLive ? null : " The first already runs here, on this page."}
         </p>
 
         <ol className="col-span-12 border-t border-rule lg:col-span-9">

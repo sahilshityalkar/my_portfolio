@@ -7,7 +7,7 @@ import { getCase, work } from "@/content/work";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-export const alt = "A case study from the portfolio of Sahil Shityalkar";
+export const alt = "A case study by Sahil Shityalkar, Frontend Lead Engineer";
 
 const PAPER = "#f5f2ec";
 const INK = "#1c1b19";

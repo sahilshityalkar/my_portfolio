@@ -54,9 +54,9 @@ grep -rn "draft(" src/content
 6. [ ] **Lab entries** (`src/content/lab.ts`): Glass, Springs and Blueprint
    are demo entries. While `labLive = false` they are a plain list with no
    links, so nothing points at lab.sahilshityalkar.com pages that don't
-   exist: Glass and Springs say "In progress", and Blueprint (which is the
-   glass on this very page, `onThisPage: true`) offers "Try it here". If
-   Glass and Springs will not ship soon, consider removing them. When the lab site is deployed, update titles, summaries and slugs
+   exist. Until then only Blueprint shows (it is the glass on this very
+   page, `onThisPage: true`, and offers "Try it here"); Glass and Springs
+   stay in lab.ts, unshown, until the lab site is live. When the lab site is deployed, update titles, summaries and slugs
    to match what you published, then set `labLive = true` to restore the
    links and the "All experiments" band.
 7. [ ] **Source repo visibility**: if this site's repo is made public, set

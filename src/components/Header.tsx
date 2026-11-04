@@ -147,7 +147,7 @@ export function Header() {
             </a>
           ) : (
             <PrintButton className="hidden h-9 items-center rounded-full border border-(--rule-strong) px-4 text-ink transition-colors hover:bg-ink hover:text-paper lg:flex">
-              PDF summary
+              Résumé (PDF)
             </PrintButton>
           )}
 

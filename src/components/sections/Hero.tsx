@@ -156,7 +156,7 @@ export function Hero() {
               // on wide screens the header carries it
               <li className="lg:hidden">
                 <PrintButton className="link-draw uppercase text-ink">
-                  PDF summary
+                  Résumé (PDF)
                   <span aria-hidden="true" className="ml-1 text-ink-3">
                     ↓
                   </span>
