@@ -1,18 +1,29 @@
-/**
- * The home page's sections, in order: their anchors, sheet numbers and names.
- * The header nav, the ruler and each section head read them from here.
- */
-export const sections = [
-  { id: "intro", n: "01", label: "Intro" },
-  { id: "work", n: "02", label: "Work" },
-  { id: "experience", n: "03", label: "Experience" },
-  { id: "about", n: "04", label: "About" },
-  { id: "writing", n: "05", label: "Writing" },
-  { id: "lab", n: "06", label: "Lab" },
-  { id: "contact", n: "07", label: "Contact" },
+import { labLive } from "./lab";
+
+const all = [
+  { id: "intro", label: "Intro" },
+  { id: "work", label: "Work" },
+  { id: "experience", label: "Experience" },
+  { id: "about", label: "About" },
+  { id: "writing", label: "Writing" },
+  { id: "lab", label: "Lab" },
+  { id: "contact", label: "Contact" },
 ] as const;
 
-export type SectionId = (typeof sections)[number]["id"];
+export type SectionId = (typeof all)[number]["id"];
+
+/**
+ * The home page's sections, in order: their anchors, sheet numbers and names.
+ * The header nav, the ruler and each section head read them from here. The
+ * lab appears once its site is live (content/lab.ts): until then its one
+ * entry would only repeat the hero, and the numbers close up around it.
+ */
+export const sections = all
+  .filter((s) => s.id !== "lab" || labLive)
+  .map((s, i) => ({ ...s, n: String(i + 1).padStart(2, "0") }));
+
+/** Whether a section is on the page, e.g. shown("lab") === labLive. */
+export const shown = (id: SectionId) => sections.some((s) => s.id === id);
 
 /** A section's sheet number, e.g. sheet("work") === "02". */
-export const sheet = (id: SectionId) => sections.find((s) => s.id === id)!.n;
+export const sheet = (id: SectionId) => sections.find((s) => s.id === id)?.n ?? "";

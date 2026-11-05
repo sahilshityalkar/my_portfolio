@@ -84,13 +84,12 @@ would rather not stand behind (remove it from `src/content/writing.ts`).
    the part of an interface nobody screenshots. Written for you; make it
    sound like you. Paragraph 2 (MERN to Next.js, ReplyAI) is also demo.
 6. [ ] **Lab entries** (`src/content/lab.ts`): Glass, Springs and Blueprint
-   are demo entries. While `labLive = false` they are a plain list with no
-   links, so nothing points at lab.sahilshityalkar.com pages that don't
-   exist. Until then only Blueprint shows (it is the glass on this very
-   page, `onThisPage: true`, and offers "Try it here"); Glass and Springs
-   stay in lab.ts, unshown, until the lab site is live. When the lab site is deployed, update titles, summaries and slugs
-   to match what you published, then set `labLive = true` to restore the
-   links and the "All experiments" band.
+   are demo entries. While `labLive = false` the whole Lab section is left
+   off the home page (its one entry only repeated the hero's glass), and
+   the nav, ruler and sheet numbers close up around it. When the lab site
+   is deployed, update titles, summaries and slugs to match what you
+   published, then set `labLive = true`: the section, its links and its
+   nav entry come back, numbered in place.
 7. [ ] **Source repo visibility**: if this site's repo is made public, set
    `links.source` in `profile.ts` to its GitHub URL. The footer title block
    then shows "Source ↗". It stays hidden while `null`.

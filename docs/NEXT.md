@@ -62,10 +62,10 @@ Done: a curated home notes list, honest proof lines, note wording; Clyra
 cases II and III are compact rows (plate at index-card size on large
 screens), so ReplyAI leads; ReplyAI's Decisions map each part of the
 product to the constraint it answers (the second Plate I stays: it is the
-drawing of those decisions). Next, none of which needs the owner:
-3. Print: drop the "press L" line on paper; consider a three-line Notes
-   block if it still fits two pages.
-4. Hide #lab while `labLive` is false (its one entry repeats the hero).
+drawing of those decisions); the Lab section is off the page until
+`labLive` (numbers close up: Contact is 06). Next, none of which needs the
+owner:
+3. Print: consider a three-line Notes block if it still fits two pages.
 
 ## How to verify
 
@@ -91,7 +91,7 @@ In priority order (details in PLACEHOLDERS.md):
 3. An in-app ReplyAI screenshot (inbox, replies, approval) to replace the
    marketing-page one in `public/work/replyai.png`.
 4. Confirm or remove the availability lines and the reply-time promise.
-5. Lab site at lab.sahilshityalkar.com, or remove Glass and Springs.
+5. Lab site at lab.sahilshityalkar.com (the section returns with `labLive`).
 6. Deploy on Vercel and connect sahilshityalkar.com.
 
 Known, deliberately left: 320x568 phones do not show the Work rule on the
