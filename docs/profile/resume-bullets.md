@@ -29,8 +29,9 @@ complaint-reply-generator.vercel.app
 - Built a customer-response workspace that turns a pasted complaint into
   three ready-to-send replies in under five seconds (measured 2.6 to 2.9 s
   end to end), in English, Hindi, Hinglish, Tamil, Marathi, Bengali and more.
-- Designed brand-voice profiles, a safety engine that holds risky replies
-  (legal threats, chargebacks, abusive language) for review, and an approval
+- Designed brand-voice profiles, a safety engine that routes risky complaints
+  (legal threats, chargebacks, abusive language) to review instead of an
+  automatic reply, and an approval
   inbox between AI drafts and sending; email and WhatsApp channels behind
   authenticated webhooks.
 - Found and fixed a silent data-loss bug that a green build and 22 of 22

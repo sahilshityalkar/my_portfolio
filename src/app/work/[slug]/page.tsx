@@ -158,7 +158,23 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
                   {s.points.map((pt) => (
                     <div key={pt.lead} className="grid gap-x-6 gap-y-1 border-b border-rule py-3 sm:grid-cols-[11rem_minmax(0,1fr)]">
                       <dt className="t-meta pt-1 text-mark">{pt.lead}</dt>
-                      <dd className="text-pretty text-ink-2">{pt.text}</dd>
+                      <dd className="text-pretty text-ink-2">
+                        {pt.text}
+                        {pt.href ? (
+                          <>
+                            {" "}
+                            <a
+                              href={pt.href}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="t-meta link-draw whitespace-nowrap text-ink"
+                              aria-label={`The code for “${pt.lead}”, on GitHub`}
+                            >
+                              Code ↗
+                            </a>
+                          </>
+                        ) : null}
+                      </dd>
                     </div>
                   ))}
                 </dl>

@@ -38,13 +38,27 @@ export const work: CaseStudy[] = [
       {
         heading: "Decisions",
         body: "Each of those three constraints became a part of the product, and the rest is what a support team needs around them.",
+        // each point checked against the public repo at 209c9de; the links open the code
         points: [
-          { lead: "Sound like the business", text: "Brand-voice profiles distil a reusable voice “DNA” and apply it to every draft." },
-          { lead: "Say nothing it shouldn’t", text: "A safety engine checks every reply before it goes out." },
-          { lead: "A person approves first", text: "An approval inbox sits between the AI drafts and sending." },
+          {
+            lead: "Sound like the business",
+            text: "Brand-voice profiles distil a reusable voice “DNA” and apply it to every draft.",
+            href: "https://github.com/sahilshityalkar/complaint-reply-generator/blob/main/src/lib/voice.ts",
+          },
+          {
+            lead: "Say nothing it shouldn’t",
+            text: "A safety engine reads each incoming complaint and sends the risky ones (legal threats, chargebacks, sensitive data) to a person instead of an automatic reply.",
+            href: "https://github.com/sahilshityalkar/complaint-reply-generator/blob/main/src/lib/safety.ts",
+          },
+          {
+            lead: "A person approves first",
+            text: "An approval inbox sits between the AI drafts and sending.",
+            href: "https://github.com/sahilshityalkar/complaint-reply-generator/blob/main/src/components/ApprovalInbox.tsx",
+          },
           {
             lead: "Where support happens",
             text: "Email and WhatsApp channels behind authenticated webhooks, data connectors that let replies draw on the business’s own Postgres data, and usage tracking per plan.",
+            href: "https://github.com/sahilshityalkar/complaint-reply-generator/tree/main/src/app/api/webhooks",
           },
         ],
       },

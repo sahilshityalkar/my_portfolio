@@ -48,6 +48,7 @@ export function Work() {
           const compact = !c.image;
           // a full case before it needs the larger gap; compact rows sit close
           const afterFull = !!work[i - 1]?.image;
+          const printPoints = c.image ? c.sections.find((x) => x.points?.length)?.points : undefined;
           // a compact row sits on the page grid: its facts start on the same
           // column line as case I's (9), its story fills the columns before
           const story = compact ? "md:col-span-7 md:col-start-1 lg:col-span-5" : "";
@@ -119,6 +120,17 @@ export function Work() {
                 </h3>
                 <T as="p" v={c.kicker} className={`mt-4 max-w-[38ch] text-pretty text-ink-2 ${story}`} />
                 {c.proof ? <ProofLine proof={c.proof} className={`mt-4 ${story}`} /> : null}
+                {/* on paper only: the résumé is forwarded to people who never
+                    open the site, so the shipped case carries its decisions */}
+                {printPoints?.length ? (
+                  <ul className="hidden print:block">
+                    {printPoints.map((pt) => (
+                      <li key={pt.lead}>
+                        <span className="t-meta text-mark">{pt.lead}:</span> {pt.text}
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
                 <dl
                   className={`t-meta mt-6 grid grid-cols-[6rem_1fr] gap-y-1.5 border-t border-rule pt-4 ${
                     compact ? `${facts} md:row-span-2 md:row-start-1 md:mt-1 md:content-start` : ""

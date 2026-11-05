@@ -324,8 +324,22 @@ export function Loupe() {
     };
 
     const onKey = (e: KeyboardEvent) => {
-      if (demo) endDemo(e.key.toLowerCase() !== "l" && e.key !== "Escape");
-      if (isTyping(e.target) || e.metaKey || e.ctrlKey || e.altKey) return;
+      const plain = !isTyping(e.target) && !e.metaKey && !e.ctrlKey && !e.altKey;
+      if (demo) {
+        const from = demo.from;
+        const tryIt = plain && e.key.toLowerCase() === "l";
+        endDemo(!tryIt && e.key !== "Escape");
+        // "Press L" while the demo runs means "let me try": the open lens is
+        // handed to the visitor's pointer, not toggled shut
+        if (tryIt) {
+          pointer = { x: from.x, y: from.y, seen: true };
+          px.target = from.x;
+          py.target = from.y;
+          kick();
+          return;
+        }
+      }
+      if (!plain) return;
       if (e.key === "Escape" && current !== "off") inspect.set("off");
       else if (e.key.toLowerCase() === "l") inspect.set(current === "off" ? "lens" : "off");
     };

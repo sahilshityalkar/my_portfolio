@@ -1213,3 +1213,19 @@ html:not(.js) .asbuilt-toggle {
     display: none !important;
   }
 }
+
+/* The printed résumé: the shipped case's decisions, under its summary */
+@media print {
+  #work ol > li > div > ul {
+    margin-top: 2mm !important;
+    font-size: 9pt;
+    line-height: 1.35;
+    color: var(--ink-2);
+  }
+  #work ol > li > div > ul > li + li {
+    margin-top: 1mm;
+  }
+  #work ol > li > div > ul .t-meta {
+    font-size: 7pt;
+  }
+}

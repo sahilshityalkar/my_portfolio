@@ -47,8 +47,11 @@ export type CaseStudy = {
   proof?: string;
   summary: Text;
   /** Case-study body. Each section renders with the same editorial template. */
-  /** `points`: a section's claims as a short list, each led by what it answers. */
-  sections: { heading: string; body: Text; points?: { lead: string; text: string }[] }[];
+  /**
+   * `points`: a section's claims as a short list, each led by what it answers,
+   * with `href` to the code that backs it where the source is public.
+   */
+  sections: { heading: string; body: Text; points?: { lead: string; text: string; href?: string }[] }[];
   links: Link[];
   /** A real screenshot of the shipped product (file in /public), shown on the case page. */
   image?: { src: string; alt: string; url?: string };
