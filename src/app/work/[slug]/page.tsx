@@ -131,7 +131,8 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
           the decisions. Without one, the drawing opens, at a size that leaves
           the text within reach. */}
       {c.image ? (
-        <div className="wrap mt-16" data-reveal>
+        // no reveal: it is the largest paint on a phone, so it arrives with the page
+        <div className="wrap mt-16">
           <CaseScreenshot c={c} />
         </div>
       ) : (

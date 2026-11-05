@@ -21,7 +21,7 @@ export function CaseScreenshot({ c }: { c: CaseStudy }) {
         {c.image.url ? <span className="truncate">{c.image.url}</span> : null}
       </figcaption>
       <div className="relative aspect-[1780/1080]">
-        <Image src={c.image.src} alt={c.image.alt} fill sizes="(min-width: 1440px) 1344px, calc(100vw - 2 * clamp(1rem, 4vw, 3rem))" className="object-cover object-top" />
+        <Image src={c.image.src} alt={c.image.alt} fill loading="eager" fetchPriority="high" sizes="(min-width: 1440px) 1344px, calc(100vw - 2 * clamp(1rem, 4vw, 3rem))" className="object-cover object-top" />
       </div>
     </figure>
   );

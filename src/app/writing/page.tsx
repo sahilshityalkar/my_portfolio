@@ -3,6 +3,7 @@ import Link from "next/link";
 import { posts } from "@/content/writing";
 import { profile } from "@/content/profile";
 import { PostList } from "@/components/PostList";
+import { JsonLd, personId } from "@/lib/jsonld";
 import { lede } from "./lede";
 
 const description = `Notes on frontend engineering by ${profile.name}: performance, layout, typography and shipping products that work.`;
@@ -28,6 +29,21 @@ export const metadata: Metadata = {
 export default function WritingIndex() {
   return (
     <div className="wrap pb-20 pt-[calc(var(--header-h)+3rem)]">
+      <JsonLd
+        data={{
+          "@type": "Blog",
+          name: `Writing · ${profile.name}`,
+          description: lede,
+          url: `${profile.siteUrl}/writing`,
+          author: { "@id": personId },
+          blogPost: posts.map((p) => ({
+            "@type": "BlogPosting",
+            headline: p.title,
+            url: `${profile.siteUrl}/writing/${p.slug}`,
+            datePublished: p.date,
+          })),
+        }}
+      />
       <nav aria-label="Breadcrumb" className="t-meta flex gap-3 text-ink-3">
         <Link href="/#writing" className="link-draw hover:text-ink">
           ← Index
@@ -45,7 +61,7 @@ export default function WritingIndex() {
         </a>
       </p>
       <div className="mt-12">
-        <PostList posts={posts} headingLevel="h2" />
+        <PostList posts={posts} headingLevel="h2" reveal={false} />
       </div>
     </div>
   );

@@ -9,16 +9,19 @@ export function PostList({
   posts,
   headingLevel = "h3",
   lead = "date",
+  reveal = true,
 }: {
   posts: Post[];
   headingLevel?: "h2" | "h3";
   lead?: "date" | "topic";
+  /** Off where the list is the first screen (/writing): its first row is the largest paint. */
+  reveal?: boolean;
 }) {
   const H = headingLevel;
   return (
     <ol className="border-t border-rule">
       {posts.map((p, i) => (
-        <li key={p.slug} className="border-b border-rule" data-reveal style={{ ["--i" as string]: i }}>
+        <li key={p.slug} className="border-b border-rule" data-reveal={reveal || undefined} style={{ ["--i" as string]: i }}>
           <Link href={`/writing/${p.slug}`} className="group grid gap-x-6 gap-y-2 py-5 sm:grid-cols-[9rem_minmax(0,1fr)_auto]">
             <span className="t-meta pt-1.5 text-ink-3">
               {lead === "date" ? <time dateTime={p.date}>{formatDate(p.date)}</time> : p.tags.slice(0, 2).join(" · ")}

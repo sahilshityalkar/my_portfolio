@@ -72,7 +72,12 @@ export function Prose({ body }: { body: Block[] }) {
             <figure className="prose-code">
               {b.caption ? <figcaption className="t-meta">{b.caption}</figcaption> : null}
               {/* a long line scrolls inside the block, never the page */}
-              <pre tabIndex={0} aria-label={b.caption ? `Code: ${b.caption}` : "Code"}>
+              <pre
+                tabIndex={0}
+                role="region"
+                aria-label={b.caption ? `Code: ${b.caption}` : "Code"}
+                data-label={b.caption ? `Code: ${b.caption}` : "Code"}
+              >
                 <code data-lang={b.lang}>{b.code}</code>
               </pre>
             </figure>

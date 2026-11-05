@@ -67,6 +67,16 @@ drawing of those decisions); the Lab section is off the page until
 owner:
 3. Print: consider a three-line Notes block if it still fits two pages.
 
+Audit, 5 November (Lighthouse 13.6, axe 4.14): desktop 100 everywhere; axe 0
+violations on every route at 1280 and 375 in both themes. Fixed: /writing
+mobile LCP 3.5 s to 0.8 s (its first rows no longer wait for a reveal), the
+case screenshot paints with the page (eager, high priority), code blocks are
+labelled regions only while they scroll, a Blog JSON-LD on /writing, and
+sitemap dates only where content has one. Left: /work/replyai mobile is
+89 to 93 (simulated LCP 3.2 s), bound by the 104 KB Newsreader roman
+preload and framework JS on the throttled link, not by render delay; the
+next step there would be subsetting the variable font's axes.
+
 ## How to verify
 
 ```bash
