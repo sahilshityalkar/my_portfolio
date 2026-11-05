@@ -45,7 +45,7 @@ export const fallbacks: Post = {
     },
     {
       type: "p",
-      text: "It happens on any machine with Times New Roman installed. My Linux test machine at first had none, so the fallback face never matched there and the extra line did not reproduce. A fallback test only means something where the fallback font exists.",
+      text: "It reproduces wherever Times New Roman or a metric clone is installed. My Linux test machine at first had none, so the fallback face never matched there and the extra line did not reproduce. A fallback test only means something where the fallback font exists.",
     },
 
     { type: "h", text: "Three tiers and an italic" },
@@ -158,17 +158,6 @@ italic   0.735 / 1.032 = 71.22%    0.265 / 1.032 = 25.68%`,
     {
       type: "p",
       text: "I would test delayed fonts on a machine with Times New Roman from the start, and give the generator a sanity check on its output: an override far outside 0% to 200% is a bug, not a font.",
-    },
-
-    { type: "h", text: "What I'd take away" },
-    {
-      type: "list",
-      items: [
-        "A metric-matched fallback matches one size. With optical sizes, measure the width ratio at each size you set, and give each tier its own face.",
-        "Divide ascent and descent overrides by `size-adjust`, because it scales them too.",
-        "Test a font swap where the fallback font exists. A machine without it can hide the shift.",
-        "When a generated value looks like a browser bug, read the generated value first.",
-      ],
     },
   ],
 };

@@ -39,16 +39,11 @@ Attach the link; the share cards are designed for these previews.
 > How three fallback tiers took font-swap layout shift on my portfolio to
 > zero, and the debugging detour that cost me an hour. [link]
 
-## "Profiling the glass: the cost was pixels, not code"
+## "A canvas loupe at 4x CPU: 50 ms to 16.8 ms at p95"
 
 > My portfolio's loupe spent its frames repainting pixels that had not
 > changed. A profile, an offscreen canvas and a lens-sized window took it
 > from 21.8 ms to 17.6 ms a frame on a 4x slowed CPU. [link]
-
-## "A portfolio page that prints as a two-page résumé"
-
-> Recruiters forward PDFs, so my portfolio prints as a two-page résumé from
-> the same page: one print stylesheet, no second template. [link]
 
 ## X (one line each)
 

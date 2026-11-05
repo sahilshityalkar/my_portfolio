@@ -341,6 +341,16 @@ body::before {
   }
   .prose-code pre {
     overflow-x: auto;
+    /* scroll shadows, CSS only: the paper covers (moving with the content,
+       "local") hide the shadows (fixed to the box, "scroll") at whichever
+       end there is nothing more to see, so a soft edge appears only where
+       the code continues */
+    background:
+      linear-gradient(to right, var(--paper-2) 40%, transparent) left / 2.5rem 100% no-repeat local,
+      linear-gradient(to left, var(--paper-2) 40%, transparent) right / 2.5rem 100% no-repeat local,
+      linear-gradient(to right, color-mix(in srgb, var(--ink) 14%, transparent), transparent) left / 0.9rem 100% no-repeat scroll,
+      linear-gradient(to left, color-mix(in srgb, var(--ink) 14%, transparent), transparent) right / 0.9rem 100% no-repeat scroll,
+      var(--paper-2);
     padding: 0.9rem;
     font-family: var(--mono);
     font-size: 0.8125rem;
@@ -1058,7 +1068,7 @@ html:not(.js) .asbuilt-toggle {
   #experience {
     break-before: page;
   }
-  main section > div:first-child {
+  [data-section-head] {
     break-after: avoid;
   }
   #work ol > li > div {

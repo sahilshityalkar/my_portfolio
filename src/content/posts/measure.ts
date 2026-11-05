@@ -10,7 +10,7 @@ import type { Post } from "../writing";
 export const measure: Post = {
   slug: "drag-the-measure",
   title: "Drag the measure without moving the page",
-  dek: "The hero's paragraph re-sets live as you drag its measure. A canvas kept layout shift at zero; matching the browser's line positions took three fixes.",
+  dek: "Dragging the hero's measure re-sets its paragraph live. Drawing it on a canvas kept CLS at 0; matching the browser's line positions took three fixes.",
   date: "2026-11-04",
   tags: ["performance", "cls", "canvas", "typography"],
   links: [{ label: "See it on the home page", href: "/" }],
@@ -21,7 +21,7 @@ export const measure: Post = {
     },
     {
       type: "p",
-      text: "Making it move was easy. Keeping it from moving the rest of the page took a canvas, a hand-off that matches the browser line for line, and an overflow fix that a QA pass found after I thought I was done.",
+      text: "Keeping it from moving the rest of the page took a canvas, a hand-off that matches the browser line for line, and an overflow fix that a QA pass found after I thought I was done.",
     },
 
     { type: "h", text: "Reflowing during a drag counts as layout shift" },
@@ -79,11 +79,11 @@ export function balance(words: string[], width: number, measure: Measure): strin
     { type: "h", text: "Ask the browser where each line is" },
     {
       type: "p",
-      text: "My first version placed line *i* at `i * lh` from the paragraph's top, plus half the leading and the font's ascent. QA's second round caught the hand-off moving the text by a pixel. Taking the first baseline from the DOM, snapped to device pixels, fixed the first line. Snapping every baseline in the next round was not enough either: the third line still moved.",
+      text: "My first version placed line *i* at `i * lh` from the paragraph's top, plus half the leading and the font's ascent. A second round of QA caught the hand-off moving the text by a pixel. Taking the first baseline from the DOM, snapped to device pixels, fixed the first line. Snapping every baseline in the next round was not enough either: the third line still moved.",
     },
     {
       type: "p",
-      text: "Browsers place line boxes in layout units of 1/64 px. Each line box lands on a rounded position, so multiplying the line height by the index drifts from what the browser actually did. By the third line the drift crossed a pixel.",
+      text: "Chromium places line boxes in layout units of 1/64 px. Each line box lands on a rounded position, so multiplying the line height by the index drifts from what the browser actually did. By the third line the drift crossed a pixel.",
     },
     {
       type: "p",
@@ -167,17 +167,6 @@ const cw = Math.min(maxW + padL + PAD, document.documentElement.clientWidth - bo
     {
       type: "p",
       text: "One trade-off remains. The canvas applies tracking only where canvas `letterSpacing` is supported, so a browser without it sets the canvas a little differently from the DOM. I accepted that because the statement's tracking is small (`-0.01em`).",
-    },
-
-    { type: "h", text: "What I'd take away" },
-    {
-      type: "list",
-      items: [
-        "A drag is continuous input. CLS only forgives shifts within 500 ms of a discrete one, so anything that reflows during a drag counts.",
-        "If you draw text instead of laying it out, leave the DOM text in place. It keeps accessibility and selection for free.",
-        "Do not predict where the browser put a line. Ask it with `Range.getClientRects()`.",
-        "Hidden is not gone. Take an idle element out of the layout, and clip overflow at the section that owns it.",
-      ],
     },
   ],
 };

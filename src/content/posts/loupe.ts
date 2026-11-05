@@ -11,11 +11,11 @@ import type { Post } from "../writing";
  */
 export const loupe: Post = {
   slug: "profiling-a-canvas-loupe",
-  title: "Profiling the glass: the cost was pixels, not code",
-  dek: "At 4x CPU throttle the glass took 21.8 ms a frame, 50 ms at p95. A profile pointed at rasterisation; caching the scene cut it to 17.6 ms and 16.8 ms.",
+  title: "A canvas loupe at 4x CPU: 50 ms to 16.8 ms at p95",
+  dek: "Culling draw calls barely helped. A CPU profile showed the browser rasterising the whole viewport on every pointer move; caching the scene and shrinking the canvas to the lens fixed it.",
   date: "2026-11-03",
   tags: ["performance", "canvas", "profiling"],
-  links: [{ label: "Press L on the home page", href: "/" }],
+  links: [{ label: "See the glass on the home page", href: "/" }],
   body: [
     {
       type: "p",
@@ -145,7 +145,7 @@ drawLens(frame, scene);`,
     { type: "h", text: "A closed glass should cost nothing" },
     {
       type: "p",
-      text: "The same review found a cost no frame timing would show: the glass worked while closed. It measured the page and sized its canvas on load, and again on every resize. On a phone, the URL bar hiding as you scroll fires a resize, so that was a full DOM measurement for a feature nobody had opened.",
+      text: "A later review found a cost no frame timing would show: the glass worked while closed. It measured the page and sized its canvas on load, and again on every resize. On a phone, the URL bar hiding as you scroll fires a resize, so that was a full DOM measurement for a feature nobody had opened.",
     },
     {
       type: "p",
@@ -162,13 +162,12 @@ drawLens(frame, scene);`,
       items: [
         "4x CPU, lens moving, before: 21.8 ms average, 50 ms at p95.",
         "4x CPU, lens moving, after: 17.6 ms average, 16.8 ms at p95.",
-        "Unthrottled, after: 16.7 ms, one frame at 60 Hz.",
         "Cumulative layout shift: 0.",
       ],
     },
     {
       type: "p",
-      text: "A p95 below the average looks odd. It means almost every frame now lands on the 16.7 ms tick and a few long ones pull the mean up. I read those as the frames that render the scene again, a cost I moved rather than removed.",
+      text: "These are intervals between animation frames, so at 60 Hz the floor is 16.7 ms. A p95 below the average looks odd. It means almost every frame now lands on the 16.7 ms tick and a few long ones pull the mean up. I read those as the frames that render the scene again, a cost I moved rather than removed.",
     },
     {
       type: "p",
@@ -182,18 +181,7 @@ drawLens(frame, scene);`,
     },
     {
       type: "p",
-      text: "What I would do differently: profile before optimising. Culling was a reasonable guess and it did help, but it went after the number of commands when the cost was in pixels. I would also write the cache key from an explicit list of everything the scene reads, focus included, before writing the cache, instead of leaving a reviewer to find the missing input.",
-    },
-
-    { type: "h", text: "What I'd take away" },
-    {
-      type: "list",
-      items: [
-        "Find where the time goes before deciding what to cut. A profile dominated by `(program)` points at native work such as rasterisation, not at your code.",
-        "Separate what changes per frame from what changes per event. Here the pointer only chose a window onto a picture that changes on scroll, resize, remeasure, focus or theme.",
-        "A cache key is a claim about every input. Write the inputs down and test the one you are least sure of.",
-        "A feature that is closed should cost nothing, including on resize events you did not think about.",
-      ],
+      text: "What I would do differently: profile before optimising. Culling was a reasonable guess and it did help, but it went after the number of commands when the cost was in pixels. I would also write the cache key from an explicit list of everything the scene reads, focus included, before writing the cache, instead of finding the missing input in review.",
     },
   ],
 };

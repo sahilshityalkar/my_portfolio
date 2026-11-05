@@ -20,7 +20,7 @@ export const greenBuild: Post = {
   body: [
     {
       type: "p",
-      text: "By early June 2026 every feature in ReplyAI's plan was marked done, the build was green and the unit suite passed 22 of 22. Then I used the running app the way a customer would, and found it had not been saving a single reply it generated.",
+      text: "By early June 2026 every feature in ReplyAI's plan was marked done, the build was green and the unit suite passed 22 of 22. Then I ran the app against its real services, signed in as a real user, and found it had not been saving a single reply it generated.",
     },
     {
       type: "p",
@@ -37,7 +37,7 @@ export const greenBuild: Post = {
       text: "Every check I had was green. The project compiled, the linter was quiet and Vitest passed 22 of 22. None of those checks touched a real database.",
     },
 
-    { type: "h", text: "Testing it the way a customer would" },
+    { type: "h", text: "Testing against the real services" },
     {
       type: "p",
       text: "So I ran a different kind of test: the app on localhost with a real signed-in Clerk session, the real Supabase project and real Groq calls, driving the product through its API from the browser. The first result looked fine. `/api/generate` returned 200 with three distinct, relevant replies in about 2.6 to 2.9 seconds, inside the five-second promise.",
@@ -100,7 +100,7 @@ if (historyError) {
       text: "I chose not to fail the request. The replies are the product, and someone answering a complaint should still get them if history storage is broken. The failure is now in the logs the moment it happens. The voice routes got the same treatment: they return the underlying error detail instead of an empty 500.",
     },
 
-    { type: "h", text: "A schema check that can fail a deploy" },
+    { type: "h", text: "A schema check to run before deploying" },
     {
       type: "p",
       text: "Logging catches the problem after a user hits it. I also wanted to catch it before, so I added a schema verifier: a Node script that lists every table and column the application code depends on, asks the database whether each one exists, and exits non-zero if anything is missing.",
@@ -130,7 +130,7 @@ const EXPECTED = {
     },
     {
       type: "p",
-      text: "It runs as `npm run check:schema`, reads the Supabase URL and service key from `.env.local` or the environment, and needs nothing beyond the Supabase client. Exit code 0 means every expected column is present; 1 means something is missing or the database could not be reached, and it says which, so a paused project reads as paused rather than as a missing table. It is meant to run after applying migrations, in CI and before every deploy.",
+      text: "It runs as `npm run check:schema`, reads the Supabase URL and service key from `.env.local` or the environment, and needs nothing beyond the Supabase client. Exit code 0 means every expected column is present; 1 means something is missing or the database could not be reached, and it says which, so a paused project reads as paused rather than as a missing table. Because it exits non-zero, it can gate a deploy. ReplyAI has no CI yet; wiring the check into it is the next step.",
     },
 
     { type: "h", text: "Why 22 passing tests said nothing" },
