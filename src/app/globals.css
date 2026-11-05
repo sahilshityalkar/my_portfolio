@@ -1153,4 +1153,15 @@ html:not(.js) .asbuilt-toggle {
   article figure {
     break-inside: avoid;
   }
+  /* posts on paper: code wraps instead of scrolling (paper cannot scroll),
+     and the "next note" link has nothing to offer a printout */
+  .prose-code pre {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    overflow: visible;
+    background: none;
+  }
+  article[data-spec="Post"] > footer {
+    display: none;
+  }
 }

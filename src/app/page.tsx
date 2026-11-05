@@ -7,6 +7,7 @@ import { Writing } from "@/components/sections/Writing";
 import { Contact } from "@/components/sections/Contact";
 import { Ruler } from "@/components/Ruler";
 import { JsonLd, person } from "@/lib/jsonld";
+import { PrintOnArrival } from "@/components/PrintButton";
 import { profile } from "@/content/profile";
 
 export default function Home() {
@@ -21,6 +22,7 @@ export default function Home() {
       <Lab />
       <Contact />
       <Ruler />
+      <PrintOnArrival />
     </>
   );
 }

@@ -4,6 +4,7 @@ import { Fragment } from "react";
 import type { Block } from "@/content/writing";
 import { tokenize } from "@/lib/inline";
 import { anchor } from "@/lib/reading";
+import { CodeFocus } from "./CodeFocus";
 
 /**
  * Inline text (see lib/inline.ts): internal links (starting with /) use the
@@ -91,6 +92,7 @@ export function Prose({ body }: { body: Block[] }) {
           )}
         </Fragment>
       ))}
+      {body.some((b) => b.type === "code") ? <CodeFocus /> : null}
     </div>
   );
 }

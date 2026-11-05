@@ -129,10 +129,16 @@ export function measure(ctx: CanvasRenderingContext2D): Model {
     const parent = n.parentElement;
     if (!parent || parent.closest("[aria-hidden=true]")) continue;
     const fixed = isFixed(parent);
+    // a long line inside a code block scrolls within it: clip each line box to
+    // the block so the lens never draws text that is scrolled out of view
+    const clip = parent.closest("pre")?.getBoundingClientRect();
     range.selectNodeContents(n);
     for (const r of range.getClientRects()) {
-      if (r.width < 2 || r.height < 2) continue;
-      lines.push({ x: r.left + (fixed ? 0 : sx), y: r.top + (fixed ? 0 : sy), w: r.width, h: r.height, fixed });
+      const left = clip ? Math.max(r.left, clip.left) : r.left;
+      const right = clip ? Math.min(r.right, clip.right) : r.right;
+      const w = right - left;
+      if (w < 2 || r.height < 2) continue;
+      lines.push({ x: left + (fixed ? 0 : sx), y: r.top + (fixed ? 0 : sy), w, h: r.height, fixed });
     }
   }
 

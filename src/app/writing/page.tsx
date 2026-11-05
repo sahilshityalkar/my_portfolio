@@ -4,10 +4,24 @@ import { posts } from "@/content/writing";
 import { profile } from "@/content/profile";
 import { PostList } from "@/components/PostList";
 
+const description = `Notes on frontend engineering by ${profile.name}: performance, layout, typography and shipping products that work.`;
+const shareTitle = `Writing · ${profile.name}`;
+
+// openGraph and twitter replace the root's whole objects (metadata merges
+// shallowly), so without these the index would share as the home page
 export const metadata: Metadata = {
   title: "Writing",
-  description: `Notes on frontend engineering by ${profile.name}: performance, layout, typography and shipping products that work.`,
+  description,
   alternates: { canonical: "/writing", types: { "application/rss+xml": "/feed.xml" } },
+  openGraph: {
+    type: "website",
+    url: "/writing",
+    siteName: profile.name,
+    title: shareTitle,
+    description,
+    locale: "en_IN",
+  },
+  twitter: { card: "summary_large_image", title: shareTitle, description, creator: "@SK_sahil05" },
 };
 
 export default function WritingIndex() {

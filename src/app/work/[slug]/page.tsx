@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: PageProps<"/work/[slug]">): P
   return {
     title,
     description,
-    alternates: { canonical: `/work/${c.slug}` },
+    alternates: { canonical: `/work/${c.slug}`, types: { "application/rss+xml": "/feed.xml" } },
     openGraph: {
       type: "article",
       url: `/work/${c.slug}`,

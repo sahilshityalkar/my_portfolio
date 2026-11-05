@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { profile, links } from "@/content/profile";
 import { inspect, openGlass, section, theme, useStore } from "@/lib/store";
 import { readTheme, setTheme } from "@/lib/theme";
+import { usePathname } from "next/navigation";
 import { PrintButton } from "@/components/PrintButton";
 import { sections } from "@/content/sections";
 
@@ -14,6 +15,7 @@ export function Header() {
   const mode = useStore(inspect, "off");
   const t = useStore(theme, "day");
   const here = useStore(section, null);
+  const home = usePathname() === "/";
   const [open, setOpen] = useState(false);
   const menuButton = useRef<HTMLButtonElement>(null);
 
@@ -146,9 +148,20 @@ export function Header() {
               Résumé
             </a>
           ) : (
-            <PrintButton className="hidden h-9 items-center rounded-full border border-(--rule-strong) px-4 text-ink transition-colors hover:bg-ink hover:text-paper lg:flex">
-              Résumé (PDF)
-            </PrintButton>
+            // the summary is the home page printed: elsewhere the button goes
+            // there and asks it to print (?print), never prints this page
+            home ? (
+              <PrintButton className="hidden h-9 items-center rounded-full border border-(--rule-strong) px-4 text-ink transition-colors hover:bg-ink hover:text-paper lg:flex">
+                Résumé (PDF)
+              </PrintButton>
+            ) : (
+              <Link
+                href="/?print"
+                className="hidden h-9 items-center rounded-full border border-(--rule-strong) px-4 text-ink transition-colors hover:bg-ink hover:text-paper lg:flex"
+              >
+                Résumé (PDF)
+              </Link>
+            )
           )}
 
           <button

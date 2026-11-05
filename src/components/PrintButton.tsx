@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect } from "react";
+
 /**
  * Until a résumé PDF exists, the page itself is the thing to forward: print
  * (or Save as PDF) sets it as a two-page summary (see the print rules at the
@@ -16,4 +18,25 @@ export function PrintButton({ className = "", children }: { className?: string; 
       {children}
     </button>
   );
+}
+
+/**
+ * On the home page: arriving with ?print (the header's "Résumé (PDF)" from
+ * another page) opens the print dialog once the page and its fonts are
+ * ready, then drops the parameter so a reload does not print again.
+ */
+export function PrintOnArrival() {
+  useEffect(() => {
+    if (!new URLSearchParams(location.search).has("print")) return;
+    history.replaceState(history.state, "", location.pathname + location.hash);
+    let cancelled = false;
+    const go = () => document.fonts.ready.then(() => !cancelled && window.print());
+    if (document.readyState === "complete") go();
+    else addEventListener("load", go, { once: true });
+    return () => {
+      cancelled = true;
+      removeEventListener("load", go);
+    };
+  }, []);
+  return null;
 }
