@@ -152,6 +152,16 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
                 {s.heading}
               </h2>
               <T as="p" v={s.body} className="col-span-12 max-w-[62ch] text-[1.15rem] text-ink-2 md:col-span-8 md:col-start-4" />
+              {s.points?.length ? (
+                <dl className="col-span-12 max-w-[62ch] border-t border-rule md:col-span-8 md:col-start-4">
+                  {s.points.map((pt) => (
+                    <div key={pt.lead} className="grid gap-x-6 gap-y-1 border-b border-rule py-3 sm:grid-cols-[11rem_minmax(0,1fr)]">
+                      <dt className="t-meta pt-1 text-mark">{pt.lead}</dt>
+                      <dd className="text-ink-2">{pt.text}</dd>
+                    </div>
+                  ))}
+                </dl>
+              ) : null}
             </section>
             {/* the drawing of the idea, right after the decisions that shaped it */}
             {s.heading === "Decisions" && c.image ? (
