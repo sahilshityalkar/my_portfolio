@@ -1197,6 +1197,16 @@ html:not(.js) .asbuilt-toggle {
   article[data-spec="CaseStudy"] section {
     break-inside: avoid;
   }
+  /* a drawing at a third of the page, so it follows Decisions instead of
+     leaving half a page empty; the facts across the full width */
+  article[data-spec="CaseStudy"] figure {
+    max-width: 125mm;
+    margin-inline: auto;
+  }
+  article[data-spec="CaseStudy"] [data-spec="Facts"] {
+    grid-column: 1 / -1 !important;
+    grid-template-columns: 5rem minmax(0, 1fr) minmax(0, 1.4fr) !important;
+  }
   article[data-spec="CaseStudy"] > div.grid-12:last-of-type > ul,
   article[data-spec="CaseStudy"] > footer {
     display: none !important;

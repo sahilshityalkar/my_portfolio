@@ -12,7 +12,7 @@ export const work: CaseStudy[] = [
     index: "I",
     plate: "replies",
     title: "ReplyAI",
-    kicker: "A workspace for answering customer complaints: generate, review and send on-brand replies across email and WhatsApp.",
+    kicker: "A workspace for answering customer complaints: generate, review and send on-brand replies across email and\u00a0WhatsApp.",
     year: "2026",
     role: "Independent project: product, interface and engineering",
     stack: "Next.js 16, React 19, TypeScript, Tailwind 4, Clerk, Supabase, Groq, Resend, Vitest",

@@ -198,7 +198,10 @@ function Heatmap() {
       </g>
       <g className="svg-fade" style={d(2)}>
         <g style={MONO} fill={INK} opacity="0.7">
-          <text x="64" y="56">CONCEPTS →</text>
+          {/* right-aligned to the grid: the top-left corner is the caption's */}
+          <text x={64 + cols * 30 - 4} y="56" textAnchor="end">
+            CONCEPTS →
+          </text>
           <text x="46" y="320" transform="rotate(-90 46 320)">STUDENTS →</text>
         </g>
       </g>

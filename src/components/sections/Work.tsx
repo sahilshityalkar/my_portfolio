@@ -48,6 +48,10 @@ export function Work() {
           const compact = !c.image;
           // a full case before it needs the larger gap; compact rows sit close
           const afterFull = !!work[i - 1]?.image;
+          // a compact row sits on the page grid: its facts start on the same
+          // column line as case I's (9), its story fills the columns before
+          const story = compact ? "md:col-span-7 md:col-start-1 lg:col-span-5" : "";
+          const facts = compact ? "md:col-span-4 md:col-start-9 lg:col-start-6" : "";
           return (
             <li
               key={c.slug}
@@ -62,7 +66,7 @@ export function Work() {
               <div
                 data-plate-col
                 className={
-                  compact ? "hidden lg:col-span-3 lg:block" : `col-span-12 md:col-span-7 ${i % 2 ? "md:order-2 md:col-start-6" : ""}`
+                  compact ? "hidden lg:col-span-3 lg:block [&_figcaption]:hidden" /* at card size the numeral names it */ : `col-span-12 md:col-span-7 ${i % 2 ? "md:order-2 md:col-start-6" : ""}`
                 }
               >
                 <div className="relative">
@@ -95,16 +99,16 @@ export function Work() {
               <div
                 className={
                   compact
-                    ? "col-span-12 md:grid md:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] md:gap-x-10 lg:col-span-9 lg:col-start-4"
+                    ? "col-span-12 md:grid md:grid-cols-subgrid lg:col-span-9 lg:col-start-4"
                     : `col-span-12 md:col-span-4 md:pt-2 ${i % 2 ? "md:order-1 md:col-start-1" : "md:col-start-9"}`
                 }
               >
-                <p className="t-meta flex gap-3 text-ink-3 md:col-start-1 md:row-start-1">
+                <p className={`t-meta flex gap-3 text-ink-3 ${story}`}>
                   <span className="text-mark">{c.index}</span>
                   <T v={c.year} />
                 </p>
                 <h3
-                  className={`t-title mt-3 text-balance transition-transform duration-700 ease-(--ease-out) group-hover:translate-x-2 md:col-start-1 md:row-start-2 ${
+                  className={`t-title mt-3 text-balance transition-transform duration-700 ease-(--ease-out) group-hover:translate-x-2 ${story} ${
                     compact ? "text-[clamp(1.85rem,3.2vw,2.75rem)]" : ""
                   }`}
                   data-spec-type="Newsreader"
@@ -113,11 +117,11 @@ export function Work() {
                     <T v={c.title} />
                   </Link>
                 </h3>
-                <T as="p" v={c.kicker} className="mt-4 max-w-[38ch] text-ink-2 md:col-start-1 md:row-start-3" />
-                {c.proof ? <ProofLine proof={c.proof} className="mt-4 md:col-start-1" /> : null}
+                <T as="p" v={c.kicker} className={`mt-4 max-w-[38ch] text-pretty text-ink-2 ${story}`} />
+                {c.proof ? <ProofLine proof={c.proof} className={`mt-4 ${story}`} /> : null}
                 <dl
                   className={`t-meta mt-6 grid grid-cols-[6rem_1fr] gap-y-1.5 border-t border-rule pt-4 ${
-                    compact ? "md:col-start-2 md:row-span-2 md:row-start-1 md:mt-1 md:content-start" : ""
+                    compact ? `${facts} md:row-span-2 md:row-start-1 md:mt-1 md:content-start` : ""
                   }`}
                 >
                   <dt className="text-ink-3">Role</dt>
@@ -125,7 +129,7 @@ export function Work() {
                   <dt className="text-ink-3">Stack</dt>
                   <T as="dd" v={c.stackShort ?? c.stack} />
                 </dl>
-                <p className={`t-meta mt-6 flex flex-wrap gap-x-5 gap-y-2 text-ink ${compact ? "md:col-start-2 md:row-start-3 md:mt-4" : ""}`}>
+                <p className={`t-meta mt-6 flex flex-wrap gap-x-5 gap-y-2 text-ink ${compact ? `${facts} md:row-start-3 md:mt-4` : ""}`}>
                   <span>
                     <Link href={href} className="link-draw">
                       Read the case study

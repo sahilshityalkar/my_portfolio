@@ -40,9 +40,16 @@ export const readMono = () => {
   if (fam) MONO = `500 10px ${fam}, ui-monospace, monospace`;
 };
 
-function tag(ctx: CanvasRenderingContext2D, text: string, x: number, y: number, p: Palette, fill = p.mark) {
+type Bounds = { left: number; top: number; right: number };
+
+/** A filled label; within `inside` (a clipped drawing) it is moved, never cut. */
+function tag(ctx: CanvasRenderingContext2D, text: string, x: number, y: number, p: Palette, fill = p.mark, inside?: Bounds) {
   ctx.font = MONO;
   const w = ctx.measureText(text).width + 10;
+  if (inside) {
+    x = Math.max(inside.left, Math.min(x, inside.right - w));
+    y = Math.max(y, inside.top + 15);
+  }
   ctx.fillStyle = fill;
   ctx.fillRect(x, y - 15, w, 15);
   ctx.fillStyle = p.paper;
@@ -143,7 +150,8 @@ function drawPrims(ctx: CanvasRenderingContext2D, m: Media, sx: number, sy: numb
       return true;
     })
     .slice(0, 5);
-  for (const s of big) tag(ctx, `rect ${size(s)}`, Math.round(s.x - sx), Math.round(s.y - sy), p);
+  const inside = { left: m.x - sx, top: m.y - sy, right: m.x - sx + m.w };
+  for (const s of big) tag(ctx, `rect ${size(s)}`, Math.round(s.x - sx), Math.round(s.y - sy), p, p.mark, inside);
   ctx.restore();
 }
 
