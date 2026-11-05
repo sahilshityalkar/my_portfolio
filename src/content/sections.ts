@@ -22,8 +22,13 @@ export const sections = all
   .filter((s) => s.id !== "lab" || labLive)
   .map((s, i) => ({ ...s, n: String(i + 1).padStart(2, "0") }));
 
-/** Whether a section is on the page, e.g. shown("lab") === labLive. */
-export const shown = (id: SectionId) => sections.some((s) => s.id === id);
-
-/** A section's sheet number, e.g. sheet("work") === "02". */
-export const sheet = (id: SectionId) => sections.find((s) => s.id === id)?.n ?? "";
+/**
+ * A section's sheet number, e.g. sheet("work") === "02". Asking for one that
+ * is not on the page is a mistake, and fails the build rather than printing
+ * an empty number.
+ */
+export const sheet = (id: SectionId) => {
+  const s = sections.find((x) => x.id === id);
+  if (!s) throw new Error(`sheet("${id}"): that section is not on the page`);
+  return s.n;
+};

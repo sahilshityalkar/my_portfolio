@@ -1044,7 +1044,8 @@ html:not(.js) .asbuilt-toggle {
     text-transform: none;
     color: var(--ink-3);
   }
-  main a[href^="/work/"]::after {
+  main a[href^="/work/"]::after,
+  main a[href^="/writing/"]::after {
     content: " sahilshityalkar.com" attr(href);
     font-family: var(--mono);
     font-size: 7.5pt;

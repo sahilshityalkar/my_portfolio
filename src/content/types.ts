@@ -71,6 +71,4 @@ export type Experiment = {
   tech: string;
   /** Which drawing to show on the card (a still sketch of the experiment). */
   preview: "glass" | "spring" | "blueprint";
-  /** Already running on this site: the entry offers to open it here. */
-  onThisPage?: boolean;
 };

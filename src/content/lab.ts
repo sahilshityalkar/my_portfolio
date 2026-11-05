@@ -39,8 +39,6 @@ export const lab: Experiment[] = [
     summary: demo("Point it at any layout and it draws the page’s own construction drawing: boxes, spacing, line boxes and type metrics, measured live."),
     tech: "DOM geometry · Canvas 2D",
     preview: "blueprint",
-    /** The glass on this page is this experiment, so it can be tried right here. */
-    onThisPage: true,
   },
 ];
 

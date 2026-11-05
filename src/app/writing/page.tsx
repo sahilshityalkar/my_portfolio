@@ -26,6 +26,10 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image", title: shareTitle, description, creator: "@SK_sahil05" },
 };
 
+// the Person node itself is on the home page; here it is named in full, so
+// the reference resolves for a crawler that reads only this page
+const author = { "@type": "Person", "@id": personId, name: profile.name, url: profile.siteUrl };
+
 export default function WritingIndex() {
   return (
     <div className="wrap pb-20 pt-[calc(var(--header-h)+3rem)]">
@@ -35,12 +39,13 @@ export default function WritingIndex() {
           name: `Writing · ${profile.name}`,
           description: lede,
           url: `${profile.siteUrl}/writing`,
-          author: { "@id": personId },
+          author,
           blogPost: posts.map((p) => ({
             "@type": "BlogPosting",
             headline: p.title,
             url: `${profile.siteUrl}/writing/${p.slug}`,
             datePublished: p.date,
+            author,
           })),
         }}
       />
