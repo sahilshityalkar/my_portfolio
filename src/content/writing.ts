@@ -41,16 +41,8 @@ export const posts: Post[] = [greenBuild, measure, fallbacks, loupe, print].sort
 
 export const getPost = (slug: string) => posts.find((p) => p.slug === slug);
 
-/** Reading time at 220 words a minute, code counted at half weight. */
-export function minutes(post: Post) {
-  let words = 0;
-  for (const b of post.body) {
-    if (b.type === "code") words += b.code.split(/\s+/).length / 2;
-    else if (b.type === "list") words += b.items.join(" ").split(/\s+/).length;
-    else if ("text" in b) words += b.text.split(/\s+/).length;
-  }
-  return Math.max(1, Math.round(words / 220));
-}
+export { formatDate } from "@/lib/reading";
+import { minutes as bodyMinutes } from "@/lib/reading";
 
-export const formatDate = (iso: string) =>
-  new Date(`${iso}T00:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
+/** A post's reading time in minutes. */
+export const minutes = (post: Post) => bodyMinutes(post.body);

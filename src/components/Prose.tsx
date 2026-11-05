@@ -2,48 +2,38 @@ import Image from "next/image";
 import Link from "next/link";
 import { Fragment } from "react";
 import type { Block } from "@/content/writing";
+import { tokenize } from "@/lib/inline";
+import { anchor } from "@/lib/reading";
 
 /**
- * Inline text: `code`, *emphasis* and [links](https://...), nothing else.
- * Internal links (starting with /) use the router; external ones open in a
- * new tab.
+ * Inline text (see lib/inline.ts): internal links (starting with /) use the
+ * router; external ones open in a new tab.
  */
 export function Inline({ text }: { text: string }) {
-  const out: React.ReactNode[] = [];
-  const re = /`([^`]+)`|\*([^*]+)\*|\[([^\]]+)\]\(([^)\s]+)\)/g;
-  let last = 0;
-  let k = 0;
-  for (let m = re.exec(text); m; m = re.exec(text)) {
-    if (m.index > last) out.push(text.slice(last, m.index));
-    if (m[1] !== undefined) out.push(<code key={k++}>{m[1]}</code>);
-    else if (m[2] !== undefined) out.push(<em key={k++}>{m[2]}</em>);
-    else if (m[3] !== undefined && m[4] !== undefined) {
-      const href = m[4];
-      out.push(
-        href.startsWith("/") ? (
-          <Link key={k++} href={href} className="link-draw prose-link">
-            {m[3]}
-          </Link>
+  return (
+    <>
+      {tokenize(text).map((t, k) =>
+        t.kind === "code" ? (
+          <code key={k}>{t.text}</code>
+        ) : t.kind === "em" ? (
+          <em key={k}>{t.text}</em>
+        ) : t.kind === "link" ? (
+          t.href.startsWith("/") ? (
+            <Link key={k} href={t.href} className="link-draw prose-link">
+              {t.text}
+            </Link>
+          ) : (
+            <a key={k} href={t.href} target="_blank" rel="noreferrer" className="link-draw prose-link">
+              {t.text}
+            </a>
+          )
         ) : (
-          <a key={k++} href={href} target="_blank" rel="noreferrer" className="link-draw prose-link">
-            {m[3]}
-          </a>
+          <Fragment key={k}>{t.text}</Fragment>
         ),
-      );
-    }
-    last = re.lastIndex;
-  }
-  if (last < text.length) out.push(text.slice(last));
-  return <>{out}</>;
+      )}
+    </>
+  );
 }
-
-/** A heading's anchor: lower case, words joined by hyphens. */
-export const anchor = (text: string) =>
-  text
-    .toLowerCase()
-    .replace(/[^a-z0-9\s]/g, "")
-    .trim()
-    .replace(/\s+/g, "-");
 
 /** The body of a post, in the site's own typography. */
 export function Prose({ body }: { body: Block[] }) {

@@ -1,5 +1,7 @@
 # Portfolio: Under the Glass
 
+[![CI](https://github.com/sahilshityalkar/my_portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/sahilshityalkar/my_portfolio/actions/workflows/ci.yml)
+
 Personal portfolio of Sahil Shityalkar, Frontend Lead Engineer at Clyra.
 
 A calm, editorial site with one secret: press **L** (or tap **Inspect**) and a
@@ -30,11 +32,16 @@ npm run dev        # http://localhost:3000
 
 ## Build and check
 
+Every push to `main` runs the same checks in GitHub Actions
+(`.github/workflows/ci.yml`): typecheck, lint, unit tests and a production
+build.
+
 ```bash
 npm run build      # static production build
 npm run start      # serve the build on :3000
 npm run lint
-npm run typecheck
+npm run typecheck  # generates route types, then tsc
+npm test           # unit tests (node:test, no extra dependencies)
 ```
 
 Performance audit, run against the production build:
