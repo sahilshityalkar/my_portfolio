@@ -386,6 +386,17 @@ export function Loupe() {
         kick();
       }, 120);
     };
+    // a code block scrolled sideways moves its text, but its scroll event
+    // never reaches the window: listen in the capture phase and re-measure
+    // once the scroll settles
+    const onInnerScroll = (e: Event) => {
+      if (current === "off" || e.target === document) return;
+      clearTimeout(settle);
+      settle = window.setTimeout(() => {
+        stale = true;
+        kick();
+      }, 120);
+    };
     const onTheme = new MutationObserver(() => {
       palette = readPalette();
       pattern = hatch(ctx, palette.mark, dpr);
@@ -404,6 +415,7 @@ export function Loupe() {
     addEventListener("resize", resize);
     addEventListener("pointermove", onMove, { passive: true });
     addEventListener("scroll", onScroll, { passive: true });
+    document.addEventListener("scroll", onInnerScroll, { capture: true, passive: true });
     addEventListener("glass:yield", onYield);
     addEventListener("keydown", onKey);
     addEventListener("click", onClick);
@@ -424,6 +436,7 @@ export function Loupe() {
       removeEventListener("resize", resize);
       removeEventListener("pointermove", onMove);
       removeEventListener("scroll", onScroll);
+      document.removeEventListener("scroll", onInnerScroll, { capture: true });
       removeEventListener("keydown", onKey);
       removeEventListener("click", onClick);
       removeEventListener("focusin", onFocus);

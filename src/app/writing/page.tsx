@@ -3,6 +3,7 @@ import Link from "next/link";
 import { posts } from "@/content/writing";
 import { profile } from "@/content/profile";
 import { PostList } from "@/components/PostList";
+import { lede } from "./lede";
 
 const description = `Notes on frontend engineering by ${profile.name}: performance, layout, typography and shipping products that work.`;
 const shareTitle = `Writing · ${profile.name}`;
@@ -36,7 +37,7 @@ export default function WritingIndex() {
         Writing
       </h1>
       <p className="t-lede mt-6 max-w-[40ch] text-ink-2">
-        Notes on the engineering behind work I can show: what broke, what I measured, and what I changed.
+        {lede}
       </p>
       <p className="t-meta mt-4 text-ink-3">
         <a href="/feed.xml" className="link-draw hover:text-ink">

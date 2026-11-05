@@ -28,9 +28,15 @@ export function PrintButton({ className = "", children }: { className?: string; 
 export function PrintOnArrival() {
   useEffect(() => {
     if (!new URLSearchParams(location.search).has("print")) return;
-    history.replaceState(history.state, "", location.pathname + location.hash);
     let cancelled = false;
-    const go = () => document.fonts.ready.then(() => !cancelled && window.print());
+    // the parameter goes only when printing actually starts: under
+    // StrictMode the first run is cancelled, and the second must still see it
+    const go = () =>
+      document.fonts.ready.then(() => {
+        if (cancelled) return;
+        history.replaceState(history.state, "", location.pathname + location.hash);
+        window.print();
+      });
     if (document.readyState === "complete") go();
     else addEventListener("load", go, { once: true });
     return () => {

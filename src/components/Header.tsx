@@ -157,7 +157,7 @@ export function Header() {
             ) : (
               <Link
                 href="/?print"
-                className="hidden h-9 items-center rounded-full border border-(--rule-strong) px-4 text-ink transition-colors hover:bg-ink hover:text-paper lg:flex"
+                className="hidden h-9 [html:not(.js)_&]:hidden items-center rounded-full border border-(--rule-strong) px-4 text-ink transition-colors hover:bg-ink hover:text-paper lg:flex"
               >
                 Résumé (PDF)
               </Link>
