@@ -6,11 +6,6 @@ import { SectionHead } from "@/components/SectionHead";
 import { sheet } from "@/content/sections";
 import { ProofLine } from "@/components/ProofLine";
 
-/**
- * No interactive element nests inside another: the plate is covered by a
- * pointer-only link (hidden from the accessibility tree and the tab order),
- * the title is the accessible link, and the AS BUILT toggle sits above both.
- */
 /** "1 independent · 2 at Clyra", counted from work.ts. */
 function Tally() {
   const counts = new Map<string, number>();
@@ -32,17 +27,44 @@ function Tally() {
   );
 }
 
+/**
+ * No interactive element nests inside another: the plate is covered by a
+ * pointer-only link (hidden from the accessibility tree and the tab order),
+ * the title is the accessible link, and the AS BUILT toggle sits above both.
+ *
+ * A case with a shipped product gets the full plate and leads. A case without
+ * one is a compact row: its drawing at index-card size (large screens only),
+ * the story on the left, the facts on the right. The children keep one order,
+ * so the print layout (globals.css) treats both the same.
+ */
 export function Work() {
   return (
     <section id="work" aria-labelledby="work-title" data-spec="Work" data-measure-yield className="wrap pb-12 pt-10 sm:pb-16 sm:pt-12 lg:pt-8">
       <SectionHead n={sheet("work")} id="work-title" title="Selected work" aside={<Tally />} size="primary" />
-      <ol className="mt-8 space-y-12 sm:mt-12 sm:space-y-20">
+      <ol className="mt-8 sm:mt-12">
         {work.map((c, i) => {
           const href = `/work/${c.slug}`;
           const external = c.image ? c.links.filter((l): l is { label: string; href: string } => !!l.href) : [];
+          const compact = !c.image;
+          // a full case before it needs the larger gap; compact rows sit close
+          const afterFull = !!work[i - 1]?.image;
           return (
-            <li key={c.slug} data-reveal data-spec={`Case ${c.index}`} className="grid-12 group items-start gap-y-6">
-              <div data-plate-col className={`col-span-12 md:col-span-7 ${i % 2 ? "md:order-2 md:col-start-6" : ""}`}>
+            <li
+              key={c.slug}
+              data-reveal
+              data-spec={`Case ${c.index}`}
+              className={`grid-12 group items-start ${
+                compact
+                  ? `gap-y-4 border-t border-rule pt-6 ${afterFull ? "mt-12 sm:mt-20" : "mt-8 sm:mt-10"}`
+                  : `gap-y-6 ${i ? "mt-12 sm:mt-20" : ""}`
+              }`}
+            >
+              <div
+                data-plate-col
+                className={
+                  compact ? "hidden lg:col-span-3 lg:block" : `col-span-12 md:col-span-7 ${i % 2 ? "md:order-2 md:col-start-6" : ""}`
+                }
+              >
                 <div className="relative">
                   <CaseVisual c={c} seed={i + 3} asBuilt={c.image} />
                   <Link href={href} aria-hidden="true" tabIndex={-1} className="absolute inset-0 z-10" />
@@ -70,25 +92,40 @@ export function Work() {
                   </p>
                 ) : null}
               </div>
-              <div className={`col-span-12 md:col-span-4 md:pt-2 ${i % 2 ? "md:order-1 md:col-start-1" : "md:col-start-9"}`}>
-                <p className="t-meta flex gap-3 text-ink-3">
+              <div
+                className={
+                  compact
+                    ? "col-span-12 md:grid md:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] md:gap-x-10 lg:col-span-9 lg:col-start-4"
+                    : `col-span-12 md:col-span-4 md:pt-2 ${i % 2 ? "md:order-1 md:col-start-1" : "md:col-start-9"}`
+                }
+              >
+                <p className="t-meta flex gap-3 text-ink-3 md:col-start-1 md:row-start-1">
                   <span className="text-mark">{c.index}</span>
                   <T v={c.year} />
                 </p>
-                <h3 className="t-title mt-3 text-balance transition-transform duration-700 ease-(--ease-out) group-hover:translate-x-2" data-spec-type="Newsreader">
+                <h3
+                  className={`t-title mt-3 text-balance transition-transform duration-700 ease-(--ease-out) group-hover:translate-x-2 md:col-start-1 md:row-start-2 ${
+                    compact ? "text-[clamp(1.85rem,3.2vw,2.75rem)]" : ""
+                  }`}
+                  data-spec-type="Newsreader"
+                >
                   <Link href={href} aria-label={`Case study ${c.index}: ${plain(c.title, "in preparation")}`}>
                     <T v={c.title} />
                   </Link>
                 </h3>
-                <T as="p" v={c.kicker} className="mt-4 max-w-[38ch] text-ink-2" />
-                {c.proof ? <ProofLine proof={c.proof} className="mt-4" /> : null}
-                <dl className="t-meta mt-6 grid grid-cols-[6rem_1fr] gap-y-1.5 border-t border-rule pt-4">
+                <T as="p" v={c.kicker} className="mt-4 max-w-[38ch] text-ink-2 md:col-start-1 md:row-start-3" />
+                {c.proof ? <ProofLine proof={c.proof} className="mt-4 md:col-start-1" /> : null}
+                <dl
+                  className={`t-meta mt-6 grid grid-cols-[6rem_1fr] gap-y-1.5 border-t border-rule pt-4 ${
+                    compact ? "md:col-start-2 md:row-span-2 md:row-start-1 md:mt-1 md:content-start" : ""
+                  }`}
+                >
                   <dt className="text-ink-3">Role</dt>
                   <T as="dd" v={c.role} />
                   <dt className="text-ink-3">Stack</dt>
                   <T as="dd" v={c.stackShort ?? c.stack} />
                 </dl>
-                <p className="t-meta mt-6 flex flex-wrap gap-x-5 gap-y-2 text-ink">
+                <p className={`t-meta mt-6 flex flex-wrap gap-x-5 gap-y-2 text-ink ${compact ? "md:col-start-2 md:row-start-3 md:mt-4" : ""}`}>
                   <span>
                     <Link href={href} className="link-draw">
                       Read the case study
