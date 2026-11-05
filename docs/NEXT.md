@@ -72,10 +72,10 @@ violations on every route at 1280 and 375 in both themes. Fixed: /writing
 mobile LCP 3.5 s to 0.8 s (its first rows no longer wait for a reveal), the
 case screenshot paints with the page (eager, high priority), code blocks are
 labelled regions only while they scroll, a Blog JSON-LD on /writing, and
-sitemap dates only where content has one. Left: /work/replyai mobile is
-89 to 93 (simulated LCP 3.2 s), bound by the 104 KB Newsreader roman
-preload and framework JS on the throttled link, not by render delay; the
-next step there would be subsetting the variable font's axes.
+sitemap dates only where content has one. Then the Newsreader roman's
+weight axis was cut to 300 to 400 (nothing is set heavier): 104 KB to 79 KB,
+pixel-identical, every page about 25 KB lighter; /work/replyai mobile 94
+(simulated LCP 3.0 s, now bound by framework JS on the throttled link).
 
 ## How to verify
 
