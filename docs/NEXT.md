@@ -84,5 +84,5 @@ In priority order (details in PLACEHOLDERS.md):
 6. Deploy on Vercel and connect sahilshityalkar.com.
 
 Known, deliberately left: 320x568 phones do not show the Work rule on the
-first screen; the case pages still print their draft Outcome and Hindsight
-sections (this run was scoped to the landing page).
+first screen. Case pages print on their own (two to three A4 pages, plates
+drawn, draft sections left out), but the résumé is the home page.

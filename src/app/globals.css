@@ -1165,3 +1165,40 @@ html:not(.js) .asbuilt-toggle {
     display: none;
   }
 }
+
+/* A case study on paper: the same page, set close. A plate below the fold
+   never entered the view, so it is drawn outright; the links repeated at the
+   foot and the next case are for the screen. */
+@media print {
+  [data-reveal] .draw {
+    stroke-dashoffset: 0 !important;
+    transition: none !important;
+  }
+  [data-reveal] :is(.svg-fade, .pop, .cell) {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  article[data-spec="CaseStudy"] {
+    padding-top: 0 !important;
+  }
+  article[data-spec="CaseStudy"] > header {
+    row-gap: 4mm !important;
+  }
+  article[data-spec="CaseStudy"] > :is(div, footer) {
+    margin-top: 7mm !important;
+  }
+  article[data-spec="CaseStudy"] > div.grid-12:last-of-type {
+    row-gap: 6mm !important;
+  }
+  article[data-spec="CaseStudy"] figure {
+    break-inside: avoid;
+  }
+  article[data-spec="CaseStudy"] section {
+    break-inside: avoid;
+  }
+  article[data-spec="CaseStudy"] > div.grid-12:last-of-type > ul,
+  article[data-spec="CaseStudy"] > footer {
+    display: none !important;
+  }
+}
