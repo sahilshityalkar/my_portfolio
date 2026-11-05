@@ -143,8 +143,10 @@ one-line summary, tech tags, a `slug` (opens `lab.sahilshityalkar.com/<slug>`)
 and a `preview` drawing (`glass`, `spring` or `blueprint`).
 
 While `labLive` in `lab.ts` is `false` (the lab isn't deployed yet), the
-entries are listed without links, so nothing points at a page that 404s.
-Set it to `true` once the lab and each experiment's page are live.
+Lab section is left off the home page, and the nav, the ruler and the
+sheet numbers close up around it (`src/content/sections.ts`). Set it to
+`true` once the lab and each experiment's page are live: the section, its
+links and its nav entry return, numbered in place.
 
 Later, the lab can publish an `experiments.json` feed and this list can be
 read from it at build time.
