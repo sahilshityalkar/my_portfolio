@@ -77,6 +77,21 @@ weight axis was cut to 300 to 400 (nothing is set heavier): 104 KB to 79 KB,
 pixel-identical, every page about 25 KB lighter; /work/replyai mobile 94
 (simulated LCP 3.0 s, now bound by framework JS on the throttled link).
 
+## Panel re-score, 5 November (evening): 6.7 average
+
+Engineering manager 6, staff engineer 7.5, recruiter 6.5. The panel found no
+change without new facts that would move the average by half a point; its
+three suggestions are done (ReplyAI decisions link to their code, the
+printed résumé carries them, L during the glass demo keeps the lens). It
+also surfaced one wrong claim, now fixed: the safety engine routes risky
+incoming complaints to review; it does not check outgoing replies.
+
+What moves the score now is the owner's, in this order: Clyra team size,
+scope and one real number per Experience line; 2021 to 2024; a résumé PDF;
+work mode and notice period; making this repository public (the notes quote
+its code) and setting `links.source`; reading every note and the About copy
+and rewriting them in your own voice.
+
 ## How to verify
 
 ```bash
