@@ -56,6 +56,18 @@ The recruiter and panel scores are capped by the same thing: the lead
 role rests on demo copy. **The six questions at the top of
 PLACEHOLDERS.md are the highest-leverage next step.**
 
+## Queued (hiring panel, 5 November: 6/10, capped by owner facts)
+
+Done: a curated home notes list, honest proof lines, note wording. Next, none
+of which needs the owner:
+1. Home Work: Clyra cases II and III as compact rows without plates, so
+   ReplyAI (the only case with a screen and an outcome) leads.
+2. /work/replyai Decisions: map each decision to a constraint in "The
+   problem" (a short list), and reconsider the second Plate I.
+3. Print: drop the "press L" line on paper; consider a three-line Notes
+   block if it still fits two pages.
+4. Hide #lab while `labLive` is false (its one entry repeats the hero).
+
 ## How to verify
 
 ```bash
