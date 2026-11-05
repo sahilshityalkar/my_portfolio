@@ -3,7 +3,7 @@
 Read README.md, docs/DECISIONS.md (especially "Fourth pass") and
 PLACEHOLDERS.md first. Everything is committed on `main`.
 
-## Where things stand (4 November 2026)
+## Where things stand (5 November 2026)
 
 Everything is committed on `main`. Two sessions of autonomous work with
 independent reviewers (QA and performance, a hiring panel, a senior code
@@ -43,7 +43,14 @@ Measured on the production build (Chromium):
 | Em or en dashes in rendered HTML, every route | 0 |
 | Glass lens, 4x CPU | 17 ms average, 16.8 ms p95 |
 
-Review scores at the end: QA 7 (fresh reviewer, all its findings since
+Latest round (5 November): a hiring panel (7.2, every "now" fix applied),
+QA (8.5, all seven findings fixed) and a code review of the writing and
+print code (7.5, all four findings fixed). Since then: "Résumé (PDF)" works
+from every route (`/?print`), notes print cleanly, /writing has its own
+share card, the glass follows code blocks scrolled sideways, and code
+blocks are tab stops only when they scroll.
+
+Review scores before that round: QA 7 (fresh reviewer, all its findings since
 fixed), code review 7.5 (all bugs fixed), recruiter 6 and hiring panel 7.
 The recruiter and panel scores are capped by the same thing: the lead
 role rests on demo copy. **The six questions at the top of
