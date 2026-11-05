@@ -17,8 +17,9 @@ export const work: CaseStudy[] = [
     role: "Independent project: product, interface and engineering",
     stack: "Next.js 16, React 19, TypeScript, Tailwind 4, Clerk, Supabase, Groq, Resend, Vitest",
     stackShort: "Next.js 16, Supabase, Groq, Vitest",
-    /** From the repo README (three replies in under five seconds) and TEST_REPORT.md (22 of 22). */
-    proof: "3 replies in under 5 s · 22 of 22 tests passing · live",
+    /** From the repo README (three replies in under five seconds) and TEST_REPORT.md
+     * (the end-to-end run found the history bug that 22 passing unit tests missed). */
+    proof: "3 replies in under 5 s · caught a bug 22 tests missed · live",
     summary:
       "Paste a customer complaint, get three professional, ready-to-send replies in under five seconds. Then keep them in the brand’s voice, check them, approve them and send them from one inbox.",
     sections: [

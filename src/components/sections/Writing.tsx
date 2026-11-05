@@ -1,10 +1,10 @@
 import Link from "next/link";
-import { posts } from "@/content/writing";
+import { featured } from "@/content/writing";
 import { SectionHead } from "@/components/SectionHead";
 import { PostList } from "@/components/PostList";
 import { sheet } from "@/content/sections";
 
-/** The latest notes, as a ruled list; the archive is /writing. */
+/** A pick of the notes, as a ruled list; the archive, by date, is /writing. */
 export function Writing() {
   return (
     <section id="writing" aria-labelledby="writing-title" data-spec="Writing" className="wrap py-12 sm:py-16">
@@ -23,7 +23,7 @@ export function Writing() {
           Notes on the engineering behind the work above: what broke, what I measured, and what I changed.
         </p>
         <div className="col-span-12 lg:col-span-9">
-          <PostList posts={posts.slice(0, 4)} />
+          <PostList posts={featured} lead="topic" />
         </div>
       </div>
     </section>

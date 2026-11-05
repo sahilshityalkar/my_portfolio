@@ -41,6 +41,12 @@ export const posts: Post[] = [titleBlock, greenBuild, measure, fallbacks, loupe]
 
 export const getPost = (slug: string) => posts.find((p) => p.slug === slug);
 
+/**
+ * The home page's pick, in reading order: a product bug first, then the
+ * profiling story, then the self-measuring footer. The archive is by date.
+ */
+export const featured: Post[] = [greenBuild, loupe, titleBlock];
+
 export { formatDate } from "@/lib/reading";
 import { minutes as bodyMinutes } from "@/lib/reading";
 

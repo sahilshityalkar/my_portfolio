@@ -20,7 +20,7 @@ export const titleBlock: Post = {
     },
     {
       type: "p",
-      text: "That is a strong promise to make on a portfolio, so the numbers have to mean what the browser's own tools mean by them. My first version did not quite. Two reviews found the gaps, and both are worth knowing if you ever report Web Vitals from inside a page.",
+      text: "That is a strong promise to make on a portfolio, so the numbers have to mean what the browser's own tools mean by them. My first version did not quite. Going back over it found two gaps, and both are worth knowing if you ever report Web Vitals from inside a page.",
     },
 
     { type: "h", text: "Three numbers, three observers" },
@@ -40,7 +40,7 @@ export const titleBlock: Post = {
     },
     {
       type: "p",
-      text: "A reviewer scrolling through the page with a script saw the footer read 5.5 seconds. The cause: the contact section at the bottom sets my email address at display size, and when it was revealed it became the largest paint so far. A scripted scroll is not user input, so the browser kept sending candidates, and my footer kept believing them. With a real mouse wheel the same visit read 0.13 seconds.",
+      text: "A scripted scroll through the page made the footer read 5.5 seconds. The cause: the contact section at the bottom sets my email address at display size, and when it was revealed it became the largest paint so far. A scripted scroll is not user input, so the browser kept sending candidates, and my footer kept believing them. With a real mouse wheel the same visit read 0.13 seconds.",
     },
     {
       type: "p",
@@ -79,7 +79,7 @@ o.observe({ type: "largest-contentful-paint", buffered: true });`,
     },
     {
       type: "p",
-      text: "On a page that stays at zero the difference never shows. It shows on a long visit with a few small, unrelated shifts: a sum keeps growing for as long as the tab is open, while the session-window score stays at the worst single burst. A code review pointed out that a footer labelled CLS should mean CLS, so it now does:",
+      text: "On a page that stays at zero the difference never shows. It shows on a long visit with a few small, unrelated shifts: a sum keeps growing for as long as the tab is open, while the session-window score stays at the worst single burst. A footer labelled CLS should mean what the browser means by CLS, so it now does:",
     },
     {
       type: "code",

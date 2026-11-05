@@ -139,13 +139,13 @@ drawLens(frame, scene);`,
     },
     {
       type: "p",
-      text: "The focus counter was not in my first version. The glass redraws the keyboard focus ring on top of the drawing, because the canvas would otherwise hide the ring of the very element it travels to. I had keyed the cache on the focused element's `top`. A code review pointed out two holes: moving focus along a row, where every item shares the same top, left the key unchanged, and moving focus to nothing triggered no redraw at all. Either way a stale ring stayed in the cached scene. Now `focusin` and `focusout` both bump a counter: cheaper than reading a rectangle, and correct.",
+      text: "The focus counter was not in my first version. The glass redraws the keyboard focus ring on top of the drawing, because the canvas would otherwise hide the ring of the very element it travels to. I had keyed the cache on the focused element's `top`. Reviewing the code turned up two holes: moving focus along a row, where every item shares the same top, left the key unchanged, and moving focus to nothing triggered no redraw at all. Either way a stale ring stayed in the cached scene. Now `focusin` and `focusout` both bump a counter: cheaper than reading a rectangle, and correct.",
     },
 
     { type: "h", text: "A closed glass should cost nothing" },
     {
       type: "p",
-      text: "A later review found a cost no frame timing would show: the glass worked while closed. It measured the page and sized its canvas on load, and again on every resize. On a phone, the URL bar hiding as you scroll fires a resize, so that was a full DOM measurement for a feature nobody had opened.",
+      text: "A later pass found a cost no frame timing would show: the glass worked while closed. It measured the page and sized its canvas on load, and again on every resize. On a phone, the URL bar hiding as you scroll fires a resize, so that was a full DOM measurement for a feature nobody had opened.",
     },
     {
       type: "p",

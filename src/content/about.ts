@@ -32,8 +32,8 @@ export const about: {
     {
       title: "Frontend architecture",
       body: demo("Component systems, design tokens and the data layer underneath them. App Router, Server Components and TypeScript, end to end."),
-      proof: "Frontend lead at Clyra, see Experience",
-      href: "#experience",
+      proof: "ReplyAI: App Router, API routes, schema and migrations",
+      href: "/work/replyai",
     },
     {
       title: "Interface quality",
@@ -45,8 +45,9 @@ export const about: {
     {
       title: "Full-stack product work",
       body: "Auth, Postgres, webhooks and automated tests when the product needs them, not just the screens.",
-      proof: "ReplyAI: Next.js, Supabase, Clerk, 22 of 22 tests passing",
-      href: "/work/replyai",
+      proof: "The note: a data-loss bug 22 passing tests missed",
+      href: "/writing/a-green-build-is-not-a-working-product",
+      printProof: "Written up at sahilshityalkar.com/writing",
     },
   ],
 

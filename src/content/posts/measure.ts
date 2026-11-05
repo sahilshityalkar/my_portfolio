@@ -146,7 +146,7 @@ const cw = Math.min(maxW + padL + PAD, document.documentElement.clientWidth - bo
     },
     {
       type: "p",
-      text: "A code review caught that the slider's bounds depend on the layout. They are now read when the handle receives focus, which is when assistive tech announces them. With reduced motion, release snaps back instead of springing. Below 640 px the measure is not shown.",
+      text: "Reviewing the code showed that the slider's bounds depend on the layout. They are now read when the handle receives focus, which is when assistive tech announces them. With reduced motion, release snaps back instead of springing. Below 640 px the measure is not shown.",
     },
 
     { type: "h", text: "Results" },

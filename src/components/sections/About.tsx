@@ -40,7 +40,7 @@ export function About() {
                     {c.proof}
                   </a>
                 ) : c.href ? (
-                  <Link href={c.href} className="link-draw text-ink">
+                  <Link href={c.href} className={`link-draw text-ink ${c.printProof ? "print:hidden" : ""}`}>
                     {c.proof}
                   </Link>
                 ) : (
