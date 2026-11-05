@@ -45,6 +45,13 @@ Attach the link; the share cards are designed for these previews.
 > changed. A profile, an offscreen canvas and a lens-sized window took it
 > from 21.8 ms to 17.6 ms a frame on a 4x slowed CPU. [link]
 
+## "A footer that measures its own visit, honestly"
+
+> My portfolio's footer prints each visit's LCP, CLS and transfer size,
+> measured in the visitor's own browser. The first version summed CLS and
+> let LCP keep growing on scroll. What it takes to report your own Web
+> Vitals the way the browser does: [link]
+
 ## X (one line each)
 
 - Built my portfolio to measure itself. Press L. sahilshityalkar.com

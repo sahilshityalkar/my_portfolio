@@ -33,10 +33,11 @@ export type Post = {
 import { measure } from "./posts/measure";
 import { fallbacks } from "./posts/fallbacks";
 import { loupe } from "./posts/loupe";
+import { titleBlock } from "./posts/title-block";
 import { greenBuild } from "./posts/green-build";
 
 /** Newest first. */
-export const posts: Post[] = [greenBuild, measure, fallbacks, loupe].sort((a, b) => b.date.localeCompare(a.date));
+export const posts: Post[] = [titleBlock, greenBuild, measure, fallbacks, loupe].sort((a, b) => b.date.localeCompare(a.date));
 
 export const getPost = (slug: string) => posts.find((p) => p.slug === slug);
 
